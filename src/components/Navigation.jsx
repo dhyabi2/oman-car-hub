@@ -41,7 +41,7 @@ const Navigation = () => {
       </nav>
       <Link
         to="/add-car"
-        className="fixed bottom-6 left-6 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-4 shadow-lg transition-colors duration-200"
+        className="fixed bottom-6 left-6 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-4 shadow-lg transition-colors duration-200 z-50"
       >
         <Plus className="h-6 w-6" />
       </Link>
