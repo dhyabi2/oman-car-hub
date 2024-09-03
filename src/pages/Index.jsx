@@ -64,6 +64,7 @@ const Index = () => {
       seller_type: "Private",
       description: "",
       contact_phone: "",
+      listing_expiration_date: new Date(),
       additional_features: "",
     },
   });
@@ -134,7 +135,7 @@ const Index = () => {
                 <DialogTrigger asChild>
                   <Button>Add Car</Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle>Add a Car for Sale</DialogTitle>
                   </DialogHeader>
@@ -216,7 +217,267 @@ const Index = () => {
                           </FormItem>
                         )}
                       />
-                      {/* Add more form fields here following the same pattern */}
+                      <FormField
+                        control={form.control}
+                        name="fuel_type"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Fuel Type</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select fuel type" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {["Petrol", "Diesel", "Hybrid", "Electric", "LPG", "CNG"].map((option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="engine_size"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Engine Size (cc)</FormLabel>
+                            <FormControl>
+                              <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value, 10))} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="color"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Color</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="number_of_doors"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Number of Doors</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select number of doors" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {[2, 3, 4, 5].map((option) => (
+                                  <SelectItem key={option} value={option.toString()}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="number_of_seats"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Number of Seats</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select number of seats" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {[2, 4, 5, 7, 8].map((option) => (
+                                  <SelectItem key={option} value={option.toString()}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="drivetrain"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Drivetrain</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select drivetrain" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {["FWD", "RWD", "AWD", "4WD"].map((option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="condition"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Condition</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select condition" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {["New", "Used", "Certified Pre-Owned"].map((option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="price"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Price (OMR)</FormLabel>
+                            <FormControl>
+                              <Input type="number" {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="vin"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>VIN (Vehicle Identification Number)</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="location"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Location</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="seller_type"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Seller Type</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select seller type" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {["Private", "Dealer"].map((option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Description</FormLabel>
+                            <FormControl>
+                              <Textarea {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="contact_phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contact Phone</FormLabel>
+                            <FormControl>
+                              <Input type="tel" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="listing_expiration_date"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Listing Expiration Date</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} onChange={(e) => field.onChange(new Date(e.target.value))} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="additional_features"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Additional Features</FormLabel>
+                            <FormControl>
+                              <Textarea {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                       <Button type="submit">Submit Listing</Button>
                     </form>
                   </Form>
@@ -233,6 +494,9 @@ const Index = () => {
                         <p>Price: {car.price} OMR</p>
                         <p>Mileage: {car.mileage} km</p>
                         <p>Transmission: {car.transmission}</p>
+                        <p>Fuel Type: {car.fuel_type}</p>
+                        <p>Color: {car.color}</p>
+                        <p>Condition: {car.condition}</p>
                       </CardContent>
                     </Card>
                   ))}
