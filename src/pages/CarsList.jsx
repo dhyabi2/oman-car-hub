@@ -68,8 +68,8 @@ const CarsList = () => {
     });
   };
 
-  const carMakes = ['', ...new Set(carBrands.map(brand => brand.brand))];
-  const carModels = filters.make ? ['', ...carBrands.find(brand => brand.brand === filters.make)?.models || []] : [''];
+  const carMakes = ['All Makes', ...new Set(carBrands.map(brand => brand.brand))];
+  const carModels = filters.make === 'All Makes' ? ['All Models'] : ['All Models', ...(carBrands.find(brand => brand.brand === filters.make)?.models || [])];
 
   const maxPriceInData = Math.max(...cars.map(car => car.price), 100000);
 
@@ -90,8 +90,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select make" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Makes</SelectItem>
-                  {carMakes.slice(1).map((make) => (
+                  {carMakes.map((make) => (
                     <SelectItem key={make} value={make}>{make}</SelectItem>
                   ))}
                 </SelectContent>
@@ -104,8 +103,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select model" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Models</SelectItem>
-                  {carModels.slice(1).map((model) => (
+                  {carModels.map((model) => (
                     <SelectItem key={model} value={model}>{model}</SelectItem>
                   ))}
                 </SelectContent>
@@ -183,12 +181,16 @@ const CarsList = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCars.map((car) => (
             <Card key={car.id} className="overflow-hidden">
-              <img src={car.photos[0]} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover" />
-              <div className="flex overflow-x-auto p-2">
-                {car.photos.slice(1).map((photo, index) => (
-                  <img key={index} src={photo} alt={`${car.make} ${car.model} thumbnail ${index + 1}`} className="w-16 h-16 object-cover mr-2 flex-shrink-0" />
-                ))}
-              </div>
+              {car.photos && car.photos.length > 0 && (
+                <img src={car.photos[0]} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover" />
+              )}
+              {car.photos && car.photos.length > 1 && (
+                <div className="flex overflow-x-auto p-2">
+                  {car.photos.slice(1).map((photo, index) => (
+                    <img key={index} src={photo} alt={`${car.make} ${car.model} thumbnail ${index + 1}`} className="w-16 h-16 object-cover mr-2 flex-shrink-0" />
+                  ))}
+                </div>
+              )}
               <CardContent className="p-4">
                 <h2 className="text-xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
                 <p className="text-gray-600 mb-2">Price: {car.price} OMR</p>
