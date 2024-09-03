@@ -5,7 +5,21 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const carBrands = [
-  // ... (keep the existing carBrands array)
+  { brand: "Toyota", logo: "https://example.com/toyota-logo.png", founded: 1937, models: ["Camry", "Corolla", "RAV4", "Hilux", "Land Cruiser"] },
+  { brand: "Honda", logo: "https://example.com/honda-logo.png", founded: 1948, models: ["Civic", "Accord", "CR-V", "Pilot", "Jazz"] },
+  { brand: "Ford", logo: "https://example.com/ford-logo.png", founded: 1903, models: ["F-150", "Mustang", "Explorer", "Focus", "Ranger"] },
+  { brand: "Chevrolet", logo: "https://example.com/chevrolet-logo.png", founded: 1911, models: ["Silverado", "Camaro", "Equinox", "Malibu", "Tahoe"] },
+  { brand: "Nissan", logo: "https://example.com/nissan-logo.png", founded: 1933, models: ["Altima", "Rogue", "Sentra", "Pathfinder", "Maxima"] },
+  { brand: "BMW", logo: "https://example.com/bmw-logo.png", founded: 1916, models: ["3 Series", "5 Series", "X3", "X5", "7 Series"] },
+  { brand: "Mercedes-Benz", logo: "https://example.com/mercedes-logo.png", founded: 1926, models: ["C-Class", "E-Class", "S-Class", "GLC", "GLE"] },
+  { brand: "Audi", logo: "https://example.com/audi-logo.png", founded: 1909, models: ["A4", "A6", "Q5", "Q7", "TT"] },
+  { brand: "Hyundai", logo: "https://example.com/hyundai-logo.png", founded: 1967, models: ["Elantra", "Sonata", "Tucson", "Santa Fe", "Kona"] },
+  { brand: "Kia", logo: "https://example.com/kia-logo.png", founded: 1944, models: ["Optima", "Sorento", "Sportage", "Soul", "Telluride"] },
+  { brand: "Volkswagen", logo: "https://example.com/vw-logo.png", founded: 1937, models: ["Golf", "Passat", "Tiguan", "Atlas", "Jetta"] },
+  { brand: "Mazda", logo: "https://example.com/mazda-logo.png", founded: 1920, models: ["Mazda3", "Mazda6", "CX-5", "CX-9", "MX-5 Miata"] },
+  { brand: "Subaru", logo: "https://example.com/subaru-logo.png", founded: 1953, models: ["Outback", "Forester", "Impreza", "Legacy", "Crosstrek"] },
+  { brand: "Lexus", logo: "https://example.com/lexus-logo.png", founded: 1989, models: ["RX", "ES", "NX", "IS", "GX"] },
+  { brand: "Volvo", logo: "https://example.com/volvo-logo.png", founded: 1927, models: ["XC90", "XC60", "S60", "V60", "XC40"] },
 ];
 
 const Index = () => {
