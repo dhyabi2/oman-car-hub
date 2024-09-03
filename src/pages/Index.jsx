@@ -5,7 +5,16 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useNavigate } from 'react-router-dom';
 
 const carBrands = [
-  // ... (existing carBrands array remains unchanged)
+  { brand: "Toyota", logo: "https://example.com/toyota-logo.png", founded: 1937, models: ["Camry", "Corolla", "RAV4", "Hilux"] },
+  { brand: "Honda", logo: "https://example.com/honda-logo.png", founded: 1948, models: ["Civic", "Accord", "CR-V", "Pilot"] },
+  { brand: "Ford", logo: "https://example.com/ford-logo.png", founded: 1903, models: ["F-150", "Mustang", "Explorer", "Focus"] },
+  { brand: "Nissan", logo: "https://example.com/nissan-logo.png", founded: 1933, models: ["Altima", "Maxima", "Rogue", "Pathfinder"] },
+  { brand: "Chevrolet", logo: "https://example.com/chevrolet-logo.png", founded: 1911, models: ["Silverado", "Malibu", "Equinox", "Tahoe"] },
+  { brand: "BMW", logo: "https://example.com/bmw-logo.png", founded: 1916, models: ["3 Series", "5 Series", "X3", "X5"] },
+  { brand: "Mercedes-Benz", logo: "https://example.com/mercedes-logo.png", founded: 1926, models: ["C-Class", "E-Class", "GLC", "S-Class"] },
+  { brand: "Audi", logo: "https://example.com/audi-logo.png", founded: 1909, models: ["A4", "A6", "Q5", "Q7"] },
+  { brand: "Hyundai", logo: "https://example.com/hyundai-logo.png", founded: 1967, models: ["Elantra", "Sonata", "Tucson", "Santa Fe"] },
+  { brand: "Kia", logo: "https://example.com/kia-logo.png", founded: 1944, models: ["Optima", "Sorento", "Sportage", "Telluride"] },
 ];
 
 const Index = () => {
