@@ -30,11 +30,11 @@ const CarsList = () => {
     const fetchCars = async () => {
       // In a real application, this would be an API call
       const mockCars = [
-        { id: 1, make: 'Toyota', model: 'Camry', year: 2020, price: 25000, transmission: 'Automatic', fuelType: 'Petrol', mileage: 30000, photo: 'https://example.com/toyota-camry.jpg' },
-        { id: 2, make: 'Honda', model: 'Civic', year: 2019, price: 22000, transmission: 'Manual', fuelType: 'Petrol', mileage: 35000, photo: 'https://example.com/honda-civic.jpg' },
-        { id: 3, make: 'Ford', model: 'F-150', year: 2021, price: 35000, transmission: 'Automatic', fuelType: 'Diesel', mileage: 20000, photo: 'https://example.com/ford-f150.jpg' },
-        { id: 4, make: 'Tesla', model: 'Model 3', year: 2022, price: 45000, transmission: 'Automatic', fuelType: 'Electric', mileage: 10000, photo: 'https://example.com/tesla-model3.jpg' },
-        { id: 5, make: 'BMW', model: 'X5', year: 2020, price: 55000, transmission: 'Automatic', fuelType: 'Hybrid', mileage: 25000, photo: 'https://example.com/bmw-x5.jpg' },
+        { id: 1, make: 'Toyota', model: 'Camry', year: 2020, price: 25000, transmission: 'Automatic', fuelType: 'Petrol', mileage: 30000, photos: ['https://example.com/toyota-camry-1.jpg', 'https://example.com/toyota-camry-2.jpg', 'https://example.com/toyota-camry-3.jpg'] },
+        { id: 2, make: 'Honda', model: 'Civic', year: 2019, price: 22000, transmission: 'Manual', fuelType: 'Petrol', mileage: 35000, photos: ['https://example.com/honda-civic-1.jpg', 'https://example.com/honda-civic-2.jpg'] },
+        { id: 3, make: 'Ford', model: 'F-150', year: 2021, price: 35000, transmission: 'Automatic', fuelType: 'Diesel', mileage: 20000, photos: ['https://example.com/ford-f150-1.jpg', 'https://example.com/ford-f150-2.jpg', 'https://example.com/ford-f150-3.jpg', 'https://example.com/ford-f150-4.jpg'] },
+        { id: 4, make: 'Tesla', model: 'Model 3', year: 2022, price: 45000, transmission: 'Automatic', fuelType: 'Electric', mileage: 10000, photos: ['https://example.com/tesla-model3-1.jpg', 'https://example.com/tesla-model3-2.jpg'] },
+        { id: 5, make: 'BMW', model: 'X5', year: 2020, price: 55000, transmission: 'Automatic', fuelType: 'Hybrid', mileage: 25000, photos: ['https://example.com/bmw-x5-1.jpg', 'https://example.com/bmw-x5-2.jpg', 'https://example.com/bmw-x5-3.jpg'] },
       ];
       setCars(mockCars);
       setFilteredCars(mockCars);
@@ -68,8 +68,8 @@ const CarsList = () => {
     });
   };
 
-  const carMakes = ['All Makes', ...new Set(carBrands.map(brand => brand.brand))];
-  const carModels = ['All Models', ...(filters.make && filters.make !== 'All Makes' ? carBrands.find(brand => brand.brand === filters.make)?.models || [] : [])];
+  const carMakes = ['', ...new Set(carBrands.map(brand => brand.brand))];
+  const carModels = filters.make ? ['', ...carBrands.find(brand => brand.brand === filters.make)?.models || []] : [''];
 
   const maxPriceInData = Math.max(...cars.map(car => car.price), 100000);
 
@@ -90,7 +90,8 @@ const CarsList = () => {
                   <SelectValue placeholder="Select make" />
                 </SelectTrigger>
                 <SelectContent>
-                  {carMakes.map((make) => (
+                  <SelectItem value="">All Makes</SelectItem>
+                  {carMakes.slice(1).map((make) => (
                     <SelectItem key={make} value={make}>{make}</SelectItem>
                   ))}
                 </SelectContent>
@@ -103,7 +104,8 @@ const CarsList = () => {
                   <SelectValue placeholder="Select model" />
                 </SelectTrigger>
                 <SelectContent>
-                  {carModels.map((model) => (
+                  <SelectItem value="">All Models</SelectItem>
+                  {carModels.slice(1).map((model) => (
                     <SelectItem key={model} value={model}>{model}</SelectItem>
                   ))}
                 </SelectContent>
@@ -151,7 +153,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select transmission" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="All">All</SelectItem>
+                  <SelectItem value="">All</SelectItem>
                   <SelectItem value="Automatic">Automatic</SelectItem>
                   <SelectItem value="Manual">Manual</SelectItem>
                   <SelectItem value="CVT">CVT</SelectItem>
@@ -165,7 +167,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select fuel type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="All">All</SelectItem>
+                  <SelectItem value="">All</SelectItem>
                   <SelectItem value="Petrol">Petrol</SelectItem>
                   <SelectItem value="Diesel">Diesel</SelectItem>
                   <SelectItem value="Electric">Electric</SelectItem>
@@ -181,7 +183,12 @@ const CarsList = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCars.map((car) => (
             <Card key={car.id} className="overflow-hidden">
-              <img src={car.photo} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover" />
+              <img src={car.photos[0]} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover" />
+              <div className="flex overflow-x-auto p-2">
+                {car.photos.slice(1).map((photo, index) => (
+                  <img key={index} src={photo} alt={`${car.make} ${car.model} thumbnail ${index + 1}`} className="w-16 h-16 object-cover mr-2 flex-shrink-0" />
+                ))}
+              </div>
               <CardContent className="p-4">
                 <h2 className="text-xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
                 <p className="text-gray-600 mb-2">Price: {car.price} OMR</p>
