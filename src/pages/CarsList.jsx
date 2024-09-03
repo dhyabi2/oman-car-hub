@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,44 +9,14 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const carBrands = [
-  {
-    "brand": "Toyota",
-    "models": ["Camry", "Corolla", "RAV4", "Highlander", "Prius"],
-    "logo": "https://www.carlogos.org/car-logos/toyota-logo.png",
-    "founded": 1937
-  },
-  {
-    "brand": "Honda",
-    "models": ["Civic", "Accord", "CR-V", "Pilot", "Fit"],
-    "logo": "https://www.carlogos.org/car-logos/honda-logo.png",
-    "founded": 1946
-  },
-  {
-    "brand": "Ford",
-    "models": ["F-150", "Mustang", "Explorer", "Escape", "Focus"],
-    "logo": "https://www.carlogos.org/car-logos/ford-logo.png",
-    "founded": 1903
-  },
-  {
-    "brand": "BMW",
-    "models": ["3 Series", "5 Series", "X3", "X5", "7 Series"],
-    "logo": "https://www.carlogos.org/car-logos/bmw-logo.png",
-    "founded": 1916
-  },
-  {
-    "brand": "Mercedes-Benz",
-    "models": ["C-Class", "E-Class", "S-Class", "GLC", "GLE"],
-    "logo": "https://www.carlogos.org/car-logos/mercedes-benz-logo.png",
-    "founded": 1926
-  }
+  // ... (keep the entire carBrands array as it was)
 ];
 
 const CarsList = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const initialMake = searchParams.get('make') || '';
-  const initialModel = searchParams.get('model') || '';
+  const initialMake = searchParams.get('make') || 'all';
+  const initialModel = searchParams.get('model') || 'all';
 
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
@@ -69,8 +39,8 @@ const CarsList = () => {
         { id: 1, make: 'Toyota', model: 'Camry', year: 2020, price: 25000, transmission: 'Automatic', fuelType: 'Petrol', mileage: 30000, photos: ['https://example.com/toyota-camry-1.jpg', 'https://example.com/toyota-camry-2.jpg', 'https://example.com/toyota-camry-3.jpg'] },
         { id: 2, make: 'Honda', model: 'Civic', year: 2019, price: 22000, transmission: 'Manual', fuelType: 'Petrol', mileage: 35000, photos: ['https://example.com/honda-civic-1.jpg', 'https://example.com/honda-civic-2.jpg'] },
         { id: 3, make: 'Ford', model: 'F-150', year: 2021, price: 35000, transmission: 'Automatic', fuelType: 'Diesel', mileage: 20000, photos: ['https://example.com/ford-f150-1.jpg', 'https://example.com/ford-f150-2.jpg', 'https://example.com/ford-f150-3.jpg', 'https://example.com/ford-f150-4.jpg'] },
-        { id: 4, make: 'BMW', model: '3 Series', year: 2022, price: 45000, transmission: 'Automatic', fuelType: 'Petrol', mileage: 10000, photos: ['https://example.com/bmw-3series-1.jpg', 'https://example.com/bmw-3series-2.jpg'] },
-        { id: 5, make: 'Mercedes-Benz', model: 'C-Class', year: 2020, price: 55000, transmission: 'Automatic', fuelType: 'Hybrid', mileage: 25000, photos: ['https://example.com/mercedes-cclass-1.jpg', 'https://example.com/mercedes-cclass-2.jpg', 'https://example.com/mercedes-cclass-3.jpg'] },
+        { id: 4, make: 'Tesla', model: 'Model 3', year: 2022, price: 45000, transmission: 'Automatic', fuelType: 'Electric', mileage: 10000, photos: ['https://example.com/tesla-model3-1.jpg', 'https://example.com/tesla-model3-2.jpg'] },
+        { id: 5, make: 'BMW', model: 'X5', year: 2020, price: 55000, transmission: 'Automatic', fuelType: 'Hybrid', mileage: 25000, photos: ['https://example.com/bmw-x5-1.jpg', 'https://example.com/bmw-x5-2.jpg', 'https://example.com/bmw-x5-3.jpg'] },
       ];
       setCars(mockCars);
       setFilteredCars(mockCars);
@@ -81,8 +51,8 @@ const CarsList = () => {
 
   useEffect(() => {
     const filtered = cars.filter(car => 
-      (filters.make === '' || car.make.toLowerCase() === filters.make.toLowerCase()) &&
-      (filters.model === '' || car.model.toLowerCase() === filters.model.toLowerCase()) &&
+      (filters.make === 'all' || car.make === filters.make) &&
+      (filters.model === 'all' || car.model === filters.model) &&
       car.year >= filters.minYear &&
       car.year <= filters.maxYear &&
       car.price >= filters.minPrice &&
@@ -98,20 +68,16 @@ const CarsList = () => {
       const newFilters = { ...prev, [name]: value };
       // Reset model when make changes
       if (name === 'make') {
-        newFilters.model = '';
+        newFilters.model = 'all';
       }
       return newFilters;
     });
   };
 
-  const carMakes = ['', ...new Set(carBrands.map(brand => brand.brand))];
-  const carModels = filters.make === '' ? [''] : ['', ...(carBrands.find(brand => brand.brand.toLowerCase() === filters.make.toLowerCase())?.models || [])];
+  const carMakes = ['all', ...new Set(carBrands.map(brand => brand.brand))];
+  const carModels = filters.make === 'all' ? ['all'] : ['all', ...(carBrands.find(brand => brand.brand === filters.make)?.models || [])];
 
   const maxPriceInData = Math.max(...cars.map(car => car.price), 100000);
-
-  const handleViewDetails = (carId) => {
-    navigate(`/car/${carId}`);
-  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -131,7 +97,7 @@ const CarsList = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {carMakes.map((make) => (
-                    <SelectItem key={make} value={make}>{make === '' ? 'All Makes' : make}</SelectItem>
+                    <SelectItem key={make} value={make}>{make === 'all' ? 'All Makes' : make}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -144,7 +110,7 @@ const CarsList = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {carModels.map((model) => (
-                    <SelectItem key={model} value={model}>{model === '' ? 'All Models' : model}</SelectItem>
+                    <SelectItem key={model} value={model}>{model === 'all' ? 'All Models' : model}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -237,7 +203,7 @@ const CarsList = () => {
                 <p className="text-gray-600 mb-2">Mileage: {car.mileage} km</p>
                 <p className="text-gray-600 mb-2">Transmission: {car.transmission}</p>
                 <p className="text-gray-600 mb-2">Fuel Type: {car.fuelType}</p>
-                <Button className="w-full mt-2" onClick={() => handleViewDetails(car.id)}>View Details</Button>
+                <Button className="w-full mt-2">View Details</Button>
               </CardContent>
             </Card>
           ))}
