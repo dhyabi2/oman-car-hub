@@ -12,8 +12,8 @@ const CarsList = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const initialMake = searchParams.get('make') || '';
-  const initialModel = searchParams.get('model') || '';
+  const initialMake = searchParams.get('make') || 'All Makes';
+  const initialModel = searchParams.get('model') || 'All Models';
 
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
@@ -179,10 +179,14 @@ const CarsList = () => {
             <Card key={car.id} className="overflow-hidden">
               {car.photos && car.photos.length > 0 && (
                 <img 
-                  src={URL.createObjectURL(car.photos[0])} 
+                  src={car.photos[0] instanceof File ? URL.createObjectURL(car.photos[0]) : car.photos[0]}
                   alt={`${car.make} ${car.model}`} 
                   className="w-full h-48 object-cover"
-                  onLoad={(e) => URL.revokeObjectURL(e.target.src)}
+                  onLoad={(e) => {
+                    if (car.photos[0] instanceof File) {
+                      URL.revokeObjectURL(e.target.src);
+                    }
+                  }}
                 />
               )}
               {car.photos && car.photos.length > 1 && (
@@ -190,10 +194,14 @@ const CarsList = () => {
                   {car.photos.slice(1).map((photo, index) => (
                     <img 
                       key={index} 
-                      src={URL.createObjectURL(photo)} 
+                      src={photo instanceof File ? URL.createObjectURL(photo) : photo}
                       alt={`${car.make} ${car.model} thumbnail ${index + 1}`} 
                       className="w-16 h-16 object-cover mr-2 flex-shrink-0"
-                      onLoad={(e) => URL.revokeObjectURL(e.target.src)}
+                      onLoad={(e) => {
+                        if (photo instanceof File) {
+                          URL.revokeObjectURL(e.target.src);
+                        }
+                      }}
                     />
                   ))}
                 </div>
