@@ -256,11 +256,11 @@ const Index = () => {
                   <Button
                     key={index}
                     variant={selectedBrand === brand ? "default" : "outline"}
-                    className="w-full flex flex-col items-center justify-center p-2"
+                    className="w-full h-24 flex flex-col items-center justify-center p-2 space-y-1"
                     onClick={() => setSelectedBrand(brand)}
                   >
-                    <img src={brand.logo} alt={`${brand.brand} logo`} className="w-12 h-12 object-contain mb-2" />
-                    <span className="text-sm">{brand.brand}</span>
+                    <img src={brand.logo} alt={`${brand.brand} logo`} className="w-10 h-10 object-contain" />
+                    <span className="text-xs font-semibold text-center line-clamp-1">{brand.brand}</span>
                     <span className="text-xs text-gray-500">Est. {brand.founded}</span>
                   </Button>
                 ))}
