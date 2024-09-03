@@ -15,8 +15,8 @@ const carBrands = [
 const CarsList = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const initialMake = searchParams.get('make') || 'all';
-  const initialModel = searchParams.get('model') || 'all';
+  const initialMake = searchParams.get('make') || '';
+  const initialModel = searchParams.get('model') || '';
 
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
@@ -27,8 +27,8 @@ const CarsList = () => {
     maxYear: new Date().getFullYear(),
     minPrice: 0,
     maxPrice: 100000,
-    transmission: 'all',
-    fuelType: 'all',
+    transmission: '',
+    fuelType: '',
   });
 
   useEffect(() => {
@@ -51,14 +51,14 @@ const CarsList = () => {
 
   useEffect(() => {
     const filtered = cars.filter(car => 
-      (filters.make === 'all' || car.make === filters.make) &&
-      (filters.model === 'all' || car.model === filters.model) &&
+      (filters.make === '' || car.make === filters.make) &&
+      (filters.model === '' || car.model === filters.model) &&
       car.year >= filters.minYear &&
       car.year <= filters.maxYear &&
       car.price >= filters.minPrice &&
       car.price <= filters.maxPrice &&
-      (filters.transmission === 'all' || car.transmission === filters.transmission) &&
-      (filters.fuelType === 'all' || car.fuelType === filters.fuelType)
+      (filters.transmission === '' || car.transmission === filters.transmission) &&
+      (filters.fuelType === '' || car.fuelType === filters.fuelType)
     );
     setFilteredCars(filtered);
   }, [filters, cars]);
@@ -68,14 +68,14 @@ const CarsList = () => {
       const newFilters = { ...prev, [name]: value };
       // Reset model when make changes
       if (name === 'make') {
-        newFilters.model = 'all';
+        newFilters.model = '';
       }
       return newFilters;
     });
   };
 
-  const carMakes = ['all', ...new Set(carBrands.map(brand => brand.brand))];
-  const carModels = filters.make === 'all' ? ['all'] : ['all', ...(carBrands.find(brand => brand.brand === filters.make)?.models || [])];
+  const carMakes = ['', ...new Set(carBrands.map(brand => brand.brand))];
+  const carModels = filters.make === '' ? [''] : ['', ...(carBrands.find(brand => brand.brand === filters.make)?.models || [])];
 
   const maxPriceInData = Math.max(...cars.map(car => car.price), 100000);
 
@@ -97,7 +97,7 @@ const CarsList = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {carMakes.map((make) => (
-                    <SelectItem key={make} value={make}>{make === 'all' ? 'All Makes' : make}</SelectItem>
+                    <SelectItem key={make} value={make}>{make === '' ? 'All Makes' : make}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -110,7 +110,7 @@ const CarsList = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {carModels.map((model) => (
-                    <SelectItem key={model} value={model}>{model === 'all' ? 'All Models' : model}</SelectItem>
+                    <SelectItem key={model} value={model}>{model === '' ? 'All Models' : model}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -157,7 +157,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select transmission" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="">All</SelectItem>
                   <SelectItem value="Automatic">Automatic</SelectItem>
                   <SelectItem value="Manual">Manual</SelectItem>
                   <SelectItem value="CVT">CVT</SelectItem>
@@ -171,7 +171,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select fuel type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="">All</SelectItem>
                   <SelectItem value="Petrol">Petrol</SelectItem>
                   <SelectItem value="Diesel">Diesel</SelectItem>
                   <SelectItem value="Electric">Electric</SelectItem>
