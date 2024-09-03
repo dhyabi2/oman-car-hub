@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +16,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 
 const AddCar = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     make: '',
     model: '',
@@ -39,17 +41,32 @@ const AddCar = () => {
     additional_features: '',
   });
 
+  useEffect(() => {
+    const savedFormData = localStorage.getItem('addCarFormData');
+    if (savedFormData) {
+      setFormData(JSON.parse(savedFormData));
+    }
+  }, []);
+
   const handleInputChange = (name, value) => {
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    setFormData(prevState => {
+      const newState = {
+        ...prevState,
+        [name]: value
+      };
+      localStorage.setItem('addCarFormData', JSON.stringify(newState));
+      return newState;
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-    // Here you would typically send the data to your backend
+    const cars = JSON.parse(localStorage.getItem('cars') || '[]');
+    const newCar = { ...formData, id: Date.now() };
+    cars.push(newCar);
+    localStorage.setItem('cars', JSON.stringify(cars));
+    localStorage.removeItem('addCarFormData');
+    navigate('/cars-list');
   };
 
   const carMakes = ['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Nissan', 'BMW', 'Mercedes-Benz', 'Audi', 'Volkswagen', 'Hyundai', 'Kia'];
@@ -268,14 +285,14 @@ const AddCar = () => {
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {formData.listing_expiration_date ? format(formData.listing_expiration_date, "PPP") : <span>Pick a date</span>}
+                      {formData.listing_expiration_date ? format(new Date(formData.listing_expiration_date), "PPP") : <span>Pick a date</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
                     <Calendar
                       mode="single"
-                      selected={formData.listing_expiration_date}
-                      onSelect={(date) => handleInputChange('listing_expiration_date', date)}
+                      selected={formData.listing_expiration_date ? new Date(formData.listing_expiration_date) : undefined}
+                      onSelect={(date) => handleInputChange('listing_expiration_date', date ? date.toISOString() : null)}
                       initialFocus
                     />
                   </PopoverContent>

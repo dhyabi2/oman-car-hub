@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,12 +8,9 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const carBrands = [
-  // ... (keep the entire carBrands array as it was)
-];
-
 const CarsList = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const initialMake = searchParams.get('make') || '';
   const initialModel = searchParams.get('model') || '';
@@ -32,21 +29,9 @@ const CarsList = () => {
   });
 
   useEffect(() => {
-    // Simulating API call to fetch cars
-    const fetchCars = async () => {
-      // In a real application, this would be an API call
-      const mockCars = [
-        { id: 1, make: 'Toyota', model: 'Camry', year: 2020, price: 25000, transmission: 'Automatic', fuelType: 'Petrol', mileage: 30000, photos: ['https://example.com/toyota-camry-1.jpg', 'https://example.com/toyota-camry-2.jpg', 'https://example.com/toyota-camry-3.jpg'] },
-        { id: 2, make: 'Honda', model: 'Civic', year: 2019, price: 22000, transmission: 'Manual', fuelType: 'Petrol', mileage: 35000, photos: ['https://example.com/honda-civic-1.jpg', 'https://example.com/honda-civic-2.jpg'] },
-        { id: 3, make: 'Ford', model: 'F-150', year: 2021, price: 35000, transmission: 'Automatic', fuelType: 'Diesel', mileage: 20000, photos: ['https://example.com/ford-f150-1.jpg', 'https://example.com/ford-f150-2.jpg', 'https://example.com/ford-f150-3.jpg', 'https://example.com/ford-f150-4.jpg'] },
-        { id: 4, make: 'Tesla', model: 'Model 3', year: 2022, price: 45000, transmission: 'Automatic', fuelType: 'Electric', mileage: 10000, photos: ['https://example.com/tesla-model3-1.jpg', 'https://example.com/tesla-model3-2.jpg'] },
-        { id: 5, make: 'BMW', model: 'X5', year: 2020, price: 55000, transmission: 'Automatic', fuelType: 'Hybrid', mileage: 25000, photos: ['https://example.com/bmw-x5-1.jpg', 'https://example.com/bmw-x5-2.jpg', 'https://example.com/bmw-x5-3.jpg'] },
-      ];
-      setCars(mockCars);
-      setFilteredCars(mockCars);
-    };
-
-    fetchCars();
+    const storedCars = JSON.parse(localStorage.getItem('cars') || '[]');
+    setCars(storedCars);
+    setFilteredCars(storedCars);
   }, []);
 
   useEffect(() => {
@@ -58,7 +43,7 @@ const CarsList = () => {
       car.price >= filters.minPrice &&
       car.price <= filters.maxPrice &&
       (filters.transmission === '' || car.transmission === filters.transmission) &&
-      (filters.fuelType === '' || car.fuelType === filters.fuelType)
+      (filters.fuelType === '' || car.fuel_type === filters.fuelType)
     );
     setFilteredCars(filtered);
   }, [filters, cars]);
@@ -66,7 +51,6 @@ const CarsList = () => {
   const handleFilterChange = (name, value) => {
     setFilters(prev => {
       const newFilters = { ...prev, [name]: value };
-      // Reset model when make changes
       if (name === 'make') {
         newFilters.model = '';
       }
@@ -74,10 +58,14 @@ const CarsList = () => {
     });
   };
 
-  const carMakes = ['', ...new Set(carBrands.map(brand => brand.brand))];
-  const carModels = filters.make === '' ? [''] : ['', ...(carBrands.find(brand => brand.brand === filters.make)?.models || [])];
+  const carMakes = ['', ...new Set(cars.map(car => car.make))];
+  const carModels = filters.make === '' ? [''] : ['', ...new Set(cars.filter(car => car.make === filters.make).map(car => car.model))];
 
   const maxPriceInData = Math.max(...cars.map(car => car.price), 100000);
+
+  const handleViewDetails = (carId) => {
+    navigate(`/car/${carId}`);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -188,12 +176,12 @@ const CarsList = () => {
           {filteredCars.map((car) => (
             <Card key={car.id} className="overflow-hidden">
               {car.photos && car.photos.length > 0 && (
-                <img src={car.photos[0]} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover" />
+                <img src={URL.createObjectURL(car.photos[0])} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover" />
               )}
               {car.photos && car.photos.length > 1 && (
                 <div className="flex overflow-x-auto p-2">
                   {car.photos.slice(1).map((photo, index) => (
-                    <img key={index} src={photo} alt={`${car.make} ${car.model} thumbnail ${index + 1}`} className="w-16 h-16 object-cover mr-2 flex-shrink-0" />
+                    <img key={index} src={URL.createObjectURL(photo)} alt={`${car.make} ${car.model} thumbnail ${index + 1}`} className="w-16 h-16 object-cover mr-2 flex-shrink-0" />
                   ))}
                 </div>
               )}
@@ -202,8 +190,8 @@ const CarsList = () => {
                 <p className="text-gray-600 mb-2">Price: {car.price} OMR</p>
                 <p className="text-gray-600 mb-2">Mileage: {car.mileage} km</p>
                 <p className="text-gray-600 mb-2">Transmission: {car.transmission}</p>
-                <p className="text-gray-600 mb-2">Fuel Type: {car.fuelType}</p>
-                <Button className="w-full mt-2">View Details</Button>
+                <p className="text-gray-600 mb-2">Fuel Type: {car.fuel_type}</p>
+                <Button className="w-full mt-2" onClick={() => handleViewDetails(car.id)}>View Details</Button>
               </CardContent>
             </Card>
           ))}
