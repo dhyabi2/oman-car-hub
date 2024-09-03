@@ -11,14 +11,14 @@ const CarsList = () => {
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
   const [filters, setFilters] = useState({
-    make: '',
-    model: '',
+    make: 'all',
+    model: 'all',
     minYear: 1990,
     maxYear: new Date().getFullYear(),
     minPrice: 0,
     maxPrice: 100000,
-    transmission: '',
-    fuelType: '',
+    transmission: 'all',
+    fuelType: 'all',
   });
 
   useEffect(() => {
@@ -36,14 +36,14 @@ const CarsList = () => {
 
   useEffect(() => {
     const filtered = cars.filter(car => 
-      (filters.make === '' || car.make === filters.make) &&
-      (filters.model === '' || car.model === filters.model) &&
+      (filters.make === 'all' || car.make === filters.make) &&
+      (filters.model === 'all' || car.model === filters.model) &&
       car.year >= filters.minYear &&
       car.year <= filters.maxYear &&
       car.price >= filters.minPrice &&
       car.price <= filters.maxPrice &&
-      (filters.transmission === '' || car.transmission === filters.transmission) &&
-      (filters.fuelType === '' || car.fuelType === filters.fuelType)
+      (filters.transmission === 'all' || car.transmission === filters.transmission) &&
+      (filters.fuelType === 'all' || car.fuelType === filters.fuelType)
     );
     setFilteredCars(filtered);
   }, [filters, cars]);
@@ -52,8 +52,8 @@ const CarsList = () => {
     setFilters(prev => ({ ...prev, [name]: value }));
   };
 
-  const carMakes = [...new Set(cars.map(car => car.make))];
-  const carModels = [...new Set(cars.filter(car => car.make === filters.make).map(car => car.model))];
+  const carMakes = ['all', ...new Set(cars.map(car => car.make))];
+  const carModels = ['all', ...new Set(cars.filter(car => car.make === filters.make || filters.make === 'all').map(car => car.model))];
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -72,8 +72,8 @@ const CarsList = () => {
                   <SelectValue placeholder="Select make" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Makes</SelectItem>
-                  {carMakes.map((make) => (
+                  <SelectItem value="all">All Makes</SelectItem>
+                  {carMakes.filter(make => make !== 'all').map((make) => (
                     <SelectItem key={make} value={make}>{make}</SelectItem>
                   ))}
                 </SelectContent>
@@ -86,8 +86,8 @@ const CarsList = () => {
                   <SelectValue placeholder="Select model" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Models</SelectItem>
-                  {carModels.map((model) => (
+                  <SelectItem value="all">All Models</SelectItem>
+                  {carModels.filter(model => model !== 'all').map((model) => (
                     <SelectItem key={model} value={model}>{model}</SelectItem>
                   ))}
                 </SelectContent>
@@ -116,7 +116,7 @@ const CarsList = () => {
               <Slider
                 min={0}
                 max={100000}
-                step={1000}
+                step={50}
                 value={[filters.minPrice, filters.maxPrice]}
                 onValueChange={(value) => {
                   handleFilterChange('minPrice', value[0]);
@@ -135,7 +135,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select transmission" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All</SelectItem>
+                  <SelectItem value="all">All</SelectItem>
                   <SelectItem value="Automatic">Automatic</SelectItem>
                   <SelectItem value="Manual">Manual</SelectItem>
                   <SelectItem value="CVT">CVT</SelectItem>
@@ -149,7 +149,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select fuel type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All</SelectItem>
+                  <SelectItem value="all">All</SelectItem>
                   <SelectItem value="Petrol">Petrol</SelectItem>
                   <SelectItem value="Diesel">Diesel</SelectItem>
                   <SelectItem value="Electric">Electric</SelectItem>
