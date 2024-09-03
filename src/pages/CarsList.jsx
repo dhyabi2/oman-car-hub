@@ -36,8 +36,8 @@ const CarsList = () => {
 
   useEffect(() => {
     const filtered = cars.filter(car => 
-      (filters.make === '' || car.make === filters.make) &&
-      (filters.model === '' || car.model === filters.model) &&
+      (filters.make === 'All Makes' || car.make === filters.make) &&
+      (filters.model === 'All Models' || car.model === filters.model) &&
       car.year >= filters.minYear &&
       car.year <= filters.maxYear &&
       car.price >= filters.minPrice &&
@@ -52,14 +52,16 @@ const CarsList = () => {
     setFilters(prev => {
       const newFilters = { ...prev, [name]: value };
       if (name === 'make') {
-        newFilters.model = '';
+        newFilters.model = 'All Models';
       }
       return newFilters;
     });
   };
 
   const carMakes = ['All Makes', ...new Set(cars.map(car => car.make))];
-  const carModels = filters.make === 'All Makes' ? ['All Models'] : ['All Models', ...new Set(cars.filter(car => car.make === filters.make).map(car => car.model))];
+  const carModels = filters.make === 'All Makes' 
+    ? ['All Models'] 
+    : ['All Models', ...new Set(cars.filter(car => car.make === filters.make).map(car => car.model))];
 
   const maxPriceInData = Math.max(...cars.map(car => car.price), 100000);
 
