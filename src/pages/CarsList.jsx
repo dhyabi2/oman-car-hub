@@ -24,8 +24,8 @@ const CarsList = () => {
     maxYear: new Date().getFullYear(),
     minPrice: 0,
     maxPrice: 100000,
-    transmission: '',
-    fuelType: '',
+    transmission: 'all',
+    fuelType: 'all',
   });
 
   useEffect(() => {
@@ -42,8 +42,8 @@ const CarsList = () => {
       car.year <= filters.maxYear &&
       car.price >= filters.minPrice &&
       car.price <= filters.maxPrice &&
-      (filters.transmission === '' || car.transmission === filters.transmission) &&
-      (filters.fuelType === '' || car.fuel_type === filters.fuelType)
+      (filters.transmission === 'all' || car.transmission === filters.transmission) &&
+      (filters.fuelType === 'all' || car.fuel_type === filters.fuelType)
     );
     setFilteredCars(filtered);
   }, [filters, cars]);
@@ -147,7 +147,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select transmission" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All</SelectItem>
+                  <SelectItem value="all">All</SelectItem>
                   <SelectItem value="Automatic">Automatic</SelectItem>
                   <SelectItem value="Manual">Manual</SelectItem>
                   <SelectItem value="CVT">CVT</SelectItem>
@@ -161,7 +161,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select fuel type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All</SelectItem>
+                  <SelectItem value="all">All</SelectItem>
                   <SelectItem value="Petrol">Petrol</SelectItem>
                   <SelectItem value="Diesel">Diesel</SelectItem>
                   <SelectItem value="Electric">Electric</SelectItem>
