@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,16 +12,11 @@ const carBrands = [
 ];
 
 const CarsList = () => {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const initialMake = searchParams.get('make') || 'all';
-  const initialModel = searchParams.get('model') || 'all';
-
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
   const [filters, setFilters] = useState({
-    make: initialMake,
-    model: initialModel,
+    make: 'all',
+    model: 'all',
     minYear: 1990,
     maxYear: new Date().getFullYear(),
     minPrice: 0,
