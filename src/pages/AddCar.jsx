@@ -141,7 +141,7 @@ const AddCar = () => {
                     <SelectValue placeholder="Select model" />
                   </SelectTrigger>
                   <SelectContent>
-                    {formData.make && carModels[formData.make].map((model) => (
+                    {formData.make && carModels[formData.make] && carModels[formData.make].map((model) => (
                       <SelectItem key={model} value={model}>{model}</SelectItem>
                     ))}
                   </SelectContent>
