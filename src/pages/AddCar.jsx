@@ -5,52 +5,44 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 
 const AddCar = () => {
   const [formData, setFormData] = useState({
     make: '',
     model: '',
-    year: '',
-    mileage: '',
-    transmission: '',
-    fuel_type: '',
-    engine_size: '',
-    color: '',
-    number_of_doors: '',
-    number_of_seats: '',
-    drivetrain: '',
-    condition: '',
-    price: '',
+    year: new Date().getFullYear(),
+    mileage: 0,
+    transmission: 'Automatic',
+    fuel_type: 'Petrol',
+    engine_size: 1500,
+    color: 'White',
+    number_of_doors: 4,
+    number_of_seats: 5,
+    drivetrain: 'FWD',
+    condition: 'Used',
+    price: 10000,
     vin: '',
     location: '',
-    seller_type: '',
+    seller_type: 'Private',
     description: '',
     photos: [],
     contact_phone: '',
-    listing_expiration_date: '',
-    additional_features: ''
+    listing_expiration_date: null,
+    additional_features: '',
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (name, value) => {
     setFormData(prevState => ({
       ...prevState,
       [name]: value
-    }));
-  };
-
-  const handleSelectChange = (name, value) => {
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    setFormData(prevState => ({
-      ...prevState,
-      photos: files.slice(0, 10) // Limit to 10 photos
     }));
   };
 
@@ -60,6 +52,21 @@ const AddCar = () => {
     // Here you would typically send the data to your backend
   };
 
+  const carMakes = ['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Nissan', 'BMW', 'Mercedes-Benz', 'Audi', 'Volkswagen', 'Hyundai', 'Kia'];
+  const carModels = {
+    Toyota: ['Camry', 'Corolla', 'RAV4', 'Highlander', 'Prius'],
+    Honda: ['Civic', 'Accord', 'CR-V', 'Pilot', 'Fit'],
+    Ford: ['F-150', 'Mustang', 'Explorer', 'Escape', 'Focus'],
+    Chevrolet: ['Silverado', 'Equinox', 'Malibu', 'Traverse', 'Camaro'],
+    Nissan: ['Altima', 'Rogue', 'Sentra', 'Maxima', 'Murano'],
+    BMW: ['3 Series', '5 Series', 'X3', 'X5', '7 Series'],
+    'Mercedes-Benz': ['C-Class', 'E-Class', 'GLC', 'GLE', 'S-Class'],
+    Audi: ['A4', 'Q5', 'A6', 'Q7', 'A3'],
+    Volkswagen: ['Jetta', 'Passat', 'Tiguan', 'Atlas', 'Golf'],
+    Hyundai: ['Elantra', 'Sonata', 'Tucson', 'Santa Fe', 'Kona'],
+    Kia: ['Forte', 'Optima', 'Sportage', 'Sorento', 'Telluride'],
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Card>
@@ -67,155 +74,222 @@ const AddCar = () => {
           <CardTitle>Add a Car for Sale</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <Label htmlFor="make">Make</Label>
-                <Input id="make" name="make" value={formData.make} onChange={handleInputChange} required />
+                <Select value={formData.make} onValueChange={(value) => handleInputChange('make', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select make" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {carMakes.map((make) => (
+                      <SelectItem key={make} value={make}>{make}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label htmlFor="model">Model</Label>
-                <Input id="model" name="model" value={formData.model} onChange={handleInputChange} required />
+                <Select value={formData.model} onValueChange={(value) => handleInputChange('model', value)} disabled={!formData.make}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select model" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {formData.make && carModels[formData.make].map((model) => (
+                      <SelectItem key={model} value={model}>{model}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div>
-                <Label htmlFor="year">Year</Label>
-                <Input id="year" name="year" type="number" value={formData.year} onChange={handleInputChange} required />
+                <Label htmlFor="year">Year ({formData.year})</Label>
+                <Slider
+                  min={1990}
+                  max={new Date().getFullYear()}
+                  step={1}
+                  value={[formData.year]}
+                  onValueChange={(value) => handleInputChange('year', value[0])}
+                />
               </div>
               <div>
-                <Label htmlFor="mileage">Mileage (km)</Label>
-                <Input id="mileage" name="mileage" type="number" value={formData.mileage} onChange={handleInputChange} required />
+                <Label htmlFor="mileage">Mileage (km) ({formData.mileage})</Label>
+                <Slider
+                  min={0}
+                  max={300000}
+                  step={1000}
+                  value={[formData.mileage]}
+                  onValueChange={(value) => handleInputChange('mileage', value[0])}
+                />
               </div>
               <div>
                 <Label htmlFor="transmission">Transmission</Label>
-                <Select name="transmission" onValueChange={(value) => handleSelectChange("transmission", value)} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select transmission" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {["Automatic", "Manual", "Semi-Automatic", "CVT"].map((option) => (
-                      <SelectItem key={option} value={option}>{option}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <RadioGroup value={formData.transmission} onValueChange={(value) => handleInputChange('transmission', value)}>
+                  {["Automatic", "Manual", "Semi-Automatic", "CVT"].map((option) => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <RadioGroupItem value={option} id={`transmission-${option}`} />
+                      <Label htmlFor={`transmission-${option}`}>{option}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </div>
               <div>
                 <Label htmlFor="fuel_type">Fuel Type</Label>
-                <Select name="fuel_type" onValueChange={(value) => handleSelectChange("fuel_type", value)} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select fuel type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {["Petrol", "Diesel", "Hybrid", "Electric", "LPG", "CNG"].map((option) => (
-                      <SelectItem key={option} value={option}>{option}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <RadioGroup value={formData.fuel_type} onValueChange={(value) => handleInputChange('fuel_type', value)}>
+                  {["Petrol", "Diesel", "Hybrid", "Electric", "LPG", "CNG"].map((option) => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <RadioGroupItem value={option} id={`fuel-${option}`} />
+                      <Label htmlFor={`fuel-${option}`}>{option}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </div>
               <div>
-                <Label htmlFor="engine_size">Engine Size (cc)</Label>
-                <Input id="engine_size" name="engine_size" type="number" value={formData.engine_size} onChange={handleInputChange} />
+                <Label htmlFor="engine_size">Engine Size (cc) ({formData.engine_size})</Label>
+                <Slider
+                  min={500}
+                  max={8000}
+                  step={100}
+                  value={[formData.engine_size]}
+                  onValueChange={(value) => handleInputChange('engine_size', value[0])}
+                />
               </div>
               <div>
                 <Label htmlFor="color">Color</Label>
-                <Input id="color" name="color" value={formData.color} onChange={handleInputChange} required />
+                <Select value={formData.color} onValueChange={(value) => handleInputChange('color', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select color" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {["White", "Black", "Silver", "Gray", "Red", "Blue", "Green", "Yellow", "Brown", "Orange"].map((color) => (
+                      <SelectItem key={color} value={color}>{color}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label htmlFor="number_of_doors">Number of Doors</Label>
-                <Select name="number_of_doors" onValueChange={(value) => handleSelectChange("number_of_doors", value)} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select number of doors" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[2, 3, 4, 5].map((option) => (
-                      <SelectItem key={option} value={option.toString()}>{option}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <RadioGroup value={formData.number_of_doors.toString()} onValueChange={(value) => handleInputChange('number_of_doors', parseInt(value))}>
+                  {[2, 3, 4, 5].map((option) => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <RadioGroupItem value={option.toString()} id={`doors-${option}`} />
+                      <Label htmlFor={`doors-${option}`}>{option}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </div>
               <div>
                 <Label htmlFor="number_of_seats">Number of Seats</Label>
-                <Select name="number_of_seats" onValueChange={(value) => handleSelectChange("number_of_seats", value)} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select number of seats" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[2, 4, 5, 7, 8].map((option) => (
-                      <SelectItem key={option} value={option.toString()}>{option}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <RadioGroup value={formData.number_of_seats.toString()} onValueChange={(value) => handleInputChange('number_of_seats', parseInt(value))}>
+                  {[2, 4, 5, 7, 8].map((option) => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <RadioGroupItem value={option.toString()} id={`seats-${option}`} />
+                      <Label htmlFor={`seats-${option}`}>{option}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </div>
               <div>
                 <Label htmlFor="drivetrain">Drivetrain</Label>
-                <Select name="drivetrain" onValueChange={(value) => handleSelectChange("drivetrain", value)} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select drivetrain" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {["FWD", "RWD", "AWD", "4WD"].map((option) => (
-                      <SelectItem key={option} value={option}>{option}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <RadioGroup value={formData.drivetrain} onValueChange={(value) => handleInputChange('drivetrain', value)}>
+                  {["FWD", "RWD", "AWD", "4WD"].map((option) => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <RadioGroupItem value={option} id={`drivetrain-${option}`} />
+                      <Label htmlFor={`drivetrain-${option}`}>{option}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </div>
               <div>
                 <Label htmlFor="condition">Condition</Label>
-                <Select name="condition" onValueChange={(value) => handleSelectChange("condition", value)} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select condition" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {["New", "Used", "Certified Pre-Owned"].map((option) => (
-                      <SelectItem key={option} value={option}>{option}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <RadioGroup value={formData.condition} onValueChange={(value) => handleInputChange('condition', value)}>
+                  {["New", "Used", "Certified Pre-Owned"].map((option) => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <RadioGroupItem value={option} id={`condition-${option}`} />
+                      <Label htmlFor={`condition-${option}`}>{option}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </div>
               <div>
-                <Label htmlFor="price">Price (OMR)</Label>
-                <Input id="price" name="price" type="number" value={formData.price} onChange={handleInputChange} required />
+                <Label htmlFor="price">Price (OMR) ({formData.price})</Label>
+                <Slider
+                  min={1000}
+                  max={100000}
+                  step={500}
+                  value={[formData.price]}
+                  onValueChange={(value) => handleInputChange('price', value[0])}
+                />
               </div>
               <div>
-                <Label htmlFor="vin">VIN (Vehicle Identification Number)</Label>
-                <Input id="vin" name="vin" value={formData.vin} onChange={handleInputChange} />
+                <Label htmlFor="vin">VIN (Optional)</Label>
+                <Input id="vin" value={formData.vin} onChange={(e) => handleInputChange('vin', e.target.value)} />
               </div>
               <div>
                 <Label htmlFor="location">Location</Label>
-                <Input id="location" name="location" value={formData.location} onChange={handleInputChange} required />
-              </div>
-              <div>
-                <Label htmlFor="seller_type">Seller Type</Label>
-                <Select name="seller_type" onValueChange={(value) => handleSelectChange("seller_type", value)} required>
+                <Select value={formData.location} onValueChange={(value) => handleInputChange('location', value)}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select seller type" />
+                    <SelectValue placeholder="Select location" />
                   </SelectTrigger>
                   <SelectContent>
-                    {["Private", "Dealer"].map((option) => (
-                      <SelectItem key={option} value={option}>{option}</SelectItem>
+                    {["Muscat", "Salalah", "Sohar", "Nizwa", "Sur", "Ibri", "Barka", "Seeb", "Rustaq", "Ibra"].map((city) => (
+                      <SelectItem key={city} value={city}>{city}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div>
+                <Label htmlFor="seller_type">Seller Type</Label>
+                <RadioGroup value={formData.seller_type} onValueChange={(value) => handleInputChange('seller_type', value)}>
+                  {["Private", "Dealer"].map((option) => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <RadioGroupItem value={option} id={`seller-${option}`} />
+                      <Label htmlFor={`seller-${option}`}>{option}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+              </div>
+              <div>
                 <Label htmlFor="contact_phone">Contact Phone</Label>
-                <Input id="contact_phone" name="contact_phone" type="tel" value={formData.contact_phone} onChange={handleInputChange} required />
+                <Input id="contact_phone" type="tel" value={formData.contact_phone} onChange={(e) => handleInputChange('contact_phone', e.target.value)} />
               </div>
               <div>
                 <Label htmlFor="listing_expiration_date">Listing Expiration Date</Label>
-                <Input id="listing_expiration_date" name="listing_expiration_date" type="date" value={formData.listing_expiration_date} onChange={handleInputChange} />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !formData.listing_expiration_date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {formData.listing_expiration_date ? format(formData.listing_expiration_date, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={formData.listing_expiration_date}
+                      onSelect={(date) => handleInputChange('listing_expiration_date', date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
             <div>
-              <Label htmlFor="description">Description</Label>
-              <Textarea id="description" name="description" value={formData.description} onChange={handleInputChange} />
+              <Label htmlFor="description">Description (Optional)</Label>
+              <Textarea id="description" value={formData.description} onChange={(e) => handleInputChange('description', e.target.value)} />
             </div>
             <div>
-              <Label htmlFor="additional_features">Additional Features</Label>
-              <Textarea id="additional_features" name="additional_features" value={formData.additional_features} onChange={handleInputChange} />
+              <Label htmlFor="additional_features">Additional Features (Optional)</Label>
+              <Textarea id="additional_features" value={formData.additional_features} onChange={(e) => handleInputChange('additional_features', e.target.value)} />
             </div>
             <div>
               <Label htmlFor="photos">Photos (Max 10)</Label>
-              <Input id="photos" name="photos" type="file" multiple onChange={handleFileChange} accept="image/*" />
+              <Input id="photos" type="file" multiple onChange={(e) => handleInputChange('photos', Array.from(e.target.files).slice(0, 10))} accept="image/*" />
             </div>
             <Button type="submit" className="w-full">Submit Listing</Button>
           </form>
