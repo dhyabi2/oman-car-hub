@@ -242,11 +242,15 @@ const carBrands = [
 
 const Index = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedModel, setSelectedModel] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(null);
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8 text-center">Oman Auto Mart</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <Card className="h-[calc(100vh-12rem)] overflow-hidden">
           <CardContent className="p-4">
             <h2 className="text-2xl font-semibold mb-4">Car Brands</h2>
@@ -257,7 +261,11 @@ const Index = () => {
                     key={index}
                     variant={selectedBrand === brand ? "default" : "outline"}
                     className="w-full h-24 flex flex-col items-center justify-center p-2 space-y-1"
-                    onClick={() => setSelectedBrand(brand)}
+                    onClick={() => {
+                      setSelectedBrand(brand);
+                      setSelectedModel(null);
+                      setSelectedYear(null);
+                    }}
                   >
                     <img src={brand.logo} alt={`${brand.brand} logo`} className="w-10 h-10 object-contain" />
                     <span className="text-xs font-semibold text-center line-clamp-1">{brand.brand}</span>
@@ -277,8 +285,39 @@ const Index = () => {
               {selectedBrand && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {selectedBrand.models.map((model, index) => (
-                    <Button key={index} variant="outline" className="w-full">
+                    <Button
+                      key={index}
+                      variant={selectedModel === model ? "default" : "outline"}
+                      className="w-full"
+                      onClick={() => {
+                        setSelectedModel(model);
+                        setSelectedYear(null);
+                      }}
+                    >
                       {model}
+                    </Button>
+                  ))}
+                </div>
+              )}
+            </ScrollArea>
+          </CardContent>
+        </Card>
+        <Card className="h-[calc(100vh-12rem)] overflow-hidden">
+          <CardContent className="p-4">
+            <h2 className="text-2xl font-semibold mb-4">
+              {selectedModel ? `${selectedModel} Years` : "Select a Model"}
+            </h2>
+            <ScrollArea className="h-[calc(100vh-16rem)]">
+              {selectedModel && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {years.map((year) => (
+                    <Button
+                      key={year}
+                      variant={selectedYear === year ? "default" : "outline"}
+                      className="w-full"
+                      onClick={() => setSelectedYear(year)}
+                    >
+                      {year}
                     </Button>
                   ))}
                 </div>
