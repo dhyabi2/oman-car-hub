@@ -25,10 +25,15 @@ const CarsList = () => {
     // Simulating API call to fetch cars
     const fetchCars = async () => {
       // In a real application, this would be an API call
-      const response = await fetch('/api/cars');
-      const data = await response.json();
-      setCars(data);
-      setFilteredCars(data);
+      const mockCars = [
+        { id: 1, make: 'Toyota', model: 'Camry', year: 2020, price: 25000, transmission: 'Automatic', fuelType: 'Petrol', mileage: 30000, photo: 'https://example.com/toyota-camry.jpg' },
+        { id: 2, make: 'Honda', model: 'Civic', year: 2019, price: 22000, transmission: 'Manual', fuelType: 'Petrol', mileage: 35000, photo: 'https://example.com/honda-civic.jpg' },
+        { id: 3, make: 'Ford', model: 'F-150', year: 2021, price: 35000, transmission: 'Automatic', fuelType: 'Diesel', mileage: 20000, photo: 'https://example.com/ford-f150.jpg' },
+        { id: 4, make: 'Tesla', model: 'Model 3', year: 2022, price: 45000, transmission: 'Automatic', fuelType: 'Electric', mileage: 10000, photo: 'https://example.com/tesla-model3.jpg' },
+        { id: 5, make: 'BMW', model: 'X5', year: 2020, price: 55000, transmission: 'Automatic', fuelType: 'Hybrid', mileage: 25000, photo: 'https://example.com/bmw-x5.jpg' },
+      ];
+      setCars(mockCars);
+      setFilteredCars(mockCars);
     };
 
     fetchCars();
@@ -49,11 +54,20 @@ const CarsList = () => {
   }, [filters, cars]);
 
   const handleFilterChange = (name, value) => {
-    setFilters(prev => ({ ...prev, [name]: value }));
+    setFilters(prev => {
+      const newFilters = { ...prev, [name]: value };
+      // Reset model when make changes
+      if (name === 'make') {
+        newFilters.model = 'all';
+      }
+      return newFilters;
+    });
   };
 
   const carMakes = ['all', ...new Set(cars.map(car => car.make))];
-  const carModels = ['all', ...new Set(cars.filter(car => car.make === filters.make || filters.make === 'all').map(car => car.model))];
+  const carModels = ['all', ...new Set(cars.filter(car => filters.make === 'all' || car.make === filters.make).map(car => car.model))];
+
+  const maxPriceInData = Math.max(...cars.map(car => car.price), 100000);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -72,9 +86,8 @@ const CarsList = () => {
                   <SelectValue placeholder="Select make" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Makes</SelectItem>
-                  {carMakes.filter(make => make !== 'all').map((make) => (
-                    <SelectItem key={make} value={make}>{make}</SelectItem>
+                  {carMakes.map((make) => (
+                    <SelectItem key={make} value={make}>{make === 'all' ? 'All Makes' : make}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -86,9 +99,8 @@ const CarsList = () => {
                   <SelectValue placeholder="Select model" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Models</SelectItem>
-                  {carModels.filter(model => model !== 'all').map((model) => (
-                    <SelectItem key={model} value={model}>{model}</SelectItem>
+                  {carModels.map((model) => (
+                    <SelectItem key={model} value={model}>{model === 'all' ? 'All Models' : model}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -115,8 +127,8 @@ const CarsList = () => {
               <Label>Price Range (OMR)</Label>
               <Slider
                 min={0}
-                max={100000}
-                step={50}
+                max={maxPriceInData}
+                step={1000}
                 value={[filters.minPrice, filters.maxPrice]}
                 onValueChange={(value) => {
                   handleFilterChange('minPrice', value[0]);
