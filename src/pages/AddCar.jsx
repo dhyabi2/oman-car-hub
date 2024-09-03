@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { toast } from "sonner";
 
 const AddCar = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const AddCar = () => {
     transmission: 'Automatic',
     fuel_type: 'Petrol',
     engine_size: 1500,
-    color: 'White',
+    color: '',
     number_of_doors: 4,
     number_of_seats: 5,
     drivetrain: 'FWD',
@@ -45,7 +46,6 @@ const AddCar = () => {
     const savedFormData = localStorage.getItem('addCarFormData');
     if (savedFormData) {
       const parsedData = JSON.parse(savedFormData);
-      // Don't restore photos from localStorage
       setFormData({ ...parsedData, photos: [] });
     }
   }, []);
@@ -56,20 +56,33 @@ const AddCar = () => {
         ...prevState,
         [name]: value
       };
-      // Don't save photos to localStorage
       const stateForStorage = { ...newState, photos: [] };
       localStorage.setItem('addCarFormData', JSON.stringify(stateForStorage));
       return newState;
     });
   };
 
+  const validateForm = () => {
+    const requiredFields = ['make', 'model', 'year', 'mileage', 'transmission', 'fuel_type', 'color', 'price', 'location', 'contact_phone'];
+    const emptyFields = requiredFields.filter(field => !formData[field]);
+    
+    if (emptyFields.length > 0) {
+      toast.error(`Please fill in all required fields: ${emptyFields.join(', ')}`);
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     const cars = JSON.parse(localStorage.getItem('cars') || '[]');
     const newCar = { ...formData, id: Date.now() };
     cars.push(newCar);
     localStorage.setItem('cars', JSON.stringify(cars));
     localStorage.removeItem('addCarFormData');
+    toast.success('Car listing added successfully!');
     navigate('/cars-list');
   };
 
