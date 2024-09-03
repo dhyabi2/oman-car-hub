@@ -145,7 +145,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select transmission" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="All">All</SelectItem>
+                  <SelectItem value="">All</SelectItem>
                   <SelectItem value="Automatic">Automatic</SelectItem>
                   <SelectItem value="Manual">Manual</SelectItem>
                   <SelectItem value="CVT">CVT</SelectItem>
@@ -159,7 +159,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select fuel type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="All">All</SelectItem>
+                  <SelectItem value="">All</SelectItem>
                   <SelectItem value="Petrol">Petrol</SelectItem>
                   <SelectItem value="Diesel">Diesel</SelectItem>
                   <SelectItem value="Electric">Electric</SelectItem>
@@ -176,12 +176,12 @@ const CarsList = () => {
           {filteredCars.map((car) => (
             <Card key={car.id} className="overflow-hidden">
               {car.photos && car.photos.length > 0 && (
-                <img src={URL.createObjectURL(car.photos[0])} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover" />
+                <img src={car.photos[0]} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover" />
               )}
               {car.photos && car.photos.length > 1 && (
                 <div className="flex overflow-x-auto p-2">
                   {car.photos.slice(1).map((photo, index) => (
-                    <img key={index} src={URL.createObjectURL(photo)} alt={`${car.make} ${car.model} thumbnail ${index + 1}`} className="w-16 h-16 object-cover mr-2 flex-shrink-0" />
+                    <img key={index} src={photo} alt={`${car.make} ${car.model} thumbnail ${index + 1}`} className="w-16 h-16 object-cover mr-2 flex-shrink-0" />
                   ))}
                 </div>
               )}
