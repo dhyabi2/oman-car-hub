@@ -58,8 +58,8 @@ const CarsList = () => {
     });
   };
 
-  const carMakes = ['', ...new Set(cars.map(car => car.make))];
-  const carModels = filters.make === '' ? [''] : ['', ...new Set(cars.filter(car => car.make === filters.make).map(car => car.model))];
+  const carMakes = ['All Makes', ...new Set(cars.map(car => car.make))];
+  const carModels = filters.make === 'All Makes' ? ['All Models'] : ['All Models', ...new Set(cars.filter(car => car.make === filters.make).map(car => car.model))];
 
   const maxPriceInData = Math.max(...cars.map(car => car.price), 100000);
 
@@ -85,7 +85,7 @@ const CarsList = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {carMakes.map((make) => (
-                    <SelectItem key={make} value={make}>{make === '' ? 'All Makes' : make}</SelectItem>
+                    <SelectItem key={make} value={make}>{make}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -98,7 +98,7 @@ const CarsList = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {carModels.map((model) => (
-                    <SelectItem key={model} value={model}>{model === '' ? 'All Models' : model}</SelectItem>
+                    <SelectItem key={model} value={model}>{model}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -145,7 +145,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select transmission" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All</SelectItem>
+                  <SelectItem value="All">All</SelectItem>
                   <SelectItem value="Automatic">Automatic</SelectItem>
                   <SelectItem value="Manual">Manual</SelectItem>
                   <SelectItem value="CVT">CVT</SelectItem>
@@ -159,7 +159,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select fuel type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All</SelectItem>
+                  <SelectItem value="All">All</SelectItem>
                   <SelectItem value="Petrol">Petrol</SelectItem>
                   <SelectItem value="Diesel">Diesel</SelectItem>
                   <SelectItem value="Electric">Electric</SelectItem>
