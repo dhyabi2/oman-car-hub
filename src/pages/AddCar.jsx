@@ -44,7 +44,9 @@ const AddCar = () => {
   useEffect(() => {
     const savedFormData = localStorage.getItem('addCarFormData');
     if (savedFormData) {
-      setFormData(JSON.parse(savedFormData));
+      const parsedData = JSON.parse(savedFormData);
+      // Don't restore photos from localStorage
+      setFormData({ ...parsedData, photos: [] });
     }
   }, []);
 
@@ -54,7 +56,9 @@ const AddCar = () => {
         ...prevState,
         [name]: value
       };
-      localStorage.setItem('addCarFormData', JSON.stringify(newState));
+      // Don't save photos to localStorage
+      const stateForStorage = { ...newState, photos: [] };
+      localStorage.setItem('addCarFormData', JSON.stringify(stateForStorage));
       return newState;
     });
   };
@@ -67,6 +71,14 @@ const AddCar = () => {
     localStorage.setItem('cars', JSON.stringify(cars));
     localStorage.removeItem('addCarFormData');
     navigate('/cars-list');
+  };
+
+  const handlePhotoUpload = (e) => {
+    const files = Array.from(e.target.files).slice(0, 10);
+    setFormData(prevState => ({
+      ...prevState,
+      photos: files
+    }));
   };
 
   const carMakes = ['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Nissan', 'BMW', 'Mercedes-Benz', 'Audi', 'Volkswagen', 'Hyundai', 'Kia'];
@@ -309,7 +321,12 @@ const AddCar = () => {
             </div>
             <div>
               <Label htmlFor="photos">Photos (Max 10)</Label>
-              <Input id="photos" type="file" multiple onChange={(e) => handleInputChange('photos', Array.from(e.target.files).slice(0, 10))} accept="image/*" />
+              <Input id="photos" type="file" multiple onChange={handlePhotoUpload} accept="image/*" />
+              {formData.photos.length > 0 && (
+                <div className="mt-2">
+                  <p>{formData.photos.length} file(s) selected</p>
+                </div>
+              )}
             </div>
             <Button type="submit" className="w-full">Submit Listing</Button>
           </form>
