@@ -15,14 +15,14 @@ const CarsList = () => {
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
   const [filters, setFilters] = useState({
-    make: '',
-    model: '',
+    make: 'All Makes',
+    model: 'All Models',
     minYear: 1990,
     maxYear: new Date().getFullYear(),
     minPrice: 0,
     maxPrice: 100000,
-    transmission: '',
-    fuelType: '',
+    transmission: 'All',
+    fuelType: 'All',
   });
 
   useEffect(() => {
@@ -45,14 +45,14 @@ const CarsList = () => {
 
   useEffect(() => {
     const filtered = cars.filter(car => 
-      (filters.make === '' || car.make === filters.make) &&
-      (filters.model === '' || car.model === filters.model) &&
+      (filters.make === 'All Makes' || car.make === filters.make) &&
+      (filters.model === 'All Models' || car.model === filters.model) &&
       car.year >= filters.minYear &&
       car.year <= filters.maxYear &&
       car.price >= filters.minPrice &&
       car.price <= filters.maxPrice &&
-      (filters.transmission === '' || car.transmission === filters.transmission) &&
-      (filters.fuelType === '' || car.fuelType === filters.fuelType)
+      (filters.transmission === 'All' || car.transmission === filters.transmission) &&
+      (filters.fuelType === 'All' || car.fuelType === filters.fuelType)
     );
     setFilteredCars(filtered);
   }, [filters, cars]);
@@ -62,7 +62,7 @@ const CarsList = () => {
       const newFilters = { ...prev, [name]: value };
       // Reset model when make changes
       if (name === 'make') {
-        newFilters.model = '';
+        newFilters.model = 'All Models';
       }
       return newFilters;
     });
@@ -151,7 +151,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select transmission" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All</SelectItem>
+                  <SelectItem value="All">All</SelectItem>
                   <SelectItem value="Automatic">Automatic</SelectItem>
                   <SelectItem value="Manual">Manual</SelectItem>
                   <SelectItem value="CVT">CVT</SelectItem>
@@ -165,7 +165,7 @@ const CarsList = () => {
                   <SelectValue placeholder="Select fuel type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All</SelectItem>
+                  <SelectItem value="All">All</SelectItem>
                   <SelectItem value="Petrol">Petrol</SelectItem>
                   <SelectItem value="Diesel">Diesel</SelectItem>
                   <SelectItem value="Electric">Electric</SelectItem>
