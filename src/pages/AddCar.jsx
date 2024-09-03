@@ -67,6 +67,9 @@ const AddCar = () => {
     Kia: ['Forte', 'Optima', 'Sportage', 'Sorento', 'Telluride'],
   };
 
+  const colors = ['White', 'Black', 'Silver', 'Gray', 'Red', 'Blue', 'Green', 'Yellow', 'Brown', 'Orange'];
+  const locations = ['Muscat', 'Salalah', 'Sohar', 'Nizwa', 'Sur', 'Ibri', 'Barka', 'Seeb', 'Rustaq', 'Ibra'];
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Card>
@@ -161,7 +164,7 @@ const AddCar = () => {
                     <SelectValue placeholder="Select color" />
                   </SelectTrigger>
                   <SelectContent>
-                    {["White", "Black", "Silver", "Gray", "Red", "Blue", "Green", "Yellow", "Brown", "Orange"].map((color) => (
+                    {colors.map((color) => (
                       <SelectItem key={color} value={color}>{color}</SelectItem>
                     ))}
                   </SelectContent>
@@ -216,7 +219,7 @@ const AddCar = () => {
                 <Slider
                   min={1000}
                   max={100000}
-                  step={500}
+                  step={50}
                   value={[formData.price]}
                   onValueChange={(value) => handleInputChange('price', value[0])}
                 />
@@ -232,7 +235,7 @@ const AddCar = () => {
                     <SelectValue placeholder="Select location" />
                   </SelectTrigger>
                   <SelectContent>
-                    {["Muscat", "Salalah", "Sohar", "Nizwa", "Sur", "Ibri", "Barka", "Seeb", "Rustaq", "Ibra"].map((city) => (
+                    {locations.map((city) => (
                       <SelectItem key={city} value={city}>{city}</SelectItem>
                     ))}
                   </SelectContent>
