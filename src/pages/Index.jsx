@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -243,9 +244,22 @@ const carBrands = [
 const Index = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
-  const [selectedYear, setSelectedYear] = useState(null);
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
+  const navigate = useNavigate();
+
+  const handleBrandSelect = (brand) => {
+    setSelectedBrand(brand);
+    setSelectedModel(null);
+  };
+
+  const handleModelSelect = (model) => {
+    setSelectedModel(model);
+  };
+
+  const handleViewCars = () => {
+    if (selectedBrand && selectedModel) {
+      navigate(`/cars-list?make=${selectedBrand.brand}&model=${selectedModel}`);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -261,11 +275,7 @@ const Index = () => {
                     key={index}
                     variant={selectedBrand === brand ? "default" : "outline"}
                     className="w-full h-24 flex flex-col items-center justify-center p-2 space-y-1"
-                    onClick={() => {
-                      setSelectedBrand(brand);
-                      setSelectedModel(null);
-                      setSelectedYear(null);
-                    }}
+                    onClick={() => handleBrandSelect(brand)}
                   >
                     <img src={brand.logo} alt={`${brand.brand} logo`} className="w-10 h-10 object-contain" />
                     <span className="text-xs font-semibold text-center line-clamp-1">{brand.brand}</span>
@@ -289,10 +299,7 @@ const Index = () => {
                       key={index}
                       variant={selectedModel === model ? "default" : "outline"}
                       className="w-full"
-                      onClick={() => {
-                        setSelectedModel(model);
-                        setSelectedYear(null);
-                      }}
+                      onClick={() => handleModelSelect(model)}
                     >
                       {model}
                     </Button>
@@ -303,26 +310,23 @@ const Index = () => {
           </CardContent>
         </Card>
         <Card className="h-[calc(100vh-12rem)] overflow-hidden">
-          <CardContent className="p-4">
-            <h2 className="text-2xl font-semibold mb-4">
-              {selectedModel ? `${selectedModel} Years` : "Select a Model"}
-            </h2>
-            <ScrollArea className="h-[calc(100vh-16rem)]">
-              {selectedModel && (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {years.map((year) => (
-                    <Button
-                      key={year}
-                      variant={selectedYear === year ? "default" : "outline"}
-                      className="w-full"
-                      onClick={() => setSelectedYear(year)}
-                    >
-                      {year}
-                    </Button>
-                  ))}
+          <CardContent className="p-4 flex flex-col justify-between">
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Selected Car</h2>
+              {selectedBrand && selectedModel ? (
+                <div>
+                  <p><strong>Brand:</strong> {selectedBrand.brand}</p>
+                  <p><strong>Model:</strong> {selectedModel}</p>
                 </div>
+              ) : (
+                <p>Please select a brand and model</p>
               )}
-            </ScrollArea>
+            </div>
+            {selectedBrand && selectedModel && (
+              <Button onClick={handleViewCars} className="mt-4">
+                View Cars
+              </Button>
+            )}
           </CardContent>
         </Card>
       </div>
