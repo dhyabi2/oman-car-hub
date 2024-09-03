@@ -2,6 +2,7 @@ import { HomeIcon, PlusCircleIcon, ListIcon } from "lucide-react";
 import Index from "./pages/Index.jsx";
 import AddCar from "./pages/AddCar.jsx";
 import CarsList from "./pages/CarsList.jsx";
+import CarDetails from "./pages/CarDetails.jsx";
 
 export const navItems = [
   {
@@ -21,5 +22,11 @@ export const navItems = [
     to: "/cars-list",
     icon: <ListIcon className="h-4 w-4" />,
     page: <CarsList />,
+  },
+  {
+    title: "Car Details",
+    to: "/car/:id",
+    icon: <ListIcon className="h-4 w-4" />,
+    page: <CarDetails />,
   },
 ];
