@@ -26,7 +26,7 @@ const Index = () => {
   useEffect(() => {
     const fetchData = async () => {
       const allCars = await getAllCars();
-      setFeaturedCars(allCars.slice(0, 3)); // Get first 3 cars as featured
+      setFeaturedCars(allCars.slice(0, 3));
       setStats({
         totalListings: allCars.length,
         activeSellers: new Set(allCars.map(car => car.seller_id)).size,
@@ -58,82 +58,28 @@ const Index = () => {
       <QuickStats stats={stats} />
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-        <Card className="h-[calc(100vh-12rem)] overflow-hidden">
-          <CardContent className="p-4">
-            <h2 className="text-2xl font-semibold mb-4">Car Brands</h2>
-            <Input
-              type="text"
-              placeholder="Search brands..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="mb-4"
-            />
-            <ScrollArea className="h-[calc(100vh-22rem)]">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {filteredBrands.map((brand, index) => (
-                  <Button
-                    key={index}
-                    variant={selectedBrand === brand ? "default" : "outline"}
-                    className="w-full h-24 flex flex-col items-center justify-center p-2 space-y-1"
-                    onClick={() => handleBrandSelect(brand)}
-                  >
-                    <img src={brand.logo} alt={`${brand.brand} logo`} className="w-10 h-10 object-contain" />
-                    <span className="text-xs font-semibold text-center line-clamp-1">{brand.brand}</span>
-                    <span className="text-xs text-gray-500">Est. {brand.founded}</span>
-                  </Button>
-                ))}
-              </div>
-            </ScrollArea>
-          </CardContent>
-        </Card>
-        <Card className="h-[calc(100vh-12rem)] overflow-hidden">
-          <CardContent className="p-4">
-            <h2 className="text-2xl font-semibold mb-4">
-              {selectedBrand ? `${selectedBrand.brand} Models` : "Select a Brand"}
-            </h2>
-            <ScrollArea className="h-[calc(100vh-16rem)]">
-              {selectedBrand && (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {selectedBrand.models.map((model, index) => (
-                    <Button
-                      key={index}
-                      variant={selectedModel === model ? "default" : "outline"}
-                      className="w-full"
-                      onClick={() => handleModelSelect(model)}
-                    >
-                      {model}
-                    </Button>
-                  ))}
-                </div>
-              )}
-            </ScrollArea>
-          </CardContent>
-        </Card>
-        <Card className="h-[calc(100vh-12rem)] overflow-hidden">
-          <CardContent className="p-4 flex flex-col justify-between">
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Selected Car</h2>
-              {selectedBrand && selectedModel ? (
-                <div>
-                  <p><strong>Brand:</strong> {selectedBrand.brand}</p>
-                  <p><strong>Model:</strong> {selectedModel}</p>
-                </div>
-              ) : (
-                <p>Please select a brand and model</p>
-              )}
-            </div>
-            {selectedBrand && selectedModel && (
-              <Button onClick={handleViewCars} className="mt-4">
-                View Cars
-              </Button>
-            )}
-          </CardContent>
-        </Card>
+        <BrandSelector
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          filteredBrands={filteredBrands}
+          selectedBrand={selectedBrand}
+          handleBrandSelect={handleBrandSelect}
+        />
+        <ModelSelector
+          selectedBrand={selectedBrand}
+          selectedModel={selectedModel}
+          handleModelSelect={handleModelSelect}
+        />
+        <SelectedCar
+          selectedBrand={selectedBrand}
+          selectedModel={selectedModel}
+          handleViewCars={handleViewCars}
+        />
       </div>
       
-      <FeaturedCars cars={featuredCars} />
+      <FeaturedCars cars={featuredCars} navigate={navigate} />
       
-      <SellYourCar />
+      <SellYourCar navigate={navigate} />
     </div>
   );
 };
@@ -151,7 +97,87 @@ const QuickStats = ({ stats }) => (
   </div>
 );
 
-const FeaturedCars = ({ cars }) => (
+const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBrand, handleBrandSelect }) => (
+  <Card className="h-[calc(100vh-12rem)] overflow-hidden">
+    <CardContent className="p-4">
+      <h2 className="text-2xl font-semibold mb-4">Car Brands</h2>
+      <Input
+        type="text"
+        placeholder="Search brands..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="mb-4"
+      />
+      <ScrollArea className="h-[calc(100vh-22rem)]">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {filteredBrands.map((brand, index) => (
+            <Button
+              key={index}
+              variant={selectedBrand === brand ? "default" : "outline"}
+              className="w-full h-24 flex flex-col items-center justify-center p-2 space-y-1"
+              onClick={() => handleBrandSelect(brand)}
+            >
+              <img src={brand.logo} alt={`${brand.brand} logo`} className="w-10 h-10 object-contain" />
+              <span className="text-xs font-semibold text-center line-clamp-1">{brand.brand}</span>
+              <span className="text-xs text-gray-500">Est. {brand.founded}</span>
+            </Button>
+          ))}
+        </div>
+      </ScrollArea>
+    </CardContent>
+  </Card>
+);
+
+const ModelSelector = ({ selectedBrand, selectedModel, handleModelSelect }) => (
+  <Card className="h-[calc(100vh-12rem)] overflow-hidden">
+    <CardContent className="p-4">
+      <h2 className="text-2xl font-semibold mb-4">
+        {selectedBrand ? `${selectedBrand.brand} Models` : "Select a Brand"}
+      </h2>
+      <ScrollArea className="h-[calc(100vh-16rem)]">
+        {selectedBrand && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {selectedBrand.models.map((model, index) => (
+              <Button
+                key={index}
+                variant={selectedModel === model ? "default" : "outline"}
+                className="w-full"
+                onClick={() => handleModelSelect(model)}
+              >
+                {model}
+              </Button>
+            ))}
+          </div>
+        )}
+      </ScrollArea>
+    </CardContent>
+  </Card>
+);
+
+const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars }) => (
+  <Card className="h-[calc(100vh-12rem)] overflow-hidden">
+    <CardContent className="p-4 flex flex-col justify-between">
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Selected Car</h2>
+        {selectedBrand && selectedModel ? (
+          <div>
+            <p><strong>Brand:</strong> {selectedBrand.brand}</p>
+            <p><strong>Model:</strong> {selectedModel}</p>
+          </div>
+        ) : (
+          <p>Please select a brand and model</p>
+        )}
+      </div>
+      {selectedBrand && selectedModel && (
+        <Button onClick={handleViewCars} className="mt-4">
+          View Cars
+        </Button>
+      )}
+    </CardContent>
+  </Card>
+);
+
+const FeaturedCars = ({ cars, navigate }) => (
   <div className="mb-8">
     <h2 className="text-2xl font-semibold mb-4">Featured Cars</h2>
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -169,7 +195,7 @@ const FeaturedCars = ({ cars }) => (
   </div>
 );
 
-const SellYourCar = () => (
+const SellYourCar = ({ navigate }) => (
   <Card className="bg-primary text-primary-foreground">
     <CardContent className="p-8 text-center">
       <h2 className="text-3xl font-bold mb-4">Ready to Sell Your Car?</h2>
