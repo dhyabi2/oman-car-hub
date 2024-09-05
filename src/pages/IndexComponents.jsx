@@ -1,28 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
+import { motion, AnimatePresence } from "framer-motion";
 
-export const QuickStats = ({ stats, t }) => (
-  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-    {Object.entries(stats).map(([key, value]) => {
-      if (key === 'latestCar') return null; // Skip latestCar as it's not a statistic
-      return (
-        <Card key={key}>
-          <CardContent className="p-4 text-center">
-            <h3 className="text-lg font-semibold">{t[key] || key}</h3>
-            <p className="text-2xl font-bold">
-              {key === 'averagePrice' || key === 'totalValue' 
-                ? `${value.toLocaleString()} OMR` 
-                : value}
-            </p>
-          </CardContent>
-        </Card>
-      );
-    })}
-  </div>
-);
+const useAutoSlide = (length, interval = 3000) => {
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % length);
+    }, interval);
+    return () => clearInterval(timer);
+  }, [length, interval]);
+  return index;
+};
+
+export const QuickStats = ({ stats, t }) => {
+  const statEntries = Object.entries(stats).filter(([key]) => key !== 'latestCar');
+  const currentIndex = useAutoSlide(statEntries.length);
+
+  return (
+    <div className="relative h-24 mb-8 overflow-hidden">
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={currentIndex}
+          className="absolute inset-0 flex items-center justify-center"
+          initial={{ opacity: 0, x: 300 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -300 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Card className="w-full max-w-sm">
+            <CardContent className="p-4 text-center">
+              <h3 className="text-lg font-semibold">{t[statEntries[currentIndex][0]] || statEntries[currentIndex][0]}</h3>
+              <p className="text-2xl font-bold">
+                {['averagePrice', 'totalValue'].includes(statEntries[currentIndex][0])
+                  ? `${statEntries[currentIndex][1].toLocaleString()} OMR`
+                  : statEntries[currentIndex][1]}
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+};
 
 export const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBrand, handleBrandSelect, t }) => (
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
