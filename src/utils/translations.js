@@ -66,6 +66,7 @@ export const translations = {
     yearRange: "Year Range",
     to: "to",
     priceRange: "Price Range",
+    // Theme translations
     light: "Light",
     dark: "Dark",
     desertSands: "Desert Sands",
@@ -78,6 +79,7 @@ export const translations = {
     techFuturism: "Tech Futurism",
     frankincenseTrail: "Frankincense Trail",
     royalOpulence: "Royal Opulence",
+    // New translations for AddCar
     addCarForSale: "Add Car for Sale",
     submitListing: "Submit Listing",
     basicInformation: "Basic Information",
@@ -86,8 +88,6 @@ export const translations = {
     invalidPhoneNumber: "Invalid phone number. Please enter 8 digits.",
     carListingAddedSuccess: "Car listing added successfully!",
     failedToAddCarListing: "Failed to add car listing. Please try again.",
-    selectLocationOnMap: "Select location on the map",
-    selectedLocation: "Selected location",
   },
   ar: {
     appName: "سوق عمان للسيارات",
@@ -156,6 +156,7 @@ export const translations = {
     yearRange: "نطاق السنة",
     to: "إلى",
     priceRange: "نطاق السعر",
+    // Theme translations
     light: "فاتح",
     dark: "داكن",
     desertSands: "رمال الصحراء",
@@ -168,6 +169,7 @@ export const translations = {
     techFuturism: "مستقبل تقني",
     frankincenseTrail: "درب اللبان",
     royalOpulence: "فخامة ملكية",
+    // New translations for AddCar
     addCarForSale: "إضافة سيارة للبيع",
     submitListing: "إرسال القائمة",
     basicInformation: "المعلومات الأساسية",
@@ -176,7 +178,5 @@ export const translations = {
     invalidPhoneNumber: "رقم هاتف غير صالح. الرجاء إدخال 8 أرقام.",
     carListingAddedSuccess: "تمت إضافة قائمة السيارة بنجاح!",
     failedToAddCarListing: "فشل في إضافة قائمة السيارة. يرجى المحاولة مرة أخرى.",
-    selectLocationOnMap: "حدد الموقع على الخريطة",
-    selectedLocation: "الموقع المحدد",
   },
 };

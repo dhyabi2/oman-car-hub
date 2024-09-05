@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { addCar } from '../utils/indexedDB';
 import { MakeModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelTypeSelector, TransmissionSelector, DoorsSelector, SeatsSelector, DrivetrainSelector, ConditionSelector } from '../components/CarFormFields';
 import { FormSection, ListingDetails, AdditionalInformation, PhotoUpload } from './AddCarComponents';
-import OmanMap from '../components/OmanMap';
 
 const AddCar = ({ language, t }) => {
   const navigate = useNavigate();
@@ -52,10 +51,6 @@ const AddCar = ({ language, t }) => {
       console.error('Error adding car:', error);
       toast.error(t.failedToAddCarListing);
     }
-  };
-
-  const handleLocationSelect = (location) => {
-    handleInputChange('location', location);
   };
 
   return (
@@ -117,14 +112,6 @@ const AddCar = ({ language, t }) => {
                 onChange={(value) => handleInputChange('condition', value)}
                 t={t}
               />
-            </FormSection>
-
-            <FormSection title={t.location}>
-              <div className="mb-4">
-                <p className="mb-2">{t.selectLocationOnMap}</p>
-                <OmanMap onSelectLocation={handleLocationSelect} />
-              </div>
-              <p>{t.selectedLocation}: {formData.location}</p>
             </FormSection>
 
             <ListingDetails
