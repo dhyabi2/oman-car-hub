@@ -13,9 +13,9 @@ export const FormSection = ({ title, children }) => (
 );
 
 export const ListingDetails = ({ formData, handleInputChange, t }) => (
-  <FormSection title={t('listingDetails')}>
+  <FormSection title={t.listingDetails}>
     <div>
-      <Label htmlFor="price">{t('price')} (OMR)</Label>
+      <Label htmlFor="price">{t.price} (OMR)</Label>
       <Input
         id="price"
         type="number"
@@ -24,10 +24,10 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => (
       />
     </div>
     <div>
-      <Label htmlFor="location">{t('location')}</Label>
+      <Label htmlFor="location">{t.location}</Label>
       <Select value={formData.location} onValueChange={(value) => handleInputChange('location', value)}>
         <SelectTrigger>
-          <SelectValue placeholder={t('selectLocation')} />
+          <SelectValue placeholder={t.selectLocation} />
         </SelectTrigger>
         <SelectContent>
           {locations.map((location) => (
@@ -37,7 +37,7 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => (
       </Select>
     </div>
     <div>
-      <Label htmlFor="contact_phone">{t('contactPhone')}</Label>
+      <Label htmlFor="contact_phone">{t.contactPhone}</Label>
       <Input
         id="contact_phone"
         type="tel"
@@ -50,9 +50,9 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => (
 );
 
 export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
-  <FormSection title={t('additionalInformation')}>
+  <FormSection title={t.additionalInformation}>
     <div>
-      <Label htmlFor="description">{t('description')}</Label>
+      <Label htmlFor="description">{t.description}</Label>
       <Textarea
         id="description"
         value={formData.description}
@@ -61,7 +61,7 @@ export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
       />
     </div>
     <div>
-      <Label htmlFor="additional_features">{t('additionalFeatures')}</Label>
+      <Label htmlFor="additional_features">{t.additionalFeatures}</Label>
       <Textarea
         id="additional_features"
         value={formData.additional_features}
@@ -73,9 +73,9 @@ export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
 );
 
 export const PhotoUpload = ({ photos, handlePhotoUpload, t }) => (
-  <FormSection title={t('photos')}>
+  <FormSection title={t.photos}>
     <div>
-      <Label htmlFor="photos">{t('uploadPhotos')}</Label>
+      <Label htmlFor="photos">{t.uploadPhotos}</Label>
       <Input
         id="photos"
         type="file"
