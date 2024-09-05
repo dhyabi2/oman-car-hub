@@ -16,18 +16,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const themes = [
-  { name: 'Light', value: 'light', icon: <Sun className="h-4 w-4" /> },
-  { name: 'Dark', value: 'dark', icon: <Moon className="h-4 w-4" /> },
-  { name: 'Desert Sands', value: 'desert-sands', icon: <Palette className="h-4 w-4" /> },
-  { name: 'Oasis Breeze', value: 'oasis-breeze', icon: <Palette className="h-4 w-4" /> },
-  { name: 'Spice Market', value: 'spice-market', icon: <Palette className="h-4 w-4" /> },
-  { name: 'Modern Minimalist', value: 'modern-minimalist', icon: <Palette className="h-4 w-4" /> },
-  { name: 'Coastal Calm', value: 'coastal-calm', icon: <Palette className="h-4 w-4" /> },
-  { name: 'Arabian Nights', value: 'arabian-nights', icon: <Palette className="h-4 w-4" /> },
-  { name: 'Bedouin Chic', value: 'bedouin-chic', icon: <Palette className="h-4 w-4" /> },
-  { name: 'Tech Futurism', value: 'tech-futurism', icon: <Palette className="h-4 w-4" /> },
-  { name: 'Frankincense Trail', value: 'frankincense-trail', icon: <Palette className="h-4 w-4" /> },
-  { name: 'Royal Opulence', value: 'royal-opulence', icon: <Palette className="h-4 w-4" /> },
+  { name: 'light', value: 'light', icon: <Sun className="h-4 w-4" /> },
+  { name: 'dark', value: 'dark', icon: <Moon className="h-4 w-4" /> },
+  { name: 'desertSands', value: 'desert-sands', icon: <Palette className="h-4 w-4" /> },
+  { name: 'oasisBreeze', value: 'oasis-breeze', icon: <Palette className="h-4 w-4" /> },
+  { name: 'spiceMarket', value: 'spice-market', icon: <Palette className="h-4 w-4" /> },
+  { name: 'modernMinimalist', value: 'modern-minimalist', icon: <Palette className="h-4 w-4" /> },
+  { name: 'coastalCalm', value: 'coastal-calm', icon: <Palette className="h-4 w-4" /> },
+  { name: 'arabianNights', value: 'arabian-nights', icon: <Palette className="h-4 w-4" /> },
+  { name: 'bedouinChic', value: 'bedouin-chic', icon: <Palette className="h-4 w-4" /> },
+  { name: 'techFuturism', value: 'tech-futurism', icon: <Palette className="h-4 w-4" /> },
+  { name: 'frankincenseTrail', value: 'frankincense-trail', icon: <Palette className="h-4 w-4" /> },
+  { name: 'royalOpulence', value: 'royal-opulence', icon: <Palette className="h-4 w-4" /> },
 ];
 
 const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }) => {
@@ -55,7 +55,7 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
                 <DropdownMenuItem key={theme.value} onSelect={() => onThemeChange(theme.value)}>
                   <div className="flex items-center">
                     {theme.icon}
-                    <span className="ml-2">{theme.name}</span>
+                    <span className="ml-2">{t[theme.name]}</span>
                   </div>
                 </DropdownMenuItem>
               ))}
