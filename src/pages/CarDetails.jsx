@@ -29,9 +29,9 @@ const CarDetails = () => {
     description: 'Well-maintained Toyota Camry with low mileage. Perfect family car with excellent fuel efficiency.',
     additional_features: 'Bluetooth connectivity, Backup camera, Keyless entry',
     photos: [
-      'https://example.com/toyota-camry-1.jpg',
-      'https://example.com/toyota-camry-2.jpg',
-      'https://example.com/toyota-camry-3.jpg'
+      'https://picsum.photos/800/600?random=1',
+      'https://picsum.photos/800/600?random=2',
+      'https://picsum.photos/800/600?random=3'
     ],
     contact_phone: '12345678',
     listing_expiration_date: '2023-12-31'
