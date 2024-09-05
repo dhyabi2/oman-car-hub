@@ -36,6 +36,10 @@ export const translations = {
     description: "Description",
     additionalFeatures: "Additional Features",
     contactSeller: "Contact Seller on WhatsApp",
+    index: "Home",
+    "add-car": "Add Car",
+    "cars-list": "Cars List",
+    car: "Car Details",
   },
   ar: {
     appName: "سوق عمان للسيارات",
@@ -74,5 +78,9 @@ export const translations = {
     description: "الوصف",
     additionalFeatures: "ميزات إضافية",
     contactSeller: "تواصل مع البائع عبر واتساب",
+    index: "الرئيسية",
+    "add-car": "إضافة سيارة",
+    "cars-list": "قائمة السيارات",
+    car: "تفاصيل السيارة",
   },
 };
