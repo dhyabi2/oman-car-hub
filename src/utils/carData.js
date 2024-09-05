@@ -17,3 +17,7 @@ export const carModels = {
 export const colors = ['White', 'Black', 'Silver', 'Gray', 'Red', 'Blue', 'Green', 'Yellow', 'Brown', 'Orange'];
 
 export const locations = ['Muscat', 'Salalah', 'Sohar', 'Nizwa', 'Sur', 'Ibri', 'Barka', 'Seeb', 'Rustaq', 'Ibra'];
+
+export const fuelTypes = ['Petrol', 'Diesel', 'Electric', 'Hybrid', 'LPG', 'CNG'];
+
+export const transmissionTypes = ['Automatic', 'Manual', 'CVT', 'Semi-Automatic'];

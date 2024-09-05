@@ -3,20 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Slider } from "@/components/ui/slider";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
-import { colors, locations } from '../utils/carData';
+import { locations } from '../utils/carData';
 import { addCar } from '../utils/indexedDB';
-import { MakeModelSelect, MileageInput, PriceRangeInput } from '../components/CarFormFields';
+import { MakeModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelTypeSelector, TransmissionSelector } from '../components/CarFormFields';
+import ImageSelector from '../components/ImageSelector';
 
 const AddCar = () => {
   const navigate = useNavigate();
@@ -25,8 +23,8 @@ const AddCar = () => {
     model: '',
     year: new Date().getFullYear(),
     mileage: 0,
-    transmission: 'Automatic',
-    fuel_type: 'Petrol',
+    transmission: '',
+    fuel_type: '',
     engine_size: 1500,
     color: '',
     number_of_doors: 4,
@@ -48,17 +46,6 @@ const AddCar = () => {
     setFormData(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const validateForm = () => {
-    const requiredFields = ['make', 'model', 'year', 'mileage', 'transmission', 'fuel_type', 'color', 'price', 'location', 'contact_phone'];
-    const emptyFields = requiredFields.filter(field => !formData[field]);
-    
-    if (emptyFields.length > 0) {
-      toast.error(`Please fill in all required fields: ${emptyFields.join(', ')}`);
-      return false;
-    }
-    return true;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -71,6 +58,17 @@ const AddCar = () => {
       console.error('Error adding car:', error);
       toast.error('Failed to add car listing. Please try again.');
     }
+  };
+
+  const validateForm = () => {
+    const requiredFields = ['make', 'model', 'year', 'mileage', 'transmission', 'fuel_type', 'color', 'price', 'location', 'contact_phone'];
+    const emptyFields = requiredFields.filter(field => !formData[field]);
+    
+    if (emptyFields.length > 0) {
+      toast.error(`Please fill in all required fields: ${emptyFields.join(', ')}`);
+      return false;
+    }
+    return true;
   };
 
   const handlePhotoUpload = (e) => {
@@ -114,13 +112,6 @@ const AddCar = () => {
                 onMakeChange={(value) => handleInputChange('make', value)}
                 onModelChange={(value) => handleInputChange('model', value)}
               />
-              <SliderField
-                label="Year"
-                value={formData.year}
-                onChange={(value) => handleInputChange('year', value[0])}
-                min={1990}
-                max={new Date().getFullYear()}
-              />
               <MileageInput
                 value={formData.mileage}
                 onChange={(value) => handleInputChange('mileage', value)}
@@ -128,55 +119,41 @@ const AddCar = () => {
             </FormSection>
 
             <FormSection title="Vehicle Details">
-              <RadioGroupField
-                label="Transmission"
+              <TransmissionSelector
                 value={formData.transmission}
                 onChange={(value) => handleInputChange('transmission', value)}
-                options={["Automatic", "Manual", "Semi-Automatic", "CVT"]}
               />
-              <RadioGroupField
-                label="Fuel Type"
+              <FuelTypeSelector
                 value={formData.fuel_type}
                 onChange={(value) => handleInputChange('fuel_type', value)}
-                options={["Petrol", "Diesel", "Hybrid", "Electric", "LPG", "CNG"]}
               />
-              <SliderField
-                label="Engine Size (cc)"
-                value={formData.engine_size}
-                onChange={(value) => handleInputChange('engine_size', value[0])}
-                min={500}
-                max={8000}
-                step={100}
-              />
-              <SelectField
-                label="Color"
+              <ColorSelector
                 value={formData.color}
                 onChange={(value) => handleInputChange('color', value)}
-                options={colors}
               />
-              <RadioGroupField
+              <ImageSelector
                 label="Number of Doors"
-                value={formData.number_of_doors.toString()}
-                onChange={(value) => handleInputChange('number_of_doors', parseInt(value))}
-                options={["2", "3", "4", "5"]}
+                options={[2, 3, 4, 5].map(num => ({ value: num, image: `/images/doors/${num}-doors.png` }))}
+                value={formData.number_of_doors}
+                onChange={(value) => handleInputChange('number_of_doors', value)}
               />
-              <RadioGroupField
+              <ImageSelector
                 label="Number of Seats"
-                value={formData.number_of_seats.toString()}
-                onChange={(value) => handleInputChange('number_of_seats', parseInt(value))}
-                options={["2", "4", "5", "7", "8"]}
+                options={[2, 4, 5, 7, 8].map(num => ({ value: num, image: `/images/seats/${num}-seats.png` }))}
+                value={formData.number_of_seats}
+                onChange={(value) => handleInputChange('number_of_seats', value)}
               />
-              <RadioGroupField
+              <ImageSelector
                 label="Drivetrain"
+                options={['FWD', 'RWD', 'AWD', '4WD'].map(type => ({ value: type, image: `/images/drivetrain/${type.toLowerCase()}.png` }))}
                 value={formData.drivetrain}
                 onChange={(value) => handleInputChange('drivetrain', value)}
-                options={["FWD", "RWD", "AWD", "4WD"]}
               />
-              <RadioGroupField
+              <ImageSelector
                 label="Condition"
+                options={['New', 'Used', 'Certified Pre-Owned'].map(condition => ({ value: condition, image: `/images/condition/${condition.toLowerCase().replace(' ', '-')}.png` }))}
                 value={formData.condition}
                 onChange={(value) => handleInputChange('condition', value)}
-                options={["New", "Used", "Certified Pre-Owned"]}
               />
             </FormSection>
 
@@ -186,24 +163,27 @@ const AddCar = () => {
                 maxPrice={formData.price}
                 onChange={(field, value) => handleInputChange('price', value)}
               />
-              <InputField
+              <Input
                 label="VIN (Optional)"
                 value={formData.vin}
                 onChange={(e) => handleInputChange('vin', e.target.value)}
               />
-              <SelectField
+              <ImageSelector
                 label="Location"
+                options={locations.map(location => ({ value: location, image: `/images/locations/${location.toLowerCase()}.png` }))}
                 value={formData.location}
                 onChange={(value) => handleInputChange('location', value)}
-                options={locations}
               />
-              <RadioGroupField
+              <ImageSelector
                 label="Seller Type"
+                options={[
+                  { value: 'Private', image: '/images/seller-type/private.png' },
+                  { value: 'Dealer', image: '/images/seller-type/dealer.png' }
+                ]}
                 value={formData.seller_type}
                 onChange={(value) => handleInputChange('seller_type', value)}
-                options={["Private", "Dealer"]}
               />
-              <InputField
+              <Input
                 label="Contact Phone"
                 type="tel"
                 value={formData.contact_phone}
@@ -217,12 +197,12 @@ const AddCar = () => {
             </FormSection>
 
             <FormSection title="Additional Information">
-              <TextareaField
+              <Textarea
                 label="Description (Optional)"
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
               />
-              <TextareaField
+              <Textarea
                 label="Additional Features (Optional)"
                 value={formData.additional_features}
                 onChange={(e) => handleInputChange('additional_features', e.target.value)}
@@ -258,63 +238,6 @@ const FormSection = ({ title, children }) => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {children}
     </div>
-  </div>
-);
-
-const SelectField = ({ label, value, onChange, options }) => (
-  <div>
-    <Label htmlFor={label}>{label}</Label>
-    <Select value={value} onValueChange={onChange}>
-      <SelectTrigger>
-        <SelectValue placeholder={`Select ${label.toLowerCase()}`} />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option} value={option}>{option}</SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  </div>
-);
-
-const RadioGroupField = ({ label, value, onChange, options }) => (
-  <div>
-    <Label>{label}</Label>
-    <RadioGroup value={value} onValueChange={onChange}>
-      {options.map((option) => (
-        <div key={option} className="flex items-center space-x-2">
-          <RadioGroupItem value={option} id={`${label}-${option}`} />
-          <Label htmlFor={`${label}-${option}`}>{option}</Label>
-        </div>
-      ))}
-    </RadioGroup>
-  </div>
-);
-
-const SliderField = ({ label, value, onChange, min, max, step = 1 }) => (
-  <div>
-    <Label>{label} ({value})</Label>
-    <Slider
-      min={min}
-      max={max}
-      step={step}
-      value={[value]}
-      onValueChange={onChange}
-    />
-  </div>
-);
-
-const InputField = ({ label, value, onChange, type = "text" }) => (
-  <div>
-    <Label htmlFor={label}>{label}</Label>
-    <Input id={label} type={type} value={value} onChange={onChange} />
-  </div>
-);
-
-const TextareaField = ({ label, value, onChange }) => (
-  <div>
-    <Label htmlFor={label}>{label}</Label>
-    <Textarea id={label} value={value} onChange={onChange} />
   </div>
 );
 

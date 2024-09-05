@@ -1,38 +1,25 @@
 import React from 'react';
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
-import { carMakes, carModels } from '../utils/carData';
+import ImageSelector from './ImageSelector';
+import { carMakes, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 
 export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange }) => (
   <>
-    <div>
-      <Label htmlFor="make">Make</Label>
-      <Select value={make} onValueChange={onMakeChange}>
-        <SelectTrigger>
-          <SelectValue placeholder="Select make" />
-        </SelectTrigger>
-        <SelectContent>
-          {carMakes.map((carMake) => (
-            <SelectItem key={carMake} value={carMake}>{carMake}</SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-    <div>
-      <Label htmlFor="model">Model</Label>
-      <Select value={model} onValueChange={onModelChange} disabled={!make}>
-        <SelectTrigger>
-          <SelectValue placeholder="Select model" />
-        </SelectTrigger>
-        <SelectContent>
-          {make && carModels[make]?.map((carModel) => (
-            <SelectItem key={carModel} value={carModel}>{carModel}</SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+    <ImageSelector
+      label="Make"
+      options={carMakes.map(make => ({ value: make, image: `/images/car-logos/${make.toLowerCase()}.png` }))}
+      value={make}
+      onChange={onMakeChange}
+    />
+    <ImageSelector
+      label="Model"
+      options={(make ? carModels[make] : []).map(model => ({ value: model, image: `/images/car-models/${make.toLowerCase()}/${model.toLowerCase().replace(' ', '-')}.png` }))}
+      value={model}
+      onChange={onModelChange}
+      disabled={!make}
+    />
   </>
 );
 
@@ -79,4 +66,31 @@ export const PriceRangeInput = ({ minPrice, maxPrice, onChange }) => (
       />
     </div>
   </div>
+);
+
+export const ColorSelector = ({ value, onChange }) => (
+  <ImageSelector
+    label="Color"
+    options={colors.map(color => ({ value: color, image: `/images/car-colors/${color.toLowerCase()}.png` }))}
+    value={value}
+    onChange={onChange}
+  />
+);
+
+export const FuelTypeSelector = ({ value, onChange }) => (
+  <ImageSelector
+    label="Fuel Type"
+    options={fuelTypes.map(type => ({ value: type, image: `/images/fuel-types/${type.toLowerCase()}.png` }))}
+    value={value}
+    onChange={onChange}
+  />
+);
+
+export const TransmissionSelector = ({ value, onChange }) => (
+  <ImageSelector
+    label="Transmission"
+    options={transmissionTypes.map(type => ({ value: type, image: `/images/transmission-types/${type.toLowerCase()}.png` }))}
+    value={value}
+    onChange={onChange}
+  />
 );
