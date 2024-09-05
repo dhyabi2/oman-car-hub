@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navItems } from '../nav-items';
-import { Menu, Sun, Moon, Palette, PlusCircle } from 'lucide-react';
+import { Menu, Sun, Moon, Palette, PlusCircle, HelpCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -77,6 +77,14 @@ const Navigation = ({ currentTheme, onThemeChange }) => {
                     <span>{item.title}</span>
                   </Link>
                 ))}
+                <Link
+                  to="/faq"
+                  className="flex items-center space-x-2 text-white hover:text-gray-300 transition-colors duration-200"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <HelpCircle className="h-4 w-4" />
+                  <span>FAQ</span>
+                </Link>
               </nav>
             </SheetContent>
           </Sheet>
