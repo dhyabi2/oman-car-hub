@@ -3,8 +3,10 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import ImageSelector from './ImageSelector';
-import { carMakes, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 import { Car, Fuel, Palette, Settings, DoorOpen, Users, Compass, CheckCircle } from 'lucide-react';
+
+// Import carMakes and carModels from carData.js
+import { carMakes, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 
 export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange }) => (
   <>
@@ -72,7 +74,7 @@ export const PriceRangeInput = ({ minPrice, maxPrice, onChange }) => (
 export const ColorSelector = ({ value, onChange }) => (
   <ImageSelector
     label="Color"
-    options={[...colors, 'Other'].map(color => ({ value: color, icon: <Palette size={24} color={color.toLowerCase()} /> }))}
+    options={colors.map(color => ({ value: color, icon: <Palette size={24} color={color.toLowerCase()} /> }))}
     value={value}
     onChange={onChange}
   />
