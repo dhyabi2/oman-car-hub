@@ -18,6 +18,11 @@ export const ListingDetails = ({ formData, handleInputChange, t, language }) => 
     handleInputChange('contact_phone', value);
   };
 
+  // Helper function to safely get translations
+  const getTranslation = (key, fallback) => {
+    return t.locations && t.locations[key] ? t.locations[key] : fallback;
+  };
+
   return (
     <FormSection title={t.listingDetails}>
       <div>
@@ -38,7 +43,7 @@ export const ListingDetails = ({ formData, handleInputChange, t, language }) => 
           <SelectContent>
             {locations.map((location) => (
               <SelectItem key={location} value={location}>
-                {t.locations[location] || location}
+                {getTranslation(location, location)}
               </SelectItem>
             ))}
           </SelectContent>
