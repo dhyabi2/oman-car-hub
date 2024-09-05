@@ -24,7 +24,6 @@ export const translations = {
     mostPopularBrand: "Most Popular Brand",
     mostExpensiveCar: "Most Expensive Car",
     newestListing: "Newest Listing",
-    totalValue: "Total Market Value",
     make: "Make",
     year: "Year",
     mileage: "Mileage",
@@ -59,6 +58,7 @@ export const translations = {
     typeFeedbackOrQuestion: "Type your feedback or question here...",
     submitFeedback: "Submit Feedback",
     feedbackThankYou: "Thank you for your feedback!",
+    currency: "OMR",
   },
   ar: {
     appName: "سوق عمان للسيارات",
@@ -85,7 +85,6 @@ export const translations = {
     mostPopularBrand: "الماركة الأكثر شعبية",
     mostExpensiveCar: "السيارة الأغلى",
     newestListing: "أحدث قائمة",
-    totalValue: "إجمالي القيمة السوقية",
     make: "الصنع",
     year: "السنة",
     mileage: "المسافة المقطوعة",
@@ -120,5 +119,6 @@ export const translations = {
     typeFeedbackOrQuestion: "اكتب ملاحظاتك أو سؤالك هنا...",
     submitFeedback: "إرسال الملاحظات",
     feedbackThankYou: "شكرًا لك على ملاحظاتك!",
+    currency: "ريال عماني",
   },
 };

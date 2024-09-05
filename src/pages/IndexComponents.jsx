@@ -27,7 +27,7 @@ export const QuickStats = ({ stats, t }) => {
   const currentIndex = useAutoSlide(statEntries.length);
 
   const formatStatValue = (key, value) => {
-    if (['averagePrice', 'totalValue'].includes(key)) {
+    if (key === 'averagePrice') {
       return `${value.toLocaleString()} ${t.currency}`;
     }
     return value;

@@ -78,7 +78,6 @@ export async function getCarStatistics() {
     mostPopularBrand,
     mostExpensiveCar: mostExpensiveCar ? `${mostExpensiveCar.year} ${mostExpensiveCar.make} ${mostExpensiveCar.model}` : '',
     newestListing: newestListing ? `${newestListing.year} ${newestListing.make} ${newestListing.model}` : '',
-    totalValue,
     latestCar: newestListing
   };
 }
