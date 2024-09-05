@@ -43,7 +43,11 @@ const App = () => {
             <Navigation currentTheme={theme} onThemeChange={setTheme} language={language} toggleLanguage={toggleLanguage} t={t} />
             <Routes>
               {navItems.map(({ to, page: Page }) => (
-                <Route key={to} path={to} element={<Page language={language} t={t} />} />
+                <Route 
+                  key={to} 
+                  path={to} 
+                  element={<Page language={language} t={t} />} 
+                />
               ))}
             </Routes>
           </div>
