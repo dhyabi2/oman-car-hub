@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navItems } from '../nav-items';
-import { Menu, X, Plus, Sun, Moon } from 'lucide-react';
+import { Menu, Sun, Moon, Palette } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -9,49 +9,55 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const themes = [
-  { name: 'Light', value: 'light' },
-  { name: 'Dark', value: 'dark' },
-  { name: 'Desert Sands', value: 'desert-sands' },
-  { name: 'Oasis Breeze', value: 'oasis-breeze' },
-  { name: 'Spice Market', value: 'spice-market' },
-  { name: 'Modern Minimalist', value: 'modern-minimalist' },
-  { name: 'Coastal Calm', value: 'coastal-calm' },
-  { name: 'Arabian Nights', value: 'arabian-nights' },
-  { name: 'Bedouin Chic', value: 'bedouin-chic' },
-  { name: 'Tech Futurism', value: 'tech-futurism' },
-  { name: 'Frankincense Trail', value: 'frankincense-trail' },
-  { name: 'Royal Opulence', value: 'royal-opulence' },
+  { name: 'Light', value: 'light', icon: <Sun className="h-4 w-4" /> },
+  { name: 'Dark', value: 'dark', icon: <Moon className="h-4 w-4" /> },
+  { name: 'Desert Sands', value: 'desert-sands', icon: <Palette className="h-4 w-4" /> },
+  { name: 'Oasis Breeze', value: 'oasis-breeze', icon: <Palette className="h-4 w-4" /> },
+  { name: 'Spice Market', value: 'spice-market', icon: <Palette className="h-4 w-4" /> },
+  { name: 'Modern Minimalist', value: 'modern-minimalist', icon: <Palette className="h-4 w-4" /> },
+  { name: 'Coastal Calm', value: 'coastal-calm', icon: <Palette className="h-4 w-4" /> },
+  { name: 'Arabian Nights', value: 'arabian-nights', icon: <Palette className="h-4 w-4" /> },
+  { name: 'Bedouin Chic', value: 'bedouin-chic', icon: <Palette className="h-4 w-4" /> },
+  { name: 'Tech Futurism', value: 'tech-futurism', icon: <Palette className="h-4 w-4" /> },
+  { name: 'Frankincense Trail', value: 'frankincense-trail', icon: <Palette className="h-4 w-4" /> },
+  { name: 'Royal Opulence', value: 'royal-opulence', icon: <Palette className="h-4 w-4" /> },
 ];
 
 const Navigation = ({ currentTheme, onThemeChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
+  const currentThemeIcon = themes.find(theme => theme.value === currentTheme)?.icon || <Palette className="h-4 w-4" />;
+
   return (
     <>
       <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
         <Link to="/" className="text-xl font-bold">Oman Car Hub</Link>
         <div className="flex items-center space-x-4">
-          <Select value={currentTheme} onValueChange={onThemeChange}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select theme" />
-            </SelectTrigger>
-            <SelectContent>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-white">
+                {currentThemeIcon}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
               {themes.map((theme) => (
-                <SelectItem key={theme.value} value={theme.value}>
-                  {theme.name}
-                </SelectItem>
+                <DropdownMenuItem key={theme.value} onSelect={() => onThemeChange(theme.value)}>
+                  <div className="flex items-center">
+                    {theme.icon}
+                    <span className="ml-2">{theme.name}</span>
+                  </div>
+                </DropdownMenuItem>
               ))}
-            </SelectContent>
-          </Select>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="text-white">
