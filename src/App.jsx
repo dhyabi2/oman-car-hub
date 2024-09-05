@@ -16,7 +16,7 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [theme, setThemeState] = useState('light');
-  const [language, setLanguageState] = useState('en');
+  const [language, setLanguageState] = useState('ar'); // Set initial language to Arabic
 
   useEffect(() => {
     document.body.className = theme;
@@ -24,7 +24,12 @@ const App = () => {
 
   useEffect(() => {
     const fetchLanguageAndTheme = async () => {
-      const lang = await getLanguage();
+      let lang = await getLanguage();
+      if (!lang) {
+        // If no language is set, default to Arabic and save it
+        lang = 'ar';
+        await setLanguage(lang);
+      }
       setLanguageState(lang);
       const savedTheme = await getTheme();
       setThemeState(savedTheme);
@@ -51,7 +56,7 @@ const App = () => {
     setThemeState(newTheme);
   };
 
-  const t = translations[language] || translations['en'];
+  const t = translations[language] || translations['ar']; // Default to Arabic if translation is missing
 
   return (
     <QueryClientProvider client={queryClient}>
