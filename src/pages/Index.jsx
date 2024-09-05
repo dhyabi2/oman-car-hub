@@ -69,18 +69,22 @@ const Index = ({ language, t }) => {
           handleBrandSelect={handleBrandSelect}
           t={t}
         />
-        <ModelSelector
-          selectedBrand={selectedBrand}
-          selectedModel={selectedModel}
-          handleModelSelect={handleModelSelect}
-          t={t}
-        />
-        <SelectedCar
-          selectedBrand={selectedBrand}
-          selectedModel={selectedModel}
-          handleViewCars={handleViewCars}
-          t={t}
-        />
+        {selectedBrand && (
+          <ModelSelector
+            selectedBrand={selectedBrand}
+            selectedModel={selectedModel}
+            handleModelSelect={handleModelSelect}
+            t={t}
+          />
+        )}
+        {selectedBrand && selectedModel && (
+          <SelectedCar
+            selectedBrand={selectedBrand}
+            selectedModel={selectedModel}
+            handleViewCars={handleViewCars}
+            t={t}
+          />
+        )}
       </div>
       
       {latestCar && <LatestCar car={latestCar} navigate={navigate} t={t} />}
