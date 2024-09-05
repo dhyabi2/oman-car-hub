@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navItems } from '../nav-items';
-import { Menu, Sun, Moon, Palette, Globe } from 'lucide-react';
+import { Menu, Sun, Moon, Palette, Globe, Car } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import {
   Sheet,
   SheetContent,
@@ -29,6 +30,24 @@ const themes = [
   { name: 'frankincenseTrail', value: 'frankincense-trail', icon: <Palette className="h-4 w-4" /> },
   { name: 'royalOpulence', value: 'royal-opulence', icon: <Palette className="h-4 w-4" /> },
 ];
+
+const AnimatedCarIcon = () => (
+  <motion.div
+    animate={{
+      rotate: [0, 360],
+      x: [-10, 10, -10],
+      y: [-5, 5, -5],
+    }}
+    transition={{
+      duration: 5,
+      repeat: Infinity,
+      repeatType: "reverse",
+    }}
+    className="inline-block mr-2"
+  >
+    <Car className="h-6 w-6" />
+  </motion.div>
+);
 
 const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -70,7 +89,10 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
   return (
     <>
       <nav className={`p-4 flex justify-between items-center ${getHeaderClass()}`}>
-        <Link to="/" className="text-xl font-bold">{t.appName}</Link>
+        <Link to="/" className="text-xl font-bold flex items-center">
+          <AnimatedCarIcon />
+          {t.appName}
+        </Link>
         <div className="flex items-center space-x-4">
           <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
             <Globe className="h-4 w-4" />
@@ -99,20 +121,20 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className={`w-[300px] sm:w-[400px] ${getHeaderClass()}`}>
-              <nav className="flex flex-col space-y-6 mt-8">
+              <nav className="flex flex-col space-y-4 mt-8">
                 {navItems.map((item) => (
                   <Link
                     key={item.to}
                     to={item.to}
-                    className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+                    className={`flex items-center space-x-3 p-4 rounded-lg transition-colors duration-200 text-lg ${
                       location.pathname === item.to
-                        ? 'bg-primary text-primary-foreground'
+                        ? 'bg-primary text-primary-foreground font-semibold'
                         : 'hover:bg-secondary hover:text-secondary-foreground'
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
                     {item.icon}
-                    <span className="text-lg">{t[item.title.toLowerCase()] || t[item.to.slice(1)] || item.title}</span>
+                    <span>{t[item.title.toLowerCase()] || t[item.to.slice(1)] || item.title}</span>
                   </Link>
                 ))}
               </nav>
