@@ -8,6 +8,13 @@ import { useState, useEffect } from "react";
 import { getLanguage, setLanguage } from "./utils/indexedDB";
 import { translations } from "./utils/translations";
 
+// Import all page components
+import Index from "./pages/Index";
+import AddCar from "./pages/AddCar";
+import CarsList from "./pages/CarsList";
+import CarDetails from "./pages/CarDetails";
+import FAQ from "./pages/FAQ";
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -42,13 +49,11 @@ const App = () => {
           <div className={`app ${theme} ${language === 'ar' ? 'rtl' : 'ltr'}`}>
             <Navigation currentTheme={theme} onThemeChange={setTheme} language={language} toggleLanguage={toggleLanguage} t={t} />
             <Routes>
-              {navItems.map(({ to, page: Page }) => (
-                <Route 
-                  key={to} 
-                  path={to} 
-                  element={<Page language={language} t={t} />} 
-                />
-              ))}
+              <Route path="/" element={<Index language={language} t={t} />} />
+              <Route path="/add-car" element={<AddCar language={language} t={t} />} />
+              <Route path="/cars-list" element={<CarsList language={language} t={t} />} />
+              <Route path="/car/:id" element={<CarDetails language={language} t={t} />} />
+              <Route path="/faq" element={<FAQ language={language} t={t} />} />
             </Routes>
           </div>
         </BrowserRouter>
