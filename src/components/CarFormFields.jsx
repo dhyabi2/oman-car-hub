@@ -127,7 +127,7 @@ export const DrivetrainSelector = ({ value, onChange, t }) => (
 export const ConditionSelector = ({ value, onChange, t }) => (
   <ImageSelector
     label={t.condition}
-    options={['New', 'Used', 'Certified Pre-Owned'].map(condition => ({ value: condition, icon: <CheckCircle size={24} />, label: t[condition.toLowerCase()] }))}
+    options={['New', 'Used'].map(condition => ({ value: condition, icon: <CheckCircle size={24} />, label: t[condition.toLowerCase()] }))}
     value={value}
     onChange={onChange}
   />
