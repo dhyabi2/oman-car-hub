@@ -72,7 +72,7 @@ export const PriceRangeInput = ({ minPrice, maxPrice, onChange }) => (
 export const ColorSelector = ({ value, onChange }) => (
   <ImageSelector
     label="Color"
-    options={colors.map(color => ({ value: color, icon: <Palette size={24} color={color.toLowerCase()} /> }))}
+    options={[...colors, 'Other'].map(color => ({ value: color, icon: <Palette size={24} color={color.toLowerCase()} /> }))}
     value={value}
     onChange={onChange}
   />

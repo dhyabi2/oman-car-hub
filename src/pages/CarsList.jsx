@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { carMakes, carModels } from '../utils/carData';
 import { getAllCars } from '../utils/indexedDB';
+import ImageGallery from '../components/ImageGallery';
 
 const CarsList = () => {
   const location = useLocation();
@@ -200,13 +201,7 @@ const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange }) => (
 
 const CarCard = ({ car, onViewDetails }) => (
   <Card className="overflow-hidden">
-    {car.photos && car.photos.length > 0 && (
-      <img 
-        src={car.photos[0]}
-        alt={`${car.make} ${car.model}`} 
-        className="w-full h-48 object-cover"
-      />
-    )}
+    <ImageGallery photos={car.photos} make={car.make} model={car.model} />
     <CardContent className="p-4">
       <h2 className="text-xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
       <p className="text-gray-600 mb-2">Price: {car.price} OMR</p>
