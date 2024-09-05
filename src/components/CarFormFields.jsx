@@ -3,20 +3,20 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import ImageSelector from './ImageSelector';
-import { carBrands, colors, fuelTypes, transmissionTypes } from '../utils/carData';
+import { carMakes, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 import { Car, Fuel, Palette, Settings, DoorOpen, Users, Compass, CheckCircle } from 'lucide-react';
 
 export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange }) => (
   <>
     <ImageSelector
       label="Make"
-      options={carBrands.map(brand => ({ value: brand.brand, icon: <Car size={24} /> }))}
+      options={carMakes.map(make => ({ value: make, icon: <Car size={24} /> }))}
       value={make}
       onChange={onMakeChange}
     />
     <ImageSelector
       label="Model"
-      options={(make ? carBrands.find(b => b.brand === make)?.models || [] : []).map(model => ({ value: model, icon: <Car size={24} /> }))}
+      options={(make ? carModels[make] : []).map(model => ({ value: model, icon: <Car size={24} /> }))}
       value={model}
       onChange={onModelChange}
       disabled={!make}
