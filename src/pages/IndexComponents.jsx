@@ -61,7 +61,7 @@ export const QuickStats = ({ stats, t }) => {
 export const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBrand, handleBrandSelect, t }) => (
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4">
-      <motion.h2 className="text-2xl font-semibold mb-4" {...fadeInUp}>{t.brandSelector}</motion.h2>
+      <motion.h2 className="text-2xl font-semibold mb-4" {...fadeInUp}>🏁 {t.brandSelector}</motion.h2>
       <motion.div {...fadeInUp} transition={{ delay: 0.1 }}>
         <Input
           type="text"
@@ -96,7 +96,7 @@ export const ModelSelector = ({ selectedBrand, selectedModel, handleModelSelect,
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4">
       <motion.h2 className="text-2xl font-semibold mb-4" {...fadeInUp}>
-        {selectedBrand ? `${selectedBrand.brand} ${t.model}` : t.modelSelector}
+        {selectedBrand ? `${selectedBrand.brand} ${t.model}` : t.modelSelector} 🚙
       </motion.h2>
       <ScrollArea className="h-[calc(100vh-16rem)]">
         {selectedBrand && (
@@ -123,7 +123,7 @@ export const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t })
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4 flex flex-col justify-between">
       <div>
-        <motion.h2 className="text-2xl font-semibold mb-4" {...fadeInUp}>{t.selectedCar}</motion.h2>
+        <motion.h2 className="text-2xl font-semibold mb-4" {...fadeInUp}>✨ {t.selectedCar}</motion.h2>
         {selectedBrand && selectedModel ? (
           <motion.div {...fadeInUp} transition={{ delay: 0.1 }}>
             <p><strong>{t.brand}:</strong> {selectedBrand.brand}</p>
@@ -136,7 +136,7 @@ export const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t })
       {selectedBrand && selectedModel && (
         <motion.div {...fadeInUp} transition={{ delay: 0.2 }}>
           <Button onClick={handleViewCars} className="mt-4 w-full">
-            {t.viewCars}
+            {t.viewCars} 👀
           </Button>
         </motion.div>
       )}
@@ -146,7 +146,7 @@ export const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t })
 
 export const LatestCar = ({ car, navigate, t }) => (
   <motion.div className="mb-8" {...fadeInUp}>
-    <h2 className="text-2xl font-semibold mb-4">{t.latestCar}</h2>
+    <h2 className="text-2xl font-semibold mb-4">🆕 {t.latestCar}</h2>
     <Card>
       <CardContent className="p-4">
         <motion.img
@@ -159,7 +159,7 @@ export const LatestCar = ({ car, navigate, t }) => (
         <h3 className="text-xl font-semibold">{car.year} {car.make} {car.model}</h3>
         <p className="text-lg font-bold">{car.price} {t.currency}</p>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button className="w-full mt-4" onClick={() => navigate(`/car/${car.id}`)}>{t.viewDetails}</Button>
+          <Button className="w-full mt-4" onClick={() => navigate(`/car/${car.id}`)}>{t.viewDetails} 🔍</Button>
         </motion.div>
       </CardContent>
     </Card>
@@ -174,11 +174,11 @@ export const SellYourCar = ({ navigate, t }) => (
   >
     <Card className="bg-primary text-primary-foreground">
       <CardContent className="p-8 text-center">
-        <h2 className="text-3xl font-bold mb-4">{t.sellYourCar}</h2>
+        <h2 className="text-3xl font-bold mb-4">💰 {t.sellYourCar}</h2>
         <p className="text-xl mb-6">{t.listingMessage}</p>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button size="lg" variant="secondary" onClick={() => navigate('/add-car')}>
-            {t.listYourCar}
+            {t.listYourCar} 📝
           </Button>
         </motion.div>
       </CardContent>

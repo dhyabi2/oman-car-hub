@@ -24,10 +24,10 @@ export const CarCard = ({ car, onViewDetails, language }) => (
   <Card className="overflow-hidden">
     <CardContent className="p-4">
       <h2 className="text-xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
-      <p className="text-gray-600 mb-2">{getTranslation(language, 'price', 'Price')}: {car.price} OMR</p>
-      <p className="text-gray-600 mb-2">{getTranslation(language, 'mileage', 'Mileage')}: {car.mileage} km</p>
-      <p className="text-gray-600 mb-2">{getTranslation(language, 'transmission', 'Transmission')}: {car.transmission}</p>
-      <p className="text-gray-600 mb-2">{getTranslation(language, 'fuelType', 'Fuel Type')}: {car.fuel_type}</p>
+      <p className="text-gray-600 mb-2">💰 {getTranslation(language, 'price', 'Price')}: {car.price} OMR</p>
+      <p className="text-gray-600 mb-2">🛣️ {getTranslation(language, 'mileage', 'Mileage')}: {car.mileage} km</p>
+      <p className="text-gray-600 mb-2">🔄 {getTranslation(language, 'transmission', 'Transmission')}: {car.transmission}</p>
+      <p className="text-gray-600 mb-2">⛽ {getTranslation(language, 'fuelType', 'Fuel Type')}: {car.fuel_type}</p>
       <div className="flex flex-wrap gap-2 mb-4">
         {car.photos.slice(0, 4).map((photo, index) => (
           <img
@@ -44,7 +44,7 @@ export const CarCard = ({ car, onViewDetails, language }) => (
         )}
       </div>
       <Button className="w-full mt-2" onClick={() => onViewDetails(car.id)}>
-        {getTranslation(language, 'viewDetails', 'View Details')}
+        {getTranslation(language, 'viewDetails', 'View Details')} 👀
       </Button>
     </CardContent>
   </Card>
@@ -53,7 +53,7 @@ export const CarCard = ({ car, onViewDetails, language }) => (
 export const FiltersCard = ({ filters, carMakes, carModels, maxPriceInData, onFilterChange, language }) => (
   <Card className="mb-6">
     <CardHeader>
-      <CardTitle>{getTranslation(language, 'filters', 'Filters')}</CardTitle>
+      <CardTitle>🔍 {getTranslation(language, 'filters', 'Filters')}</CardTitle>
     </CardHeader>
     <CardContent>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -117,7 +117,7 @@ const FilterSelect = ({ label, value, options, onChange }) => (
 
 const YearRangeFilter = ({ minYear, maxYear, onChange, language }) => (
   <div>
-    <Label>{getTranslation(language, 'yearRange', 'Year Range')}</Label>
+    <Label>📅 {getTranslation(language, 'yearRange', 'Year Range')}</Label>
     <div className="flex items-center space-x-2">
       <Input
         type="number"
@@ -138,7 +138,7 @@ const YearRangeFilter = ({ minYear, maxYear, onChange, language }) => (
 
 const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange, language }) => (
   <div>
-    <Label>{getTranslation(language, 'priceRange', 'Price Range')} (OMR)</Label>
+    <Label>💰 {getTranslation(language, 'priceRange', 'Price Range')} (OMR)</Label>
     <Slider
       min={0}
       max={maxPriceInData}
