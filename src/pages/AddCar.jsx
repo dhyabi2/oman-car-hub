@@ -213,15 +213,15 @@ const ListingDetails = ({ formData, handleInputChange, t }) => (
     </div>
     <ImageSelector
       label={t('location')}
-      options={locations.map(location => ({ value: location, icon: <MapPin size={24} /> }))}
+      options={locations.map(location => ({ value: location, icon: <MapPin size={24} />, label: t(location.toLowerCase()) }))}
       value={formData.location}
       onChange={(value) => handleInputChange('location', value)}
     />
     <ImageSelector
       label={t('sellerType')}
       options={[
-        { value: 'Private', icon: <User size={24} /> },
-        { value: 'Dealer', icon: <User size={24} /> }
+        { value: 'Private', icon: <User size={24} />, label: t('private') },
+        { value: 'Dealer', icon: <User size={24} />, label: t('dealer') }
       ]}
       value={formData.seller_type}
       onChange={(value) => handleInputChange('seller_type', value)}

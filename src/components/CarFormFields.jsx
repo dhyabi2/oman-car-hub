@@ -5,20 +5,19 @@ import { Slider } from "@/components/ui/slider";
 import ImageSelector from './ImageSelector';
 import { Car, Fuel, Palette, Settings, DoorOpen, Users, Compass, CheckCircle } from 'lucide-react';
 
-// Import carMakes and carModels from carData.js
 import { carMakes, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 
-export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange }) => (
+export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => (
   <>
     <ImageSelector
-      label="Make"
-      options={carMakes.map(make => ({ value: make, icon: <Car size={24} /> }))}
+      label={t('make')}
+      options={carMakes.map(make => ({ value: make, icon: <Car size={24} />, label: make }))}
       value={make}
       onChange={onMakeChange}
     />
     <ImageSelector
-      label="Model"
-      options={(make ? carModels[make] : []).map(model => ({ value: model, icon: <Car size={24} /> }))}
+      label={t('model')}
+      options={(make ? carModels[make] : []).map(model => ({ value: model, icon: <Car size={24} />, label: model }))}
       value={model}
       onChange={onModelChange}
       disabled={!make}
@@ -26,9 +25,9 @@ export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange }) =>
   </>
 );
 
-export const MileageInput = ({ value, onChange }) => (
+export const MileageInput = ({ value, onChange, t }) => (
   <div>
-    <Label htmlFor="mileage">Mileage (km)</Label>
+    <Label htmlFor="mileage">{t('mileage')} (km)</Label>
     <div className="flex items-center space-x-2">
       <Slider
         id="mileage"
@@ -48,87 +47,87 @@ export const MileageInput = ({ value, onChange }) => (
   </div>
 );
 
-export const PriceRangeInput = ({ minPrice, maxPrice, onChange }) => (
+export const PriceRangeInput = ({ minPrice, maxPrice, onChange, t }) => (
   <div>
-    <Label>Price Range (OMR)</Label>
+    <Label>{t('priceRange')} (OMR)</Label>
     <div className="flex items-center space-x-2">
       <Input
         type="number"
         value={minPrice}
         onChange={(e) => onChange('minPrice', Number(e.target.value))}
-        placeholder="Min"
+        placeholder={t('min')}
         className="w-24"
       />
-      <span>to</span>
+      <span>{t('to')}</span>
       <Input
         type="number"
         value={maxPrice}
         onChange={(e) => onChange('maxPrice', Number(e.target.value))}
-        placeholder="Max"
+        placeholder={t('max')}
         className="w-24"
       />
     </div>
   </div>
 );
 
-export const ColorSelector = ({ value, onChange }) => (
+export const ColorSelector = ({ value, onChange, t }) => (
   <ImageSelector
-    label="Color"
-    options={colors.map(color => ({ value: color, icon: <Palette size={24} color={color.toLowerCase()} /> }))}
+    label={t('color')}
+    options={colors.map(color => ({ value: color, icon: <Palette size={24} color={color.toLowerCase()} />, label: t(color.toLowerCase()) }))}
     value={value}
     onChange={onChange}
   />
 );
 
-export const FuelTypeSelector = ({ value, onChange }) => (
+export const FuelTypeSelector = ({ value, onChange, t }) => (
   <ImageSelector
-    label="Fuel Type"
-    options={fuelTypes.map(type => ({ value: type, icon: <Fuel size={24} /> }))}
+    label={t('fuelType')}
+    options={fuelTypes.map(type => ({ value: type, icon: <Fuel size={24} />, label: t(type.toLowerCase()) }))}
     value={value}
     onChange={onChange}
   />
 );
 
-export const TransmissionSelector = ({ value, onChange }) => (
+export const TransmissionSelector = ({ value, onChange, t }) => (
   <ImageSelector
-    label="Transmission"
-    options={transmissionTypes.map(type => ({ value: type, icon: <Settings size={24} /> }))}
+    label={t('transmission')}
+    options={transmissionTypes.map(type => ({ value: type, icon: <Settings size={24} />, label: t(type.toLowerCase()) }))}
     value={value}
     onChange={onChange}
   />
 );
 
-export const DoorsSelector = ({ value, onChange }) => (
+export const DoorsSelector = ({ value, onChange, t }) => (
   <ImageSelector
-    label="Number of Doors"
-    options={[2, 3, 4, 5].map(num => ({ value: num, icon: <DoorOpen size={24} /> }))}
+    label={t('numberOfDoors')}
+    options={[2, 3, 4, 5].map(num => ({ value: num, icon: <DoorOpen size={24} />, label: num.toString() }))}
     value={value}
     onChange={onChange}
   />
 );
 
-export const SeatsSelector = ({ value, onChange }) => (
+export const SeatsSelector = ({ value, onChange, t }) => (
   <ImageSelector
-    label="Number of Seats"
-    options={[2, 4, 5, 7, 8].map(num => ({ value: num, icon: <Users size={24} /> }))}
+    label={t('numberOfSeats')}
+    options={[2, 4, 5, 7, 8].map(num => ({ value: num, icon: <Users size={24} />, label: num.toString() }))}
     value={value}
     onChange={onChange}
   />
 );
 
-export const DrivetrainSelector = ({ value, onChange }) => (
+export const DrivetrainSelector = ({ value, onChange, t }) => (
   <ImageSelector
-    label="Drivetrain"
-    options={['FWD', 'RWD', 'AWD', '4WD'].map(type => ({ value: type, icon: <Compass size={24} /> }))}
+    label={t('drivetrain')}
+    options={['FWD', 'RWD', 'AWD', '4WD'].map(type => ({ value: type, icon: <Compass size={24} />, label: t(type.toLowerCase()) }))}
     value={value}
     onChange={onChange}
   />
 );
 
-export const ConditionSelector = ({ value, onChange }) => (
+export const ConditionSelector = ({ value, onChange, t }) => (
   <ImageSelector
-    label="Condition"
-    options={['New', 'Used', 'Certified Pre-Owned'].map(condition => ({ value: condition, icon: <CheckCircle size={24} /> }))}
+    label={t('condition')}
+    options={['New', 'Used', 'Certified Pre-Owned'].map(condition => ({ value: condition, icon: <CheckCircle size={24} />, label: t(condition.toLowerCase()) }))}
     value={value}
     onChange={onChange}
   />
