@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { getCarById } from '../utils/indexedDB';
+import ImageGallery from '../components/ImageGallery';
 
 const CarDetails = () => {
   const { id } = useParams();
@@ -34,7 +34,7 @@ const CarDetails = () => {
           </div>
           <Description description={carDetails.description} />
           <AdditionalFeatures features={carDetails.additional_features} />
-          <Photos photos={carDetails.photos} make={carDetails.make} model={carDetails.model} />
+          <ImageGallery photos={carDetails.photos} make={carDetails.make} model={carDetails.model} />
           <ContactButton phone={carDetails.contact_phone} />
         </CardContent>
       </Card>
@@ -94,17 +94,6 @@ const AdditionalFeatures = ({ features }) => (
   <div className="mt-6">
     <h2 className="text-xl font-semibold mb-4">Additional Features</h2>
     <p>{features}</p>
-  </div>
-);
-
-const Photos = ({ photos, make, model }) => (
-  <div className="mt-6">
-    <h2 className="text-xl font-semibold mb-4">Photos</h2>
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-      {photos && photos.map((photo, index) => (
-        <img key={index} src={photo} alt={`${make} ${model}`} className="w-full h-40 object-cover rounded" />
-      ))}
-    </div>
   </div>
 );
 
