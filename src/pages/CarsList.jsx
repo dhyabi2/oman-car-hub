@@ -69,6 +69,16 @@ const CarsList = () => {
     navigate(`/car/${carId}`);
   };
 
+  const renderCarImage = (photo) => {
+    if (typeof photo === 'string' && photo.startsWith('http')) {
+      return photo;
+    } else if (photo instanceof File) {
+      return URL.createObjectURL(photo);
+    } else {
+      return '/placeholder.svg'; // Fallback to a placeholder image
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Cars List</h1>
@@ -79,96 +89,41 @@ const CarsList = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <Label htmlFor="make">Make</Label>
-              <Select value={filters.make} onValueChange={(value) => handleFilterChange('make', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select make" />
-                </SelectTrigger>
-                <SelectContent>
-                  {carMakes.map((make) => (
-                    <SelectItem key={make} value={make}>{make}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="model">Model</Label>
-              <Select value={filters.model} onValueChange={(value) => handleFilterChange('model', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select model" />
-                </SelectTrigger>
-                <SelectContent>
-                  {carModels.map((model) => (
-                    <SelectItem key={model} value={model}>{model}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>Year Range</Label>
-              <div className="flex items-center space-x-2">
-                <Input
-                  type="number"
-                  value={filters.minYear}
-                  onChange={(e) => handleFilterChange('minYear', parseInt(e.target.value))}
-                  className="w-20"
-                />
-                <span>to</span>
-                <Input
-                  type="number"
-                  value={filters.maxYear}
-                  onChange={(e) => handleFilterChange('maxYear', parseInt(e.target.value))}
-                  className="w-20"
-                />
-              </div>
-            </div>
-            <div>
-              <Label>Price Range (OMR)</Label>
-              <Slider
-                min={0}
-                max={maxPriceInData}
-                step={1000}
-                value={[filters.minPrice, filters.maxPrice]}
-                onValueChange={(value) => {
-                  handleFilterChange('minPrice', value[0]);
-                  handleFilterChange('maxPrice', value[1]);
-                }}
-              />
-              <div className="flex justify-between mt-2">
-                <span>{filters.minPrice} OMR</span>
-                <span>{filters.maxPrice} OMR</span>
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="transmission">Transmission</Label>
-              <Select value={filters.transmission} onValueChange={(value) => handleFilterChange('transmission', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select transmission" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="Automatic">Automatic</SelectItem>
-                  <SelectItem value="Manual">Manual</SelectItem>
-                  <SelectItem value="CVT">CVT</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="fuelType">Fuel Type</Label>
-              <Select value={filters.fuelType} onValueChange={(value) => handleFilterChange('fuelType', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select fuel type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="Petrol">Petrol</SelectItem>
-                  <SelectItem value="Diesel">Diesel</SelectItem>
-                  <SelectItem value="Electric">Electric</SelectItem>
-                  <SelectItem value="Hybrid">Hybrid</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <FilterSelect
+              label="Make"
+              value={filters.make}
+              options={carMakes}
+              onChange={(value) => handleFilterChange('make', value)}
+            />
+            <FilterSelect
+              label="Model"
+              value={filters.model}
+              options={carModels}
+              onChange={(value) => handleFilterChange('model', value)}
+            />
+            <YearRangeFilter
+              minYear={filters.minYear}
+              maxYear={filters.maxYear}
+              onChange={handleFilterChange}
+            />
+            <PriceRangeFilter
+              minPrice={filters.minPrice}
+              maxPrice={filters.maxPrice}
+              maxPriceInData={maxPriceInData}
+              onChange={handleFilterChange}
+            />
+            <FilterSelect
+              label="Transmission"
+              value={filters.transmission}
+              options={['all', 'Automatic', 'Manual', 'CVT']}
+              onChange={(value) => handleFilterChange('transmission', value)}
+            />
+            <FilterSelect
+              label="Fuel Type"
+              value={filters.fuelType}
+              options={['all', 'Petrol', 'Diesel', 'Electric', 'Hybrid']}
+              onChange={(value) => handleFilterChange('fuelType', value)}
+            />
           </div>
         </CardContent>
       </Card>
@@ -176,50 +131,111 @@ const CarsList = () => {
       <ScrollArea className="h-[calc(100vh-20rem)]">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCars.map((car) => (
-            <Card key={car.id} className="overflow-hidden">
-              {car.photos && car.photos.length > 0 && (
-                <img 
-                  src={car.photos[0] instanceof File ? URL.createObjectURL(car.photos[0]) : car.photos[0]}
-                  alt={`${car.make} ${car.model}`} 
-                  className="w-full h-48 object-cover"
-                  onLoad={(e) => {
-                    if (car.photos[0] instanceof File) {
-                      URL.revokeObjectURL(e.target.src);
-                    }
-                  }}
-                />
-              )}
-              {car.photos && car.photos.length > 1 && (
-                <div className="flex overflow-x-auto p-2">
-                  {car.photos.slice(1).map((photo, index) => (
-                    <img 
-                      key={index} 
-                      src={photo instanceof File ? URL.createObjectURL(photo) : photo}
-                      alt={`${car.make} ${car.model} thumbnail ${index + 1}`} 
-                      className="w-16 h-16 object-cover mr-2 flex-shrink-0"
-                      onLoad={(e) => {
-                        if (photo instanceof File) {
-                          URL.revokeObjectURL(e.target.src);
-                        }
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-              <CardContent className="p-4">
-                <h2 className="text-xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
-                <p className="text-gray-600 mb-2">Price: {car.price} OMR</p>
-                <p className="text-gray-600 mb-2">Mileage: {car.mileage} km</p>
-                <p className="text-gray-600 mb-2">Transmission: {car.transmission}</p>
-                <p className="text-gray-600 mb-2">Fuel Type: {car.fuel_type}</p>
-                <Button className="w-full mt-2" onClick={() => handleViewDetails(car.id)}>View Details</Button>
-              </CardContent>
-            </Card>
+            <CarCard key={car.id} car={car} onViewDetails={handleViewDetails} renderCarImage={renderCarImage} />
           ))}
         </div>
       </ScrollArea>
     </div>
   );
 };
+
+const FilterSelect = ({ label, value, options, onChange }) => (
+  <div>
+    <Label htmlFor={label}>{label}</Label>
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger>
+        <SelectValue placeholder={`Select ${label.toLowerCase()}`} />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option) => (
+          <SelectItem key={option} value={option}>{option}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
+);
+
+const YearRangeFilter = ({ minYear, maxYear, onChange }) => (
+  <div>
+    <Label>Year Range</Label>
+    <div className="flex items-center space-x-2">
+      <Input
+        type="number"
+        value={minYear}
+        onChange={(e) => onChange('minYear', parseInt(e.target.value))}
+        className="w-20"
+      />
+      <span>to</span>
+      <Input
+        type="number"
+        value={maxYear}
+        onChange={(e) => onChange('maxYear', parseInt(e.target.value))}
+        className="w-20"
+      />
+    </div>
+  </div>
+);
+
+const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange }) => (
+  <div>
+    <Label>Price Range (OMR)</Label>
+    <Slider
+      min={0}
+      max={maxPriceInData}
+      step={1000}
+      value={[minPrice, maxPrice]}
+      onValueChange={(value) => {
+        onChange('minPrice', value[0]);
+        onChange('maxPrice', value[1]);
+      }}
+    />
+    <div className="flex justify-between mt-2">
+      <span>{minPrice} OMR</span>
+      <span>{maxPrice} OMR</span>
+    </div>
+  </div>
+);
+
+const CarCard = ({ car, onViewDetails, renderCarImage }) => (
+  <Card className="overflow-hidden">
+    {car.photos && car.photos.length > 0 && (
+      <img 
+        src={renderCarImage(car.photos[0])}
+        alt={`${car.make} ${car.model}`} 
+        className="w-full h-48 object-cover"
+        onLoad={(e) => {
+          if (car.photos[0] instanceof File) {
+            URL.revokeObjectURL(e.target.src);
+          }
+        }}
+      />
+    )}
+    {car.photos && car.photos.length > 1 && (
+      <div className="flex overflow-x-auto p-2">
+        {car.photos.slice(1).map((photo, index) => (
+          <img 
+            key={index} 
+            src={renderCarImage(photo)}
+            alt={`${car.make} ${car.model} thumbnail ${index + 1}`} 
+            className="w-16 h-16 object-cover mr-2 flex-shrink-0"
+            onLoad={(e) => {
+              if (photo instanceof File) {
+                URL.revokeObjectURL(e.target.src);
+              }
+            }}
+          />
+        ))}
+      </div>
+    )}
+    <CardContent className="p-4">
+      <h2 className="text-xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
+      <p className="text-gray-600 mb-2">Price: {car.price} OMR</p>
+      <p className="text-gray-600 mb-2">Mileage: {car.mileage} km</p>
+      <p className="text-gray-600 mb-2">Transmission: {car.transmission}</p>
+      <p className="text-gray-600 mb-2">Fuel Type: {car.fuel_type}</p>
+      <Button className="w-full mt-2" onClick={() => onViewDetails(car.id)}>View Details</Button>
+    </CardContent>
+  </Card>
+);
 
 export default CarsList;
