@@ -14,8 +14,9 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
-import { carMakes, carModels, colors, locations } from '../utils/carData';
+import { colors, locations } from '../utils/carData';
 import { addCar } from '../utils/indexedDB';
+import { MakeModelSelect, MileageInput, PriceRangeInput } from '../components/CarFormFields';
 
 const AddCar = () => {
   const navigate = useNavigate();
@@ -107,18 +108,11 @@ const AddCar = () => {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <FormSection title="Basic Information">
-              <SelectField
-                label="Make"
-                value={formData.make}
-                onChange={(value) => handleInputChange('make', value)}
-                options={carMakes}
-              />
-              <SelectField
-                label="Model"
-                value={formData.model}
-                onChange={(value) => handleInputChange('model', value)}
-                options={formData.make ? carModels[formData.make] : []}
-                disabled={!formData.make}
+              <MakeModelSelect
+                make={formData.make}
+                model={formData.model}
+                onMakeChange={(value) => handleInputChange('make', value)}
+                onModelChange={(value) => handleInputChange('model', value)}
               />
               <SliderField
                 label="Year"
@@ -127,13 +121,9 @@ const AddCar = () => {
                 min={1990}
                 max={new Date().getFullYear()}
               />
-              <SliderField
-                label="Mileage (km)"
+              <MileageInput
                 value={formData.mileage}
-                onChange={(value) => handleInputChange('mileage', value[0])}
-                min={0}
-                max={300000}
-                step={1000}
+                onChange={(value) => handleInputChange('mileage', value)}
               />
             </FormSection>
 
@@ -191,13 +181,10 @@ const AddCar = () => {
             </FormSection>
 
             <FormSection title="Listing Details">
-              <SliderField
-                label="Price (OMR)"
-                value={formData.price}
-                onChange={(value) => handleInputChange('price', value[0])}
-                min={1000}
-                max={100000}
-                step={50}
+              <PriceRangeInput
+                minPrice={formData.price}
+                maxPrice={formData.price}
+                onChange={(field, value) => handleInputChange('price', value)}
               />
               <InputField
                 label="VIN (Optional)"
@@ -274,10 +261,10 @@ const FormSection = ({ title, children }) => (
   </div>
 );
 
-const SelectField = ({ label, value, onChange, options, disabled = false }) => (
+const SelectField = ({ label, value, onChange, options }) => (
   <div>
     <Label htmlFor={label}>{label}</Label>
-    <Select value={value} onValueChange={onChange} disabled={disabled}>
+    <Select value={value} onValueChange={onChange}>
       <SelectTrigger>
         <SelectValue placeholder={`Select ${label.toLowerCase()}`} />
       </SelectTrigger>
