@@ -186,12 +186,16 @@ const AddCar = () => {
                 value={formData.seller_type}
                 onChange={(value) => handleInputChange('seller_type', value)}
               />
-              <Input
-                label="Contact Phone"
-                type="tel"
-                value={formData.contact_phone}
-                onChange={(e) => handleInputChange('contact_phone', e.target.value)}
-              />
+              <div>
+                <Label htmlFor="contact_phone">Contact Phone</Label>
+                <Input
+                  id="contact_phone"
+                  type="tel"
+                  value={formData.contact_phone}
+                  onChange={(e) => handleInputChange('contact_phone', e.target.value)}
+                  required
+                />
+              </div>
               <DatePickerField
                 label="Listing Expiration Date"
                 value={formData.listing_expiration_date}
