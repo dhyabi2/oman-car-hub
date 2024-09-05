@@ -35,17 +35,22 @@ const AnimatedCarIcon = () => (
   <motion.div
     animate={{
       rotate: [0, 360],
-      x: [-10, 10, -10],
-      y: [-5, 5, -5],
+      scale: [1, 1.2, 1],
+      x: [-20, 20, -20],
+      y: [-10, 10, -10],
     }}
     transition={{
       duration: 5,
       repeat: Infinity,
       repeatType: "reverse",
     }}
-    className="inline-block mr-2"
+    className="absolute"
+    style={{
+      top: '-20px',
+      left: '-40px',
+    }}
   >
-    <Car className="h-6 w-6" />
+    <Car className="h-12 w-12" />
   </motion.div>
 );
 
@@ -89,9 +94,9 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
   return (
     <>
       <nav className={`p-4 flex justify-between items-center ${getHeaderClass()}`}>
-        <Link to="/" className="text-xl font-bold flex items-center">
+        <Link to="/" className="text-2xl font-bold flex items-center relative">
           <AnimatedCarIcon />
-          {t.appName}
+          <span className="ml-12">{t.appName}</span>
         </Link>
         <div className="flex items-center space-x-4">
           <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
