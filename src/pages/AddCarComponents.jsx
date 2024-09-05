@@ -12,7 +12,7 @@ export const FormSection = ({ title, children }) => (
   </div>
 );
 
-export const ListingDetails = ({ formData, handleInputChange, t, language }) => {
+export const ListingDetails = ({ formData, handleInputChange, t }) => {
   const handlePhoneChange = (e) => {
     const value = e.target.value.replace(/\D/g, '').slice(0, 8);
     handleInputChange('contact_phone', value);
@@ -37,9 +37,7 @@ export const ListingDetails = ({ formData, handleInputChange, t, language }) => 
           </SelectTrigger>
           <SelectContent>
             {locations.map((location) => (
-              <SelectItem key={location} value={location}>
-                {t.locations[location] || location}
-              </SelectItem>
+              <SelectItem key={location} value={location}>{location}</SelectItem>
             ))}
           </SelectContent>
         </Select>

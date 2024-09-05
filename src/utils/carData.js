@@ -16,15 +16,7 @@ export const carModels = {
 
 export const colors = ['White', 'Black', 'Silver', 'Gray', 'Red', 'Blue', 'Green', 'Yellow', 'Brown', 'Orange'];
 
-export const locations = [
-  'Muscat', 'Salalah', 'Sohar', 'Nizwa', 'Sur', 'Ibri', 'Barka', 'Seeb', 'Rustaq', 'Ibra',
-  'Adam', 'Al Amerat', 'Al Buraimi', 'Al Hamra', 'Al Jazir', 'Al Kamil Wal Wafi', 'Al Khaburah',
-  'Al Mudhaibi', 'Al Musanaah', 'Al Qabil', 'Al Suwaiq', 'Bahla', 'Bidbid', 'Daba', 'Duqm',
-  'Haima', 'Izki', 'Jalan Bani Bu Ali', 'Jalan Bani Bu Hassan', 'Khasab', 'Liwa', 'Madha',
-  'Mahout', 'Manah', 'Masirah', 'Mirbat', 'Muqshin', 'Musandam', 'Nakhal', 'Quriyat', 'Rakhyut',
-  'Saham', 'Shalim and the Hallaniyat Islands', 'Shinas', 'Sumail', 'Taqah', 'Thumrait', 'Wadi Bani Khalid',
-  'Yanqul'
-];
+export const locations = ['Muscat', 'Salalah', 'Sohar', 'Nizwa', 'Sur', 'Ibri', 'Barka', 'Seeb', 'Rustaq', 'Ibra'];
 
 export const fuelTypes = ['Petrol', 'Diesel', 'Electric', 'Hybrid', 'LPG', 'CNG'];
 
