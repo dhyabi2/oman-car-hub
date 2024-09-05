@@ -5,12 +5,15 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { carBrands } from '../utils/carData';
+import { getAllCars } from '../utils/indexedDB';
 
 const Index = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredBrands, setFilteredBrands] = useState(carBrands);
+  const [featuredCars, setFeaturedCars] = useState([]);
+  const [stats, setStats] = useState({ totalListings: 0, activeSellers: 0, averagePrice: 0 });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +22,19 @@ const Index = () => {
     );
     setFilteredBrands(filtered);
   }, [searchTerm]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const allCars = await getAllCars();
+      setFeaturedCars(allCars.slice(0, 3)); // Get first 3 cars as featured
+      setStats({
+        totalListings: allCars.length,
+        activeSellers: new Set(allCars.map(car => car.seller_id)).size,
+        averagePrice: Math.round(allCars.reduce((sum, car) => sum + car.price, 0) / allCars.length)
+      });
+    };
+    fetchData();
+  }, []);
 
   const handleBrandSelect = (brand) => {
     setSelectedBrand(brand);
@@ -38,7 +54,10 @@ const Index = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8 text-center">Oman Auto Mart</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <QuickStats stats={stats} />
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
         <Card className="h-[calc(100vh-12rem)] overflow-hidden">
           <CardContent className="p-4">
             <h2 className="text-2xl font-semibold mb-4">Car Brands</h2>
@@ -111,8 +130,55 @@ const Index = () => {
           </CardContent>
         </Card>
       </div>
+      
+      <FeaturedCars cars={featuredCars} />
+      
+      <SellYourCar />
     </div>
   );
 };
+
+const QuickStats = ({ stats }) => (
+  <div className="grid grid-cols-3 gap-4 mb-8">
+    {Object.entries(stats).map(([key, value]) => (
+      <Card key={key}>
+        <CardContent className="p-4 text-center">
+          <h3 className="text-lg font-semibold">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
+          <p className="text-3xl font-bold">{value}</p>
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+);
+
+const FeaturedCars = ({ cars }) => (
+  <div className="mb-8">
+    <h2 className="text-2xl font-semibold mb-4">Featured Cars</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {cars.map((car) => (
+        <Card key={car.id}>
+          <CardContent className="p-4">
+            <img src={car.photos[0]} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover mb-4 rounded" />
+            <h3 className="text-xl font-semibold">{car.year} {car.make} {car.model}</h3>
+            <p className="text-lg font-bold">{car.price} OMR</p>
+            <Button className="w-full mt-4" onClick={() => navigate(`/car/${car.id}`)}>View Details</Button>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  </div>
+);
+
+const SellYourCar = () => (
+  <Card className="bg-primary text-primary-foreground">
+    <CardContent className="p-8 text-center">
+      <h2 className="text-3xl font-bold mb-4">Ready to Sell Your Car?</h2>
+      <p className="text-xl mb-6">List your car on Oman Auto Mart and reach thousands of potential buyers!</p>
+      <Button size="lg" variant="secondary" onClick={() => navigate('/add-car')}>
+        List Your Car Now
+      </Button>
+    </CardContent>
+  </Card>
+);
 
 export default Index;
