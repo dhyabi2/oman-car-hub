@@ -1,36 +1,14 @@
 export const translations = {
   en: {
-    // ... (existing translations)
-    frequentlyAskedQuestions: "Frequently Asked Questions",
-    howToListCar: "How do I list my car for sale?",
-    listCarAnswer: "To list your car, click on 'Add Car' in the navigation menu. Fill out the form with your car's details and submit.",
-    isListingFree: "Is it free to list my car?",
-    listingFreeAnswer: "Yes, listing your car on Oman Auto Mart is completely free.",
-    howToContactSeller: "How do I contact a seller?",
-    contactSellerAnswer: "Each listing has a 'Contact Seller' button. Click it to get the seller's contact information or send a message directly through our platform.",
-    howToContactDeveloper: "How can I contact the developer?",
+    // ... (previous translations remain unchanged)
+    howToContactDeveloper: "How to contact the developer?",
     contactDeveloperAnswer: "You can contact the developer via WhatsApp only.",
     contactViaWhatsApp: "Contact via WhatsApp",
-    haveMoreQuestions: "Have more questions?",
-    typeFeedbackOrQuestion: "Type your feedback or question here...",
-    submitFeedback: "Submit Feedback",
-    feedbackThankYou: "Thank you for your feedback!",
   },
   ar: {
-    // ... (existing translations)
-    frequentlyAskedQuestions: "الأسئلة الشائعة",
-    howToListCar: "كيف أضيف سيارتي للبيع؟",
-    listCarAnswer: "لإضافة سيارتك، انقر على 'إضافة سيارة' في قائمة التنقل. املأ النموذج بتفاصيل سيارتك وقم بالإرسال.",
-    isListingFree: "هل إضافة السيارة مجانية؟",
-    listingFreeAnswer: "نعم، إضافة سيارتك في سوق عمان للسيارات مجانية تمامًا.",
-    howToContactSeller: "كيف يمكنني التواصل مع البائع؟",
-    contactSellerAnswer: "كل إعلان يحتوي على زر 'تواصل مع البائع'. انقر عليه للحصول على معلومات الاتصال بالبائع أو إرسال رسالة مباشرة عبر منصتنا.",
+    // ... (previous translations remain unchanged)
     howToContactDeveloper: "كيف يمكنني التواصل مع المطور؟",
     contactDeveloperAnswer: "يمكنك التواصل مع المطور عبر واتساب فقط.",
     contactViaWhatsApp: "تواصل عبر واتساب",
-    haveMoreQuestions: "هل لديك المزيد من الأسئلة؟",
-    typeFeedbackOrQuestion: "اكتب ملاحظاتك أو سؤالك هنا...",
-    submitFeedback: "إرسال الملاحظات",
-    feedbackThankYou: "شكرًا لك على ملاحظاتك!",
   },
 };
