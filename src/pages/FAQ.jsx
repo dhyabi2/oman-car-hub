@@ -22,10 +22,6 @@ const FAQ = ({ language = 'en' }) => {
       answer: t('listingFreeAnswer')
     },
     {
-      question: t('howLongListingActive'),
-      answer: t('listingActiveAnswer')
-    },
-    {
       question: t('canEditListing'),
       answer: t('editListingAnswer')
     },
