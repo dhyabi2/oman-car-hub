@@ -3,7 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getLanguage, setLanguage } from "./utils/indexedDB";
+import { getLanguage, setLanguage, incrementCurrentViewers, decrementCurrentViewers } from "./utils/indexedDB";
 import { translations } from "./utils/translations";
 import Navigation from "./components/Navigation";
 import Index from "./pages/Index";
@@ -28,6 +28,14 @@ const App = () => {
       setLanguageState(lang);
     };
     fetchLanguage();
+
+    // Increment current viewers when the app loads
+    incrementCurrentViewers();
+
+    // Decrement current viewers when the app unloads
+    return () => {
+      decrementCurrentViewers();
+    };
   }, []);
 
   const toggleLanguage = async () => {
