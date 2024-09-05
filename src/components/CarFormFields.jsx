@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import ImageSelector from './ImageSelector';
 import { carMakes, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
-import { Car, Fuel, Palette, GearboxIcon, DoorOpen, Users, Compass, CheckCircle } from 'lucide-react';
+import { Car, Fuel, Palette, Settings, DoorOpen, Users, Compass, CheckCircle } from 'lucide-react';
 
 export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange }) => (
   <>
@@ -90,7 +90,7 @@ export const FuelTypeSelector = ({ value, onChange }) => (
 export const TransmissionSelector = ({ value, onChange }) => (
   <ImageSelector
     label="Transmission"
-    options={transmissionTypes.map(type => ({ value: type, icon: <GearboxIcon size={24} /> }))}
+    options={transmissionTypes.map(type => ({ value: type, icon: <Settings size={24} /> }))}
     value={value}
     onChange={onChange}
   />
