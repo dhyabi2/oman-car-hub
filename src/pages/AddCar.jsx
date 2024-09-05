@@ -9,11 +9,22 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, MapPin, User } from "lucide-react";
 import { toast } from "sonner";
 import { locations } from '../utils/carData';
 import { addCar } from '../utils/indexedDB';
-import { MakeModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelTypeSelector, TransmissionSelector } from '../components/CarFormFields';
+import {
+  MakeModelSelect,
+  MileageInput,
+  PriceRangeInput,
+  ColorSelector,
+  FuelTypeSelector,
+  TransmissionSelector,
+  DoorsSelector,
+  SeatsSelector,
+  DrivetrainSelector,
+  ConditionSelector
+} from '../components/CarFormFields';
 import ImageSelector from '../components/ImageSelector';
 
 const AddCar = () => {
@@ -131,27 +142,19 @@ const AddCar = () => {
                 value={formData.color}
                 onChange={(value) => handleInputChange('color', value)}
               />
-              <ImageSelector
-                label="Number of Doors"
-                options={[2, 3, 4, 5].map(num => ({ value: num, image: `/images/doors/${num}-doors.png` }))}
+              <DoorsSelector
                 value={formData.number_of_doors}
                 onChange={(value) => handleInputChange('number_of_doors', value)}
               />
-              <ImageSelector
-                label="Number of Seats"
-                options={[2, 4, 5, 7, 8].map(num => ({ value: num, image: `/images/seats/${num}-seats.png` }))}
+              <SeatsSelector
                 value={formData.number_of_seats}
                 onChange={(value) => handleInputChange('number_of_seats', value)}
               />
-              <ImageSelector
-                label="Drivetrain"
-                options={['FWD', 'RWD', 'AWD', '4WD'].map(type => ({ value: type, image: `/images/drivetrain/${type.toLowerCase()}.png` }))}
+              <DrivetrainSelector
                 value={formData.drivetrain}
                 onChange={(value) => handleInputChange('drivetrain', value)}
               />
-              <ImageSelector
-                label="Condition"
-                options={['New', 'Used', 'Certified Pre-Owned'].map(condition => ({ value: condition, image: `/images/condition/${condition.toLowerCase().replace(' ', '-')}.png` }))}
+              <ConditionSelector
                 value={formData.condition}
                 onChange={(value) => handleInputChange('condition', value)}
               />
@@ -170,15 +173,15 @@ const AddCar = () => {
               />
               <ImageSelector
                 label="Location"
-                options={locations.map(location => ({ value: location, image: `/images/locations/${location.toLowerCase()}.png` }))}
+                options={locations.map(location => ({ value: location, icon: <MapPin size={24} /> }))}
                 value={formData.location}
                 onChange={(value) => handleInputChange('location', value)}
               />
               <ImageSelector
                 label="Seller Type"
                 options={[
-                  { value: 'Private', image: '/images/seller-type/private.png' },
-                  { value: 'Dealer', image: '/images/seller-type/dealer.png' }
+                  { value: 'Private', icon: <User size={24} /> },
+                  { value: 'Dealer', icon: <User size={24} /> }
                 ]}
                 value={formData.seller_type}
                 onChange={(value) => handleInputChange('seller_type', value)}

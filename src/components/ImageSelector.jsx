@@ -1,20 +1,22 @@
 import React from 'react';
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 const ImageSelector = ({ label, options, value, onChange, disabled = false }) => (
   <div>
     <Label>{label}</Label>
     <div className="grid grid-cols-3 gap-2 mt-2">
       {options.map((option) => (
-        <button
+        <Button
           key={option.value}
-          className={`p-2 border rounded-md ${value === option.value ? 'border-blue-500' : 'border-gray-300'} ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-300'}`}
+          variant={value === option.value ? "default" : "outline"}
+          className={`p-2 flex flex-col items-center justify-center h-20 ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-300'}`}
           onClick={() => !disabled && onChange(option.value)}
           disabled={disabled}
         >
-          <img src={option.image} alt={option.value} className="w-full h-auto" />
-          <span className="block mt-1 text-xs">{option.value}</span>
-        </button>
+          {option.icon}
+          <span className="mt-1 text-xs">{option.value}</span>
+        </Button>
       ))}
     </div>
   </div>
