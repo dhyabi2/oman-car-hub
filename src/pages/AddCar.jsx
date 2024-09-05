@@ -27,7 +27,7 @@ import {
 } from '../components/CarFormFields';
 import ImageSelector from '../components/ImageSelector';
 
-const AddCar = ({ language = 'en', translations = {} }) => {
+const AddCar = ({ language = 'en', t }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     make: '',
@@ -52,8 +52,6 @@ const AddCar = ({ language = 'en', translations = {} }) => {
     listing_expiration_date: null,
     additional_features: '',
   });
-
-  const t = (key) => translations[language]?.[key] || key;
 
   const handleInputChange = (name, value) => {
     setFormData(prevState => ({ ...prevState, [name]: value }));
