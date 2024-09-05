@@ -5,27 +5,16 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { carBrands } from '../utils/carData';
-import { getAllCars, getLanguage, setLanguage } from '../utils/indexedDB';
-import { translations } from '../utils/translations';
-import { Globe } from 'lucide-react';
+import { getAllCars } from '../utils/indexedDB';
 
-const Index = () => {
+const Index = ({ language, t }) => {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredBrands, setFilteredBrands] = useState(carBrands);
   const [featuredCars, setFeaturedCars] = useState([]);
   const [stats, setStats] = useState({ totalListings: 0, activeSellers: 0, averagePrice: 0 });
-  const [language, setLanguageState] = useState('en');
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchLanguage = async () => {
-      const lang = await getLanguage();
-      setLanguageState(lang);
-    };
-    fetchLanguage();
-  }, []);
 
   useEffect(() => {
     const filtered = carBrands.filter(brand => 
@@ -62,24 +51,11 @@ const Index = () => {
     }
   };
 
-  const toggleLanguage = async () => {
-    const newLanguage = language === 'en' ? 'ar' : 'en';
-    await setLanguage(newLanguage);
-    setLanguageState(newLanguage);
-  };
-
-  const t = translations[language];
-
   return (
     <div className={`container mx-auto px-4 py-8 ${language === 'ar' ? 'rtl' : 'ltr'}`}>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">Oman Auto Mart</h1>
-        <Button onClick={toggleLanguage} variant="outline" size="icon">
-          <Globe className="h-4 w-4" />
-        </Button>
-      </div>
+      <h1 className="text-4xl font-bold mb-8">{t.appName}</h1>
       
-      <QuickStats stats={stats} />
+      <QuickStats stats={stats} t={t} />
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
         <BrandSelector
@@ -89,37 +65,34 @@ const Index = () => {
           selectedBrand={selectedBrand}
           handleBrandSelect={handleBrandSelect}
           t={t}
-          language={language}
         />
         <ModelSelector
           selectedBrand={selectedBrand}
           selectedModel={selectedModel}
           handleModelSelect={handleModelSelect}
           t={t}
-          language={language}
         />
         <SelectedCar
           selectedBrand={selectedBrand}
           selectedModel={selectedModel}
           handleViewCars={handleViewCars}
           t={t}
-          language={language}
         />
       </div>
       
-      <FeaturedCars cars={featuredCars} navigate={navigate} t={t} language={language} />
+      <FeaturedCars cars={featuredCars} navigate={navigate} t={t} />
       
-      <SellYourCar navigate={navigate} t={t} language={language} />
+      <SellYourCar navigate={navigate} t={t} />
     </div>
   );
 };
 
-const QuickStats = ({ stats }) => (
+const QuickStats = ({ stats, t }) => (
   <div className="grid grid-cols-3 gap-4 mb-8">
     {Object.entries(stats).map(([key, value]) => (
       <Card key={key}>
         <CardContent className="p-4 text-center">
-          <h3 className="text-lg font-semibold">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
+          <h3 className="text-lg font-semibold">{t[key]}</h3>
           <p className="text-3xl font-bold">{value}</p>
         </CardContent>
       </Card>
@@ -127,7 +100,7 @@ const QuickStats = ({ stats }) => (
   </div>
 );
 
-const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBrand, handleBrandSelect, t, language }) => (
+const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBrand, handleBrandSelect, t }) => (
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4">
       <h2 className="text-2xl font-semibold mb-4">{t.brandSelector}</h2>
@@ -158,7 +131,7 @@ const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBran
   </Card>
 );
 
-const ModelSelector = ({ selectedBrand, selectedModel, handleModelSelect, t, language }) => (
+const ModelSelector = ({ selectedBrand, selectedModel, handleModelSelect, t }) => (
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4">
       <h2 className="text-2xl font-semibold mb-4">
@@ -184,7 +157,7 @@ const ModelSelector = ({ selectedBrand, selectedModel, handleModelSelect, t, lan
   </Card>
 );
 
-const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t, language }) => (
+const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t }) => (
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4 flex flex-col justify-between">
       <div>
@@ -207,7 +180,7 @@ const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t, language
   </Card>
 );
 
-const FeaturedCars = ({ cars, navigate, t, language }) => (
+const FeaturedCars = ({ cars, navigate, t }) => (
   <div className="mb-8">
     <h2 className="text-2xl font-semibold mb-4">{t.featuredCars}</h2>
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -225,7 +198,7 @@ const FeaturedCars = ({ cars, navigate, t, language }) => (
   </div>
 );
 
-const SellYourCar = ({ navigate, t, language }) => (
+const SellYourCar = ({ navigate, t }) => (
   <Card className="bg-primary text-primary-foreground">
     <CardContent className="p-8 text-center">
       <h2 className="text-3xl font-bold mb-4">{t.sellYourCar}</h2>

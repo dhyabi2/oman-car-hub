@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navItems } from '../nav-items';
-import { Menu, Sun, Moon, Palette, PlusCircle, HelpCircle } from 'lucide-react';
+import { Menu, Sun, Moon, Palette, PlusCircle, HelpCircle, Globe } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -30,7 +30,7 @@ const themes = [
   { name: 'Royal Opulence', value: 'royal-opulence', icon: <Palette className="h-4 w-4" /> },
 ];
 
-const Navigation = ({ currentTheme, onThemeChange }) => {
+const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
@@ -39,8 +39,11 @@ const Navigation = ({ currentTheme, onThemeChange }) => {
   return (
     <>
       <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
-        <Link to="/" className="text-xl font-bold">Oman Car Hub</Link>
+        <Link to="/" className="text-xl font-bold">{t.appName}</Link>
         <div className="flex items-center space-x-4">
+          <Button variant="ghost" size="icon" className="text-white" onClick={toggleLanguage}>
+            <Globe className="h-4 w-4" />
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="text-white">
@@ -74,17 +77,9 @@ const Navigation = ({ currentTheme, onThemeChange }) => {
                     onClick={() => setIsOpen(false)}
                   >
                     {item.icon}
-                    <span>{item.title}</span>
+                    <span>{t[item.title.toLowerCase()]}</span>
                   </Link>
                 ))}
-                <Link
-                  to="/faq"
-                  className="flex items-center space-x-2 text-white hover:text-gray-300 transition-colors duration-200"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <HelpCircle className="h-4 w-4" />
-                  <span>FAQ</span>
-                </Link>
               </nav>
             </SheetContent>
           </Sheet>
