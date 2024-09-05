@@ -4,18 +4,19 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { carMakes, carModels } from '../utils/carData';
 import { getAllCars } from '../utils/indexedDB';
 import { NoCarsList, CarCard, FiltersCard } from './CarsListComponents';
+import { translations } from '../utils/translations';
 
 // Helper function to safely access translations
-const getTranslation = (t, key, fallback = key) => {
-  return t[key] || fallback;
+const getTranslation = (language, key, fallback = key) => {
+  return translations[language]?.[key] || fallback;
 };
 
-const CarsList = ({ t }) => {
+const CarsList = ({ language = 'en' }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const initialMake = searchParams.get('make') || getTranslation(t, 'allMakes', 'All Makes');
-  const initialModel = searchParams.get('model') || getTranslation(t, 'allModels', 'All Models');
+  const initialMake = searchParams.get('make') || getTranslation(language, 'allMakes', 'All Makes');
+  const initialModel = searchParams.get('model') || getTranslation(language, 'allModels', 'All Models');
 
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
@@ -41,8 +42,8 @@ const CarsList = ({ t }) => {
 
   useEffect(() => {
     const filtered = cars.filter(car => 
-      (filters.make === getTranslation(t, 'allMakes', 'All Makes') || car.make === filters.make) &&
-      (filters.model === getTranslation(t, 'allModels', 'All Models') || car.model === filters.model) &&
+      (filters.make === getTranslation(language, 'allMakes', 'All Makes') || car.make === filters.make) &&
+      (filters.model === getTranslation(language, 'allModels', 'All Models') || car.model === filters.model) &&
       car.year >= filters.minYear &&
       car.year <= filters.maxYear &&
       car.price >= filters.minPrice &&
@@ -51,13 +52,13 @@ const CarsList = ({ t }) => {
       (filters.fuelType === 'all' || car.fuel_type === filters.fuelType)
     );
     setFilteredCars(filtered);
-  }, [filters, cars, t]);
+  }, [filters, cars, language]);
 
   const handleFilterChange = (name, value) => {
     setFilters(prev => {
       const newFilters = { ...prev, [name]: value };
       if (name === 'make') {
-        newFilters.model = getTranslation(t, 'allModels', 'All Models');
+        newFilters.model = getTranslation(language, 'allModels', 'All Models');
       }
       return newFilters;
     });
@@ -69,15 +70,15 @@ const CarsList = ({ t }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">{getTranslation(t, 'carsList', 'Cars List')}</h1>
+      <h1 className="text-3xl font-bold mb-6">{getTranslation(language, 'carsList', 'Cars List')}</h1>
       
       <FiltersCard
         filters={filters}
-        carMakes={[getTranslation(t, 'allMakes', 'All Makes'), ...carMakes]}
-        carModels={filters.make === getTranslation(t, 'allMakes', 'All Makes') ? [getTranslation(t, 'allModels', 'All Models')] : [getTranslation(t, 'allModels', 'All Models'), ...(carModels[filters.make] || [])]}
+        carMakes={[getTranslation(language, 'allMakes', 'All Makes'), ...carMakes]}
+        carModels={filters.make === getTranslation(language, 'allMakes', 'All Makes') ? [getTranslation(language, 'allModels', 'All Models')] : [getTranslation(language, 'allModels', 'All Models'), ...(carModels[filters.make] || [])]}
         maxPriceInData={Math.max(...cars.map(car => car.price), 100000)}
         onFilterChange={handleFilterChange}
-        t={t}
+        language={language}
       />
 
       <ScrollArea className="h-[calc(100vh-20rem)]">
@@ -88,12 +89,12 @@ const CarsList = ({ t }) => {
                 key={car.id} 
                 car={car} 
                 onViewDetails={handleViewDetails}
-                t={t}
+                language={language}
               />
             ))}
           </div>
         ) : (
-          <NoCarsList t={t} />
+          <NoCarsList language={language} />
         )}
       </ScrollArea>
     </div>
