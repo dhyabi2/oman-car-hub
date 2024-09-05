@@ -248,9 +248,9 @@ const AddCar = () => {
               {formData.photos.length > 0 && (
                 <div className="mt-2">
                   <p>{formData.photos.length} file(s) selected</p>
-                  <div className="flex flex-wrap gap-2 mt-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mt-2">
                     {formData.photos.map((photo, index) => (
-                      <img key={index} src={photo} alt={`Uploaded car ${index + 1}`} className="w-20 h-20 object-cover" />
+                      <img key={index} src={photo} alt={`Uploaded car ${index + 1}`} className="w-full h-24 object-cover rounded" />
                     ))}
                   </div>
                 </div>

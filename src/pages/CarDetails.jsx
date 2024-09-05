@@ -100,13 +100,11 @@ const AdditionalFeatures = ({ features }) => (
 const Photos = ({ photos, make, model }) => (
   <div className="mt-6">
     <h2 className="text-xl font-semibold mb-4">Photos</h2>
-    <ScrollArea className="h-64 w-full">
-      <div className="flex space-x-4">
-        {photos && photos.map((photo, index) => (
-          <img key={index} src={photo} alt={`${make} ${model}`} className="w-64 h-48 object-cover" />
-        ))}
-      </div>
-    </ScrollArea>
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      {photos && photos.map((photo, index) => (
+        <img key={index} src={photo} alt={`${make} ${model}`} className="w-full h-40 object-cover rounded" />
+      ))}
+    </div>
   </div>
 );
 
