@@ -3,7 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getLanguage, setLanguage, incrementCurrentViewers, decrementCurrentViewers } from "./utils/indexedDB";
+import { getLanguage, setLanguage, incrementCurrentViewers, decrementCurrentViewers, getTheme, setTheme } from "./utils/indexedDB";
 import { translations } from "./utils/translations";
 import Navigation from "./components/Navigation";
 import Index from "./pages/Index";
@@ -15,7 +15,7 @@ import FAQ from "./pages/FAQ";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [theme, setTheme] = useState('light');
+  const [theme, setThemeState] = useState('light');
   const [language, setLanguageState] = useState('en');
 
   useEffect(() => {
@@ -23,11 +23,13 @@ const App = () => {
   }, [theme]);
 
   useEffect(() => {
-    const fetchLanguage = async () => {
+    const fetchLanguageAndTheme = async () => {
       const lang = await getLanguage();
       setLanguageState(lang);
+      const savedTheme = await getTheme();
+      setThemeState(savedTheme);
     };
-    fetchLanguage();
+    fetchLanguageAndTheme();
 
     // Increment current viewers when the app loads
     incrementCurrentViewers();
@@ -44,6 +46,11 @@ const App = () => {
     setLanguageState(newLanguage);
   };
 
+  const changeTheme = async (newTheme) => {
+    await setTheme(newTheme);
+    setThemeState(newTheme);
+  };
+
   const t = translations[language] || translations['en'];
 
   return (
@@ -52,7 +59,7 @@ const App = () => {
         <Toaster />
         <BrowserRouter>
           <div className={`app ${theme} ${language === 'ar' ? 'rtl' : 'ltr'}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
-            <Navigation currentTheme={theme} onThemeChange={setTheme} language={language} toggleLanguage={toggleLanguage} t={t} />
+            <Navigation currentTheme={theme} onThemeChange={changeTheme} language={language} toggleLanguage={toggleLanguage} t={t} />
             <Routes>
               <Route path="/" element={<Index language={language} t={t} />} />
               <Route path="/add-car" element={<AddCar language={language} t={t} />} />

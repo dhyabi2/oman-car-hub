@@ -58,6 +58,17 @@ export async function setLanguage(language) {
   return db.put(settingsStoreName, { key: 'language', value: language });
 }
 
+export async function getTheme() {
+  const db = await initDB();
+  const result = await db.get(settingsStoreName, 'theme');
+  return result ? result.value : 'light';
+}
+
+export async function setTheme(theme) {
+  const db = await initDB();
+  return db.put(settingsStoreName, { key: 'theme', value: theme });
+}
+
 export async function incrementCurrentViewers() {
   const db = await initDB();
   const tx = db.transaction(statsStoreName, 'readwrite');
