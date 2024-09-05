@@ -27,7 +27,7 @@ import {
 } from '../components/CarFormFields';
 import ImageSelector from '../components/ImageSelector';
 
-const AddCar = ({ t }) => {
+const AddCar = ({ language, translations }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     make: '',
@@ -52,6 +52,8 @@ const AddCar = ({ t }) => {
     listing_expiration_date: null,
     additional_features: '',
   });
+
+  const t = (key) => translations[language][key] || key;
 
   const handleInputChange = (name, value) => {
     setFormData(prevState => ({ ...prevState, [name]: value }));
@@ -84,23 +86,17 @@ const AddCar = ({ t }) => {
 
   const handlePhotoUpload = (e) => {
     const files = Array.from(e.target.files).slice(0, 10);
-    const filePromises = files.map(file => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
+    Promise.all(files.map(file => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    }))).then(results => {
+      setFormData(prevState => ({ ...prevState, photos: results }));
+    }).catch(error => {
+      console.error('Error processing images:', error);
+      toast.error(t('errorUploadingImages'));
     });
-
-    Promise.all(filePromises)
-      .then(results => {
-        setFormData(prevState => ({ ...prevState, photos: results }));
-      })
-      .catch(error => {
-        console.error('Error processing images:', error);
-        toast.error(t('errorUploadingImages'));
-      });
   };
 
   return (
