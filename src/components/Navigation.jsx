@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navItems } from '../nav-items';
-import { Menu, Sun, Moon, Palette } from 'lucide-react';
+import { Menu, Sun, Moon, Palette, PlusCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -87,7 +87,7 @@ const Navigation = ({ currentTheme, onThemeChange }) => {
           to="/add-car"
           className="fixed bottom-16 right-8 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-4 shadow-lg transition-colors duration-200 z-50"
         >
-          <Plus className="h-6 w-6" />
+          <PlusCircle className="h-6 w-6" />
         </Link>
       )}
     </>
