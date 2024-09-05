@@ -14,10 +14,17 @@ export const carBrands = [
   // ... (include all other car brands from the previous carBrands array)
 ];
 
-export const colors = ['White', 'Black', 'Silver', 'Gray', 'Red', 'Blue', 'Green', 'Yellow', 'Brown', 'Orange'];
+export const colors = ['White', 'Black', 'Silver', 'Gray', 'Red', 'Blue', 'Green', 'Yellow', 'Brown', 'Orange', 'Other'];
 
 export const locations = ['Muscat', 'Salalah', 'Sohar', 'Nizwa', 'Sur', 'Ibri', 'Barka', 'Seeb', 'Rustaq', 'Ibra'];
 
 export const fuelTypes = ['Petrol', 'Diesel', 'Electric', 'Hybrid', 'LPG', 'CNG'];
 
 export const transmissionTypes = ['Automatic', 'Manual', 'CVT', 'Semi-Automatic'];
+
+export const carMakes = carBrands.map(brand => brand.brand);
+
+export const carModels = carBrands.reduce((acc, brand) => {
+  acc[brand.brand] = brand.models;
+  return acc;
+}, {});
