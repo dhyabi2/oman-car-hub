@@ -1,14 +1,18 @@
 import { openDB } from 'idb';
 
 const dbName = 'CarDatabase';
-const storeName = 'cars';
-const version = 1;
+const carStoreName = 'cars';
+const settingsStoreName = 'settings';
+const version = 2;
 
 async function initDB() {
   return openDB(dbName, version, {
-    upgrade(db) {
-      if (!db.objectStoreNames.contains(storeName)) {
-        db.createObjectStore(storeName, { keyPath: 'id', autoIncrement: true });
+    upgrade(db, oldVersion, newVersion, transaction) {
+      if (!db.objectStoreNames.contains(carStoreName)) {
+        db.createObjectStore(carStoreName, { keyPath: 'id', autoIncrement: true });
+      }
+      if (!db.objectStoreNames.contains(settingsStoreName)) {
+        db.createObjectStore(settingsStoreName, { keyPath: 'key' });
       }
     },
   });
@@ -16,25 +20,36 @@ async function initDB() {
 
 export async function addCar(car) {
   const db = await initDB();
-  return db.add(storeName, car);
+  return db.add(carStoreName, car);
 }
 
 export async function getAllCars() {
   const db = await initDB();
-  return db.getAll(storeName);
+  return db.getAll(carStoreName);
 }
 
 export async function getCarById(id) {
   const db = await initDB();
-  return db.get(storeName, id);
+  return db.get(carStoreName, id);
 }
 
 export async function updateCar(car) {
   const db = await initDB();
-  return db.put(storeName, car);
+  return db.put(carStoreName, car);
 }
 
 export async function deleteCar(id) {
   const db = await initDB();
-  return db.delete(storeName, id);
+  return db.delete(carStoreName, id);
+}
+
+export async function getLanguage() {
+  const db = await initDB();
+  const result = await db.get(settingsStoreName, 'language');
+  return result ? result.value : 'en';
+}
+
+export async function setLanguage(language) {
+  const db = await initDB();
+  return db.put(settingsStoreName, { key: 'language', value: language });
 }

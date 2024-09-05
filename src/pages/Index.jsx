@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { carBrands } from '../utils/carData';
-import { getAllCars } from '../utils/indexedDB';
+import { getAllCars, getLanguage, setLanguage } from '../utils/indexedDB';
+import { translations } from '../utils/translations';
+import { Globe } from 'lucide-react';
 
 const Index = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
@@ -14,7 +16,16 @@ const Index = () => {
   const [filteredBrands, setFilteredBrands] = useState(carBrands);
   const [featuredCars, setFeaturedCars] = useState([]);
   const [stats, setStats] = useState({ totalListings: 0, activeSellers: 0, averagePrice: 0 });
+  const [language, setLanguageState] = useState('en');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      const lang = await getLanguage();
+      setLanguageState(lang);
+    };
+    fetchLanguage();
+  }, []);
 
   useEffect(() => {
     const filtered = carBrands.filter(brand => 
@@ -51,9 +62,22 @@ const Index = () => {
     }
   };
 
+  const toggleLanguage = async () => {
+    const newLanguage = language === 'en' ? 'ar' : 'en';
+    await setLanguage(newLanguage);
+    setLanguageState(newLanguage);
+  };
+
+  const t = translations[language];
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8 text-center">Oman Auto Mart</h1>
+    <div className={`container mx-auto px-4 py-8 ${language === 'ar' ? 'rtl' : 'ltr'}`}>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-bold">Oman Auto Mart</h1>
+        <Button onClick={toggleLanguage} variant="outline" size="icon">
+          <Globe className="h-4 w-4" />
+        </Button>
+      </div>
       
       <QuickStats stats={stats} />
       
@@ -64,22 +88,28 @@ const Index = () => {
           filteredBrands={filteredBrands}
           selectedBrand={selectedBrand}
           handleBrandSelect={handleBrandSelect}
+          t={t}
+          language={language}
         />
         <ModelSelector
           selectedBrand={selectedBrand}
           selectedModel={selectedModel}
           handleModelSelect={handleModelSelect}
+          t={t}
+          language={language}
         />
         <SelectedCar
           selectedBrand={selectedBrand}
           selectedModel={selectedModel}
           handleViewCars={handleViewCars}
+          t={t}
+          language={language}
         />
       </div>
       
-      <FeaturedCars cars={featuredCars} navigate={navigate} />
+      <FeaturedCars cars={featuredCars} navigate={navigate} t={t} language={language} />
       
-      <SellYourCar navigate={navigate} />
+      <SellYourCar navigate={navigate} t={t} language={language} />
     </div>
   );
 };
@@ -97,13 +127,13 @@ const QuickStats = ({ stats }) => (
   </div>
 );
 
-const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBrand, handleBrandSelect }) => (
+const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBrand, handleBrandSelect, t, language }) => (
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4">
-      <h2 className="text-2xl font-semibold mb-4">Car Brands</h2>
+      <h2 className="text-2xl font-semibold mb-4">{t.brandSelector}</h2>
       <Input
         type="text"
-        placeholder="Search brands..."
+        placeholder={t.searchBrands}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="mb-4"
@@ -128,11 +158,11 @@ const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBran
   </Card>
 );
 
-const ModelSelector = ({ selectedBrand, selectedModel, handleModelSelect }) => (
+const ModelSelector = ({ selectedBrand, selectedModel, handleModelSelect, t, language }) => (
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4">
       <h2 className="text-2xl font-semibold mb-4">
-        {selectedBrand ? `${selectedBrand.brand} Models` : "Select a Brand"}
+        {selectedBrand ? `${selectedBrand.brand} ${t.model}` : t.modelSelector}
       </h2>
       <ScrollArea className="h-[calc(100vh-16rem)]">
         {selectedBrand && (
@@ -154,32 +184,32 @@ const ModelSelector = ({ selectedBrand, selectedModel, handleModelSelect }) => (
   </Card>
 );
 
-const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars }) => (
+const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t, language }) => (
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4 flex flex-col justify-between">
       <div>
-        <h2 className="text-2xl font-semibold mb-4">Selected Car</h2>
+        <h2 className="text-2xl font-semibold mb-4">{t.selectedCar}</h2>
         {selectedBrand && selectedModel ? (
           <div>
-            <p><strong>Brand:</strong> {selectedBrand.brand}</p>
-            <p><strong>Model:</strong> {selectedModel}</p>
+            <p><strong>{t.brand}:</strong> {selectedBrand.brand}</p>
+            <p><strong>{t.model}:</strong> {selectedModel}</p>
           </div>
         ) : (
-          <p>Please select a brand and model</p>
+          <p>{t.modelSelector}</p>
         )}
       </div>
       {selectedBrand && selectedModel && (
         <Button onClick={handleViewCars} className="mt-4">
-          View Cars
+          {t.viewCars}
         </Button>
       )}
     </CardContent>
   </Card>
 );
 
-const FeaturedCars = ({ cars, navigate }) => (
+const FeaturedCars = ({ cars, navigate, t, language }) => (
   <div className="mb-8">
-    <h2 className="text-2xl font-semibold mb-4">Featured Cars</h2>
+    <h2 className="text-2xl font-semibold mb-4">{t.featuredCars}</h2>
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {cars.map((car) => (
         <Card key={car.id}>
@@ -187,7 +217,7 @@ const FeaturedCars = ({ cars, navigate }) => (
             <img src={car.photos[0]} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover mb-4 rounded" />
             <h3 className="text-xl font-semibold">{car.year} {car.make} {car.model}</h3>
             <p className="text-lg font-bold">{car.price} OMR</p>
-            <Button className="w-full mt-4" onClick={() => navigate(`/car/${car.id}`)}>View Details</Button>
+            <Button className="w-full mt-4" onClick={() => navigate(`/car/${car.id}`)}>{t.viewDetails}</Button>
           </CardContent>
         </Card>
       ))}
@@ -195,13 +225,13 @@ const FeaturedCars = ({ cars, navigate }) => (
   </div>
 );
 
-const SellYourCar = ({ navigate }) => (
+const SellYourCar = ({ navigate, t, language }) => (
   <Card className="bg-primary text-primary-foreground">
     <CardContent className="p-8 text-center">
-      <h2 className="text-3xl font-bold mb-4">Ready to Sell Your Car?</h2>
-      <p className="text-xl mb-6">List your car on Oman Auto Mart and reach thousands of potential buyers!</p>
+      <h2 className="text-3xl font-bold mb-4">{t.sellYourCar}</h2>
+      <p className="text-xl mb-6">{t.listingMessage}</p>
       <Button size="lg" variant="secondary" onClick={() => navigate('/add-car')}>
-        List Your Car Now
+        {t.listYourCar}
       </Button>
     </CardContent>
   </Card>
