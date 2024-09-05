@@ -1,17 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { getCarById } from '../utils/indexedDB';
 
 const CarDetails = () => {
   const { id } = useParams();
-  
-  const cars = JSON.parse(localStorage.getItem('cars') || '[]');
-  const carDetails = cars.find(car => car.id.toString() === id);
+  const [carDetails, setCarDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchCarDetails = async () => {
+      const car = await getCarById(parseInt(id));
+      setCarDetails(car);
+    };
+    fetchCarDetails();
+  }, [id]);
 
   if (!carDetails) {
-    return <div>Car not found</div>;
+    return <div>Loading...</div>;
   }
 
   return (

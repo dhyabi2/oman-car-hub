@@ -8,6 +8,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { carMakes, carModels } from '../utils/carData';
+import { getAllCars } from '../utils/indexedDB';
 
 const CarsList = () => {
   const location = useLocation();
@@ -30,9 +31,12 @@ const CarsList = () => {
   });
 
   useEffect(() => {
-    const storedCars = JSON.parse(localStorage.getItem('cars') || '[]');
-    setCars(storedCars);
-    setFilteredCars(storedCars);
+    const fetchCars = async () => {
+      const allCars = await getAllCars();
+      setCars(allCars);
+      setFilteredCars(allCars);
+    };
+    fetchCars();
   }, []);
 
   useEffect(() => {
@@ -202,18 +206,6 @@ const CarCard = ({ car, onViewDetails }) => (
         alt={`${car.make} ${car.model}`} 
         className="w-full h-48 object-cover"
       />
-    )}
-    {car.photos && car.photos.length > 1 && (
-      <div className="flex overflow-x-auto p-2">
-        {car.photos.slice(1).map((photo, index) => (
-          <img 
-            key={index} 
-            src={photo}
-            alt={`${car.make} ${car.model} thumbnail ${index + 1}`} 
-            className="w-16 h-16 object-cover mr-2 flex-shrink-0"
-          />
-        ))}
-      </div>
     )}
     <CardContent className="p-4">
       <h2 className="text-xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>

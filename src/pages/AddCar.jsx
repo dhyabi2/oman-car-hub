@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
 import { carMakes, carModels, colors, locations } from '../utils/carData';
+import { addCar } from '../utils/indexedDB';
 
 const AddCar = () => {
   const navigate = useNavigate();
@@ -42,21 +43,8 @@ const AddCar = () => {
     additional_features: '',
   });
 
-  useEffect(() => {
-    const savedFormData = localStorage.getItem('addCarFormData');
-    if (savedFormData) {
-      const parsedData = JSON.parse(savedFormData);
-      setFormData({ ...parsedData, photos: [] });
-    }
-  }, []);
-
   const handleInputChange = (name, value) => {
-    setFormData(prevState => {
-      const newState = { ...prevState, [name]: value };
-      const stateForStorage = { ...newState, photos: [] };
-      localStorage.setItem('addCarFormData', JSON.stringify(stateForStorage));
-      return newState;
-    });
+    setFormData(prevState => ({ ...prevState, [name]: value }));
   };
 
   const validateForm = () => {
@@ -70,17 +58,18 @@ const AddCar = () => {
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    const cars = JSON.parse(localStorage.getItem('cars') || '[]');
-    const newCar = { ...formData, id: Date.now() };
-    cars.push(newCar);
-    localStorage.setItem('cars', JSON.stringify(cars));
-    localStorage.removeItem('addCarFormData');
-    toast.success('Car listing added successfully!');
-    navigate('/cars-list');
+    try {
+      await addCar(formData);
+      toast.success('Car listing added successfully!');
+      navigate('/cars-list');
+    } catch (error) {
+      console.error('Error adding car:', error);
+      toast.error('Failed to add car listing. Please try again.');
+    }
   };
 
   const handlePhotoUpload = (e) => {
@@ -89,17 +78,7 @@ const AddCar = () => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (e) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
-            resolve(canvas.toDataURL('image/png'));
-          };
-          img.onerror = reject;
-          img.src = e.target.result;
+          resolve(e.target.result);
         };
         reader.onerror = reject;
         reader.readAsDataURL(file);
