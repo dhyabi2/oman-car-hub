@@ -6,9 +6,11 @@ import { toast } from "sonner";
 import { addCar } from '../utils/indexedDB';
 import { MakeModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelTypeSelector, TransmissionSelector, DoorsSelector, SeatsSelector, DrivetrainSelector, ConditionSelector } from '../components/CarFormFields';
 import { FormSection, ListingDetails, AdditionalInformation, PhotoUpload } from './AddCarComponents';
+import { translations } from '../utils/translations';
 
-const AddCar = ({ language = 'en', t }) => {
+const AddCar = ({ language = 'en' }) => {
   const navigate = useNavigate();
+  const t = translations[language];
   const [formData, setFormData] = useState({
     make: '', model: '', year: new Date().getFullYear(), mileage: 0,
     transmission: '', fuel_type: '', engine_size: 1500, color: '',
@@ -27,12 +29,12 @@ const AddCar = ({ language = 'en', t }) => {
     const emptyFields = requiredFields.filter(field => !formData[field]);
     
     if (emptyFields.length > 0) {
-      toast.error(`${t('pleaseAllRequiredFields')}: ${emptyFields.map(field => t(field)).join(', ')}`);
+      toast.error(`${t.pleaseAllRequiredFields}: ${emptyFields.map(field => t[field]).join(', ')}`);
       return false;
     }
 
     if (!/^\d{8}$/.test(formData.contact_phone)) {
-      toast.error(t('invalidPhoneNumber'));
+      toast.error(t.invalidPhoneNumber);
       return false;
     }
 
@@ -45,11 +47,11 @@ const AddCar = ({ language = 'en', t }) => {
 
     try {
       await addCar(formData);
-      toast.success(t('carListingAddedSuccess'));
+      toast.success(t.carListingAddedSuccess);
       navigate('/cars-list');
     } catch (error) {
       console.error('Error adding car:', error);
-      toast.error(t('failedToAddCarListing'));
+      toast.error(t.failedToAddCarListing);
     }
   };
 
@@ -57,11 +59,11 @@ const AddCar = ({ language = 'en', t }) => {
     <div className="container mx-auto px-4 py-8">
       <Card>
         <CardHeader>
-          <CardTitle>{t('addCarForSale')}</CardTitle>
+          <CardTitle>{t.addCarForSale}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <FormSection title={t('basicInformation')}>
+            <FormSection title={t.basicInformation}>
               <MakeModelSelect
                 make={formData.make}
                 model={formData.model}
@@ -76,7 +78,7 @@ const AddCar = ({ language = 'en', t }) => {
               />
             </FormSection>
 
-            <FormSection title={t('vehicleDetails')}>
+            <FormSection title={t.vehicleDetails}>
               <TransmissionSelector
                 value={formData.transmission}
                 onChange={(value) => handleInputChange('transmission', value)}
@@ -132,7 +134,7 @@ const AddCar = ({ language = 'en', t }) => {
               t={t}
             />
 
-            <Button type="submit" className="w-full">{t('submitListing')}</Button>
+            <Button type="submit" className="w-full">{t.submitListing}</Button>
           </form>
         </CardContent>
       </Card>
