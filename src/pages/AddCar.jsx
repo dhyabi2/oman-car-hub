@@ -87,9 +87,7 @@ const AddCar = () => {
     const filePromises = files.map(file => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = (e) => {
-          resolve(e.target.result);
-        };
+        reader.onload = (e) => resolve(e.target.result);
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
@@ -97,10 +95,7 @@ const AddCar = () => {
 
     Promise.all(filePromises)
       .then(results => {
-        setFormData(prevState => ({
-          ...prevState,
-          photos: results
-        }));
+        setFormData(prevState => ({ ...prevState, photos: results }));
       })
       .catch(error => {
         console.error('Error processing images:', error);
@@ -193,7 +188,6 @@ const AddCar = () => {
                   type="tel"
                   value={formData.contact_phone}
                   onChange={(e) => handleInputChange('contact_phone', e.target.value)}
-                  required
                 />
               </div>
               <DatePickerField
