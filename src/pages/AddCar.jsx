@@ -6,11 +6,9 @@ import { toast } from "sonner";
 import { addCar } from '../utils/indexedDB';
 import { MakeModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelTypeSelector, TransmissionSelector, DoorsSelector, SeatsSelector, DrivetrainSelector, ConditionSelector } from '../components/CarFormFields';
 import { FormSection, ListingDetails, AdditionalInformation, PhotoUpload } from './AddCarComponents';
-import { translations } from '../utils/translations';
 
-const AddCar = ({ language = 'en' }) => {
+const AddCar = ({ language, t }) => {
   const navigate = useNavigate();
-  const t = translations[language];
   const [formData, setFormData] = useState({
     make: '', model: '', year: new Date().getFullYear(), mileage: 0,
     transmission: '', fuel_type: '', engine_size: 1500, color: '',

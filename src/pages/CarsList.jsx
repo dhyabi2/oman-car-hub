@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { carMakes, carModels } from '../utils/carData';
 import { getAllCars } from '../utils/indexedDB';
@@ -15,8 +9,8 @@ const CarsList = ({ t }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const initialMake = searchParams.get('make') || t('allMakes');
-  const initialModel = searchParams.get('model') || t('allModels');
+  const initialMake = searchParams.get('make') || t.allMakes;
+  const initialModel = searchParams.get('model') || t.allModels;
 
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
@@ -42,8 +36,8 @@ const CarsList = ({ t }) => {
 
   useEffect(() => {
     const filtered = cars.filter(car => 
-      (filters.make === t('allMakes') || car.make === filters.make) &&
-      (filters.model === t('allModels') || car.model === filters.model) &&
+      (filters.make === t.allMakes || car.make === filters.make) &&
+      (filters.model === t.allModels || car.model === filters.model) &&
       car.year >= filters.minYear &&
       car.year <= filters.maxYear &&
       car.price >= filters.minPrice &&
@@ -58,7 +52,7 @@ const CarsList = ({ t }) => {
     setFilters(prev => {
       const newFilters = { ...prev, [name]: value };
       if (name === 'make') {
-        newFilters.model = t('allModels');
+        newFilters.model = t.allModels;
       }
       return newFilters;
     });
@@ -70,12 +64,12 @@ const CarsList = ({ t }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">{t('carsList')}</h1>
+      <h1 className="text-3xl font-bold mb-6">{t.carsList}</h1>
       
       <FiltersCard
         filters={filters}
-        carMakes={[t('allMakes'), ...carMakes]}
-        carModels={filters.make === t('allMakes') ? [t('allModels')] : [t('allModels'), ...(carModels[filters.make] || [])]}
+        carMakes={[t.allMakes, ...carMakes]}
+        carModels={filters.make === t.allMakes ? [t.allModels] : [t.allModels, ...(carModels[filters.make] || [])]}
         maxPriceInData={Math.max(...cars.map(car => car.price), 100000)}
         onFilterChange={handleFilterChange}
         t={t}
