@@ -13,6 +13,7 @@ import { CalendarIcon, MapPin, User } from "lucide-react";
 import { toast } from "sonner";
 import { locations } from '../utils/carData';
 import { addCar } from '../utils/indexedDB';
+import { translations } from '../utils/translations';
 import {
   MakeModelSelect,
   MileageInput,
@@ -27,8 +28,9 @@ import {
 } from '../components/CarFormFields';
 import ImageSelector from '../components/ImageSelector';
 
-const AddCar = ({ language = 'en', t }) => {
+const AddCar = ({ language = 'en' }) => {
   const navigate = useNavigate();
+  const t = (key) => translations[language][key] || key;
   const [formData, setFormData] = useState({
     make: '',
     model: '',
