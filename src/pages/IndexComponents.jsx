@@ -26,6 +26,13 @@ export const QuickStats = ({ stats, t }) => {
   const statEntries = Object.entries(stats).filter(([key]) => key !== 'latestCar');
   const currentIndex = useAutoSlide(statEntries.length);
 
+  const formatStatValue = (key, value) => {
+    if (['averagePrice', 'totalValue'].includes(key)) {
+      return `${value.toLocaleString()} ${t.currency}`;
+    }
+    return value;
+  };
+
   return (
     <div className="relative h-24 mb-8 overflow-hidden">
       <AnimatePresence initial={false}>
@@ -41,9 +48,7 @@ export const QuickStats = ({ stats, t }) => {
             <CardContent className="p-4 text-center">
               <h3 className="text-lg font-semibold">{t[statEntries[currentIndex][0]]}</h3>
               <p className="text-2xl font-bold">
-                {['averagePrice', 'totalValue'].includes(statEntries[currentIndex][0])
-                  ? `${statEntries[currentIndex][1].toLocaleString()} ${t.currency}`
-                  : statEntries[currentIndex][1]}
+                {formatStatValue(statEntries[currentIndex][0], statEntries[currentIndex][1])}
               </p>
             </CardContent>
           </Card>
