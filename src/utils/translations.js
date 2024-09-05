@@ -49,6 +49,8 @@ export const translations = {
     listCarAnswer: "To list your car, click on 'Add Car' in the navigation menu. Fill out the form with your car's details and submit.",
     isListingFree: "Is it free to list my car?",
     listingFreeAnswer: "Yes, listing your car on Oman Auto Mart is completely free.",
+    howLongListingActive: "How long will my listing stay active?",
+    listingActiveAnswer: "Your listing will remain active for 30 days. You can renew it after this period if your car hasn't been sold.",
     canEditListing: "Can I edit my listing after it's posted?",
     editListingAnswer: "Yes, you can edit your listing at any time by logging into your account and accessing your active listings.",
     howToContactSeller: "How do I contact a seller?",
@@ -66,7 +68,6 @@ export const translations = {
     yearRange: "Year Range",
     to: "to",
     priceRange: "Price Range",
-    // Theme translations
     light: "Light",
     dark: "Dark",
     desertSands: "Desert Sands",
@@ -79,7 +80,6 @@ export const translations = {
     techFuturism: "Tech Futurism",
     frankincenseTrail: "Frankincense Trail",
     royalOpulence: "Royal Opulence",
-    // New translations for AddCar
     addCarForSale: "Add Car for Sale",
     submitListing: "Submit Listing",
     basicInformation: "Basic Information",
@@ -148,6 +148,8 @@ export const translations = {
     listCarAnswer: "لإضافة سيارتك، انقر على 'إضافة سيارة' في قائمة التنقل. املأ النموذج بتفاصيل سيارتك وقم بالإرسال.",
     isListingFree: "هل إضافة السيارة مجانية؟",
     listingFreeAnswer: "نعم، إضافة سيارتك في سوق عمان للسيارات مجانية تمامًا.",
+    howLongListingActive: "كم من الوقت سيبقى إعلاني نشطًا؟",
+    listingActiveAnswer: "سيبقى إعلانك نشطًا لمدة 30 يومًا. يمكنك تجديده بعد هذه الفترة إذا لم يتم بيع سيارتك.",
     canEditListing: "هل يمكنني تعديل إعلاني بعد نشره؟",
     editListingAnswer: "نعم، يمكنك تعديل إعلانك في أي وقت عن طريق تسجيل الدخول إلى حسابك والوصول إلى إعلاناتك النشطة.",
     howToContactSeller: "كيف يمكنني التواصل مع البائع؟",
@@ -165,7 +167,6 @@ export const translations = {
     yearRange: "نطاق السنة",
     to: "إلى",
     priceRange: "نطاق السعر",
-    // Theme translations
     light: "فاتح",
     dark: "داكن",
     desertSands: "رمال الصحراء",
@@ -178,7 +179,6 @@ export const translations = {
     techFuturism: "مستقبل تقني",
     frankincenseTrail: "درب اللبان",
     royalOpulence: "فخامة ملكية",
-    // New translations for AddCar
     addCarForSale: "إضافة سيارة للبيع",
     submitListing: "إرسال القائمة",
     basicInformation: "المعلومات الأساسية",
