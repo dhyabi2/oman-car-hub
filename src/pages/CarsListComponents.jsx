@@ -7,6 +7,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { translations } from '../utils/translations';
 import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye } from 'lucide-react';
+import { carMakes, carModels } from '../utils/carData';
 
 const getTranslation = (language, key, fallback = key) => {
   return translations[language]?.[key] || fallback;
@@ -65,7 +66,7 @@ export const CarCard = ({ car, onViewDetails, language }) => (
   </Card>
 );
 
-export const FiltersCard = ({ filters, carMakes, carModels, maxPriceInData, onFilterChange, language }) => (
+export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language }) => (
   <Card className="mb-6">
     <CardHeader>
       <CardTitle className="flex items-center">
@@ -78,13 +79,17 @@ export const FiltersCard = ({ filters, carMakes, carModels, maxPriceInData, onFi
         <FilterSelect
           label={getTranslation(language, 'make', 'Make')}
           value={filters.make}
-          options={carMakes}
+          options={[getTranslation(language, 'allMakes', 'All Makes'), ...carMakes]}
           onChange={(value) => onFilterChange('make', value)}
         />
         <FilterSelect
           label={getTranslation(language, 'model', 'Model')}
           value={filters.model}
-          options={carModels}
+          options={
+            filters.make === getTranslation(language, 'allMakes', 'All Makes')
+              ? [getTranslation(language, 'allModels', 'All Models')]
+              : [getTranslation(language, 'allModels', 'All Models'), ...(carModels[filters.make] || [])]
+          }
           onChange={(value) => onFilterChange('model', value)}
         />
         <YearRangeFilter

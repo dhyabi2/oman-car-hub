@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { locations } from '../utils/carData';
+import { carMakes, carModels, locations } from '../utils/carData';
 
 export const FormSection = ({ title, children }) => (
   <div>
@@ -37,7 +37,7 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => {
           </SelectTrigger>
           <SelectContent>
             {locations.map((location) => (
-              <SelectItem key={location} value={location}>{location}</SelectItem>
+              <SelectItem key={location} value={location}>{t[location.toLowerCase()] || location}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -106,4 +106,35 @@ export const PhotoUpload = ({ photos, handlePhotoUpload, t }) => (
       </div>
     )}
   </FormSection>
+);
+
+export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => (
+  <>
+    <div>
+      <Label htmlFor="make">{t.make}</Label>
+      <Select value={make} onValueChange={onMakeChange}>
+        <SelectTrigger>
+          <SelectValue placeholder={t.selectMake} />
+        </SelectTrigger>
+        <SelectContent>
+          {carMakes.map((brand) => (
+            <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+    <div>
+      <Label htmlFor="model">{t.model}</Label>
+      <Select value={model} onValueChange={onModelChange} disabled={!make}>
+        <SelectTrigger>
+          <SelectValue placeholder={t.selectModel} />
+        </SelectTrigger>
+        <SelectContent>
+          {make && carModels[make]?.map((model) => (
+            <SelectItem key={model} value={model}>{model}</SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  </>
 );
