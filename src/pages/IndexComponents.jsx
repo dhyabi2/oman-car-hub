@@ -39,10 +39,10 @@ export const QuickStats = ({ stats, t }) => {
         >
           <Card className="w-full max-w-sm">
             <CardContent className="p-4 text-center">
-              <h3 className="text-lg font-semibold">{t[statEntries[currentIndex][0]] || statEntries[currentIndex][0]}</h3>
+              <h3 className="text-lg font-semibold">{t[statEntries[currentIndex][0]]}</h3>
               <p className="text-2xl font-bold">
                 {['averagePrice', 'totalValue'].includes(statEntries[currentIndex][0])
-                  ? `${statEntries[currentIndex][1].toLocaleString()} OMR`
+                  ? `${statEntries[currentIndex][1].toLocaleString()} ${t.currency}`
                   : statEntries[currentIndex][1]}
               </p>
             </CardContent>
@@ -152,7 +152,7 @@ export const LatestCar = ({ car, navigate, t }) => (
           transition={{ duration: 0.3 }}
         />
         <h3 className="text-xl font-semibold">{car.year} {car.make} {car.model}</h3>
-        <p className="text-lg font-bold">{car.price} OMR</p>
+        <p className="text-lg font-bold">{car.price} {t.currency}</p>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button className="w-full mt-4" onClick={() => navigate(`/car/${car.id}`)}>{t.viewDetails}</Button>
         </motion.div>
