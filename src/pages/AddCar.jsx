@@ -160,76 +160,9 @@ const AddCar = () => {
               />
             </FormSection>
 
-            <FormSection title="Listing Details">
-              <PriceRangeInput
-                minPrice={formData.price}
-                maxPrice={formData.price}
-                onChange={(field, value) => handleInputChange('price', value)}
-              />
-              <Input
-                label="VIN (Optional)"
-                value={formData.vin}
-                onChange={(e) => handleInputChange('vin', e.target.value)}
-              />
-              <ImageSelector
-                label="Location"
-                options={locations.map(location => ({ value: location, icon: <MapPin size={24} /> }))}
-                value={formData.location}
-                onChange={(value) => handleInputChange('location', value)}
-              />
-              <ImageSelector
-                label="Seller Type"
-                options={[
-                  { value: 'Private', icon: <User size={24} /> },
-                  { value: 'Dealer', icon: <User size={24} /> }
-                ]}
-                value={formData.seller_type}
-                onChange={(value) => handleInputChange('seller_type', value)}
-              />
-              <div>
-                <Label htmlFor="contact_phone">Contact Phone</Label>
-                <Input
-                  id="contact_phone"
-                  type="tel"
-                  value={formData.contact_phone}
-                  onChange={(e) => handleInputChange('contact_phone', e.target.value)}
-                  required
-                />
-              </div>
-              <DatePickerField
-                label="Listing Expiration Date"
-                value={formData.listing_expiration_date}
-                onChange={(date) => handleInputChange('listing_expiration_date', date ? date.toISOString() : null)}
-              />
-            </FormSection>
-
-            <FormSection title="Additional Information">
-              <Textarea
-                label="Description (Optional)"
-                value={formData.description}
-                onChange={(e) => handleInputChange('description', e.target.value)}
-              />
-              <Textarea
-                label="Additional Features (Optional)"
-                value={formData.additional_features}
-                onChange={(e) => handleInputChange('additional_features', e.target.value)}
-              />
-            </FormSection>
-
-            <div>
-              <Label htmlFor="photos">Photos (Max 10)</Label>
-              <Input id="photos" type="file" multiple onChange={handlePhotoUpload} accept="image/*" />
-              {formData.photos.length > 0 && (
-                <div className="mt-2">
-                  <p>{formData.photos.length} file(s) selected</p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mt-2">
-                    {formData.photos.map((photo, index) => (
-                      <img key={index} src={photo} alt={`Uploaded car ${index + 1}`} className="w-full h-24 object-cover rounded" />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+            <ListingDetailsSection formData={formData} handleInputChange={handleInputChange} />
+            <AdditionalInfoSection formData={formData} handleInputChange={handleInputChange} />
+            <PhotoUploadSection formData={formData} handlePhotoUpload={handlePhotoUpload} />
 
             <Button type="submit" className="w-full">Submit Listing</Button>
           </form>
@@ -245,6 +178,83 @@ const FormSection = ({ title, children }) => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {children}
     </div>
+  </div>
+);
+
+const ListingDetailsSection = ({ formData, handleInputChange }) => (
+  <FormSection title="Listing Details">
+    <PriceRangeInput
+      minPrice={formData.price}
+      maxPrice={formData.price}
+      onChange={(field, value) => handleInputChange('price', value)}
+    />
+    <Input
+      label="VIN (Optional)"
+      value={formData.vin}
+      onChange={(e) => handleInputChange('vin', e.target.value)}
+    />
+    <ImageSelector
+      label="Location"
+      options={locations.map(location => ({ value: location, icon: <MapPin size={24} /> }))}
+      value={formData.location}
+      onChange={(value) => handleInputChange('location', value)}
+    />
+    <ImageSelector
+      label="Seller Type"
+      options={[
+        { value: 'Private', icon: <User size={24} /> },
+        { value: 'Dealer', icon: <User size={24} /> }
+      ]}
+      value={formData.seller_type}
+      onChange={(value) => handleInputChange('seller_type', value)}
+    />
+    <div>
+      <Label htmlFor="contact_phone">Contact Phone</Label>
+      <Input
+        id="contact_phone"
+        type="tel"
+        value={formData.contact_phone}
+        onChange={(e) => handleInputChange('contact_phone', e.target.value)}
+        required
+      />
+    </div>
+    <DatePickerField
+      label="Listing Expiration Date"
+      value={formData.listing_expiration_date}
+      onChange={(date) => handleInputChange('listing_expiration_date', date ? date.toISOString() : null)}
+    />
+  </FormSection>
+);
+
+const AdditionalInfoSection = ({ formData, handleInputChange }) => (
+  <FormSection title="Additional Information">
+    <Textarea
+      label="Description (Optional)"
+      value={formData.description}
+      onChange={(e) => handleInputChange('description', e.target.value)}
+    />
+    <Textarea
+      label="Additional Features (Optional)"
+      value={formData.additional_features}
+      onChange={(e) => handleInputChange('additional_features', e.target.value)}
+    />
+  </FormSection>
+);
+
+const PhotoUploadSection = ({ formData, handlePhotoUpload }) => (
+  <div>
+    <Label htmlFor="photos">Photos (Max 10)</Label>
+    <Input id="photos" type="file" multiple onChange={handlePhotoUpload} accept="image/*" />
+    {formData.photos.length > 0 && (
+      <div className="mt-2">
+        <p>{formData.photos.length} file(s) selected</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mt-2">
+          {formData.photos.map((photo, index) => (
+            <img key={index} src={photo} alt={`Uploaded car ${index + 1}`} className="w-full h-24 object-cover rounded" />
+          ))}
+        </div>
+      </div>
+    )}
   </div>
 );
 

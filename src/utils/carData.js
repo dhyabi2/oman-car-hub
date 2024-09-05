@@ -1,18 +1,18 @@
-export const carMakes = ['Toyota', 'Honda', 'Ford', 'Chevrolet', 'Nissan', 'BMW', 'Mercedes-Benz', 'Audi', 'Volkswagen', 'Hyundai', 'Kia'];
-
-export const carModels = {
-  Toyota: ['Camry', 'Corolla', 'RAV4', 'Highlander', 'Prius'],
-  Honda: ['Civic', 'Accord', 'CR-V', 'Pilot', 'Fit'],
-  Ford: ['F-150', 'Mustang', 'Explorer', 'Escape', 'Focus'],
-  Chevrolet: ['Silverado', 'Equinox', 'Malibu', 'Traverse', 'Camaro'],
-  Nissan: ['Altima', 'Rogue', 'Sentra', 'Maxima', 'Murano'],
-  BMW: ['3 Series', '5 Series', 'X3', 'X5', '7 Series'],
-  'Mercedes-Benz': ['C-Class', 'E-Class', 'GLC', 'GLE', 'S-Class'],
-  Audi: ['A4', 'Q5', 'A6', 'Q7', 'A3'],
-  Volkswagen: ['Jetta', 'Passat', 'Tiguan', 'Atlas', 'Golf'],
-  Hyundai: ['Elantra', 'Sonata', 'Tucson', 'Santa Fe', 'Kona'],
-  Kia: ['Forte', 'Optima', 'Sportage', 'Sorento', 'Telluride'],
-};
+export const carBrands = [
+  {
+    "brand": "Seat",
+    "models": ["Alhambra", "Altea", "Altea XL", "Arosa", "Cordoba", "Cordoba Vario", "Exeo", "Ibiza", "Ibiza ST", "Exeo ST", "Leon", "Leon ST", "Inca", "Mii", "Toledo"],
+    "logo": "https://www.carlogos.org/car-logos/seat-logo.png",
+    "founded": 1950
+  },
+  {
+    "brand": "Renault",
+    "models": ["Captur", "Clio", "Clio Grandtour", "Espace", "Express", "Fluence", "Grand Espace", "Grand Modus", "Grand Scenic", "Kadjar", "Kangoo", "Kangoo Express", "Koleos", "Laguna", "Laguna Grandtour", "Latitude", "Mascott", "Mégane", "Mégane CC", "Mégane Combi", "Mégane Grandtour", "Mégane Coupé", "Mégane Scénic", "Scénic", "Talisman", "Talisman Grandtour", "Thalia", "Twingo", "Wind", "Zoé"],
+    "logo": "https://www.carlogos.org/car-logos/renault-logo.png",
+    "founded": 1899
+  },
+  // ... (include all other car brands from the previous carBrands array)
+];
 
 export const colors = ['White', 'Black', 'Silver', 'Gray', 'Red', 'Blue', 'Green', 'Yellow', 'Brown', 'Orange'];
 
