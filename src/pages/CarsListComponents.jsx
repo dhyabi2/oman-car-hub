@@ -168,16 +168,19 @@ const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange, langua
       <DollarSign className="mr-2" />
       {getTranslation(language, 'priceRange', 'Price Range')} (OMR)
     </Label>
-    <Slider
-      min={0}
-      max={maxPriceInData}
-      step={1000}
-      value={[minPrice, maxPrice]}
-      onValueChange={(value) => {
-        onChange('minPrice', value[0]);
-        onChange('maxPrice', value[1]);
-      }}
-    />
+    <div className="mt-2">
+      <Slider
+        min={0}
+        max={maxPriceInData}
+        step={100}
+        value={[minPrice, maxPrice]}
+        onValueChange={(value) => {
+          onChange('minPrice', value[0]);
+          onChange('maxPrice', value[1]);
+        }}
+        className="w-full"
+      />
+    </div>
     <div className="flex justify-between mt-2">
       <span>{minPrice} OMR</span>
       <span>{maxPrice} OMR</span>
