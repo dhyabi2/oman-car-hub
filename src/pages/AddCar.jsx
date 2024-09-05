@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { addCar } from '../utils/indexedDB';
 import { MakeModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelTypeSelector, TransmissionSelector, DoorsSelector, SeatsSelector, DrivetrainSelector, ConditionSelector } from '../components/CarFormFields';
-import { FormSection, ListingDetails, AdditionalInformation, PhotoUpload } from '../components/AddCarComponents';
+import { FormSection, ListingDetails, AdditionalInformation, PhotoUpload } from './AddCarComponents';
 
 const AddCar = ({ language = 'en', t }) => {
   const navigate = useNavigate();
