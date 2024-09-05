@@ -13,7 +13,9 @@ const getTranslation = (language, key, fallback = key) => {
 
 export const NoCarsList = ({ language }) => (
   <div className="text-center py-10">
-    <h2 className="text-2xl font-semibold mb-4">{getTranslation(language, 'noCarsFound', 'No Cars Found')}</h2>
+    <h2 className="text-2xl font-semibold mb-4">
+      {getTranslation(language, 'noCarsFound', 'No Cars Found')} 😢
+    </h2>
     <p>{getTranslation(language, 'tryDifferentFilters', 'Try adjusting your filters or search criteria')}</p>
   </div>
 );
