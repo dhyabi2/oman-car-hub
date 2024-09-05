@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { carBrands } from '../utils/carData';
 import { getCarStatistics } from '../utils/indexedDB';
 import { QuickStats, BrandSelector, ModelSelector, SelectedCar, LatestCar, SellYourCar } from './IndexComponents';
+import { Car } from 'lucide-react';
 
 const Index = ({ language, t }) => {
   const [selectedBrand, setSelectedBrand] = useState(null);
@@ -54,7 +55,9 @@ const Index = ({ language, t }) => {
 
   return (
     <div className={`container mx-auto px-4 py-8 ${language === 'ar' ? 'rtl' : 'ltr'}`}>
-      <h1 className="text-4xl font-bold mb-8">🚗 {t.appName}</h1>
+      <h1 className="text-4xl font-bold mb-8 flex items-center">
+        <Car className="mr-2" /> {t.appName}
+      </h1>
       
       <QuickStats stats={stats} t={t} />
       

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { translations } from '../utils/translations';
+import { HelpCircle, Send } from 'lucide-react';
 
 const FAQ = ({ language = 'en' }) => {
   const [feedback, setFeedback] = useState('');
@@ -44,7 +45,10 @@ const FAQ = ({ language = 'en' }) => {
     <div className="container mx-auto px-4 py-8">
       <Card>
         <CardHeader>
-          <CardTitle>❓ {t('frequentlyAskedQuestions')}</CardTitle>
+          <CardTitle className="flex items-center">
+            <HelpCircle className="mr-2" />
+            {t('frequentlyAskedQuestions')}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <Accordion type="single" collapsible className="w-full">
@@ -57,14 +61,20 @@ const FAQ = ({ language = 'en' }) => {
           </Accordion>
           
           <div className="mt-8">
-            <h3 className="text-lg font-semibold mb-2">🤔 {t('haveMoreQuestions')}</h3>
+            <h3 className="text-lg font-semibold mb-2 flex items-center">
+              <HelpCircle className="mr-2" />
+              {t('haveMoreQuestions')}
+            </h3>
             <Textarea
               placeholder={t('typeFeedbackOrQuestion')}
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
               className="mb-4"
             />
-            <Button onClick={handleFeedbackSubmit}>{t('submitFeedback')} 📨</Button>
+            <Button onClick={handleFeedbackSubmit} className="flex items-center">
+              <Send className="mr-2" />
+              {t('submitFeedback')}
+            </Button>
           </div>
         </CardContent>
       </Card>
