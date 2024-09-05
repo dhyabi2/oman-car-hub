@@ -99,16 +99,20 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className={`w-[300px] sm:w-[400px] ${getHeaderClass()}`}>
-              <nav className="flex flex-col space-y-4 mt-8">
+              <nav className="flex flex-col space-y-6 mt-8">
                 {navItems.map((item) => (
                   <Link
                     key={item.to}
                     to={item.to}
-                    className="flex items-center space-x-2 text-current hover:opacity-80 transition-opacity duration-200"
+                    className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+                      location.pathname === item.to
+                        ? 'bg-primary text-primary-foreground'
+                        : 'hover:bg-secondary hover:text-secondary-foreground'
+                    }`}
                     onClick={() => setIsOpen(false)}
                   >
                     {item.icon}
-                    <span>{t[item.title.toLowerCase()] || t[item.to.slice(1)] || item.title}</span>
+                    <span className="text-lg">{t[item.title.toLowerCase()] || t[item.to.slice(1)] || item.title}</span>
                   </Link>
                 ))}
               </nav>
