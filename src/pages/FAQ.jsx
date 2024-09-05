@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { translations } from '../utils/translations';
-import { HelpCircle, Send } from 'lucide-react';
+import { HelpCircle, Send, MessageCircle } from 'lucide-react';
 
 const FAQ = ({ language = 'en' }) => {
   const [feedback, setFeedback] = useState('');
@@ -24,6 +24,10 @@ const FAQ = ({ language = 'en' }) => {
     {
       question: t('howToContactSeller'),
       answer: t('contactSellerAnswer')
+    },
+    {
+      question: t('howToContactDeveloper'),
+      answer: t('contactDeveloperAnswer')
     }
   ];
 
@@ -47,7 +51,18 @@ const FAQ = ({ language = 'en' }) => {
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger>{faq.question}</AccordionTrigger>
-                <AccordionContent>{faq.answer}</AccordionContent>
+                <AccordionContent>
+                  {faq.answer}
+                  {index === faqData.length - 1 && (
+                    <Button
+                      className="mt-2 bg-green-500 hover:bg-green-600"
+                      onClick={() => window.open("https://wa.me/96896672579", "_blank")}
+                    >
+                      <MessageCircle className="mr-2" />
+                      {t('contactViaWhatsApp')}
+                    </Button>
+                  )}
+                </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
