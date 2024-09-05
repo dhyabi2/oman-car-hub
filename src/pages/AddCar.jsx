@@ -88,8 +88,20 @@ const AddCar = () => {
     const filePromises = files.map(file => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = (e) => reject(e);
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            resolve(canvas.toDataURL('image/png'));
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
         reader.readAsDataURL(file);
       });
     });
@@ -102,7 +114,7 @@ const AddCar = () => {
         }));
       })
       .catch(error => {
-        console.error('Error reading files:', error);
+        console.error('Error processing images:', error);
         toast.error('Error uploading images. Please try again.');
       });
   };
