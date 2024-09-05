@@ -20,7 +20,7 @@ const CarDetails = () => {
       if (photo.startsWith('data:image')) {
         return photo; // It's a base64 encoded image
       } else if (photo.startsWith('http')) {
-        return photo; // It's a URL
+        return `https://preview--oman-car-hub.gptengineer.run${photo}`; // It's a URL, prepend the new host
       }
     }
     return '/placeholder.svg'; // Fallback to placeholder
