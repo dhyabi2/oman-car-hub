@@ -9,7 +9,6 @@ import Navigation from "./components/Navigation";
 import Index from "./pages/Index";
 import AddCar from "./pages/AddCar";
 import CarsList from "./pages/CarsList";
-import CarDetails from "./pages/CarDetails";
 import FAQ from "./pages/FAQ";
 
 const queryClient = new QueryClient();
@@ -36,7 +35,7 @@ const App = () => {
     setLanguageState(newLanguage);
   };
 
-  const t = translations[language];
+  const t = (key) => translations[language][key] || key;
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -49,7 +48,6 @@ const App = () => {
               <Route path="/" element={<Index language={language} t={t} />} />
               <Route path="/add-car" element={<AddCar language={language} t={t} />} />
               <Route path="/cars-list" element={<CarsList language={language} t={t} />} />
-              <Route path="/car/:id" element={<CarDetails language={language} t={t} />} />
               <Route path="/faq" element={<FAQ language={language} t={t} />} />
             </Routes>
           </div>

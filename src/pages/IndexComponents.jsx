@@ -9,7 +9,7 @@ export const QuickStats = ({ stats, t }) => (
     {Object.entries(stats).map(([key, value]) => (
       <Card key={key}>
         <CardContent className="p-4 text-center">
-          <h3 className="text-lg font-semibold">{t[key]}</h3>
+          <h3 className="text-lg font-semibold">{t(key)}</h3>
           <p className="text-3xl font-bold">{value}</p>
         </CardContent>
       </Card>
@@ -20,10 +20,10 @@ export const QuickStats = ({ stats, t }) => (
 export const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBrand, handleBrandSelect, t }) => (
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4">
-      <h2 className="text-2xl font-semibold mb-4">{t.brandSelector}</h2>
+      <h2 className="text-2xl font-semibold mb-4">{t('brandSelector')}</h2>
       <Input
         type="text"
-        placeholder={t.searchBrands}
+        placeholder={t('searchBrands')}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="mb-4"
@@ -52,7 +52,7 @@ export const ModelSelector = ({ selectedBrand, selectedModel, handleModelSelect,
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4">
       <h2 className="text-2xl font-semibold mb-4">
-        {selectedBrand ? `${selectedBrand.brand} ${t.model}` : t.modelSelector}
+        {selectedBrand ? `${selectedBrand.brand} ${t('model')}` : t('modelSelector')}
       </h2>
       <ScrollArea className="h-[calc(100vh-16rem)]">
         {selectedBrand && (
@@ -78,19 +78,19 @@ export const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t })
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4 flex flex-col justify-between">
       <div>
-        <h2 className="text-2xl font-semibold mb-4">{t.selectedCar}</h2>
+        <h2 className="text-2xl font-semibold mb-4">{t('selectedCar')}</h2>
         {selectedBrand && selectedModel ? (
           <div>
-            <p><strong>{t.brand}:</strong> {selectedBrand.brand}</p>
-            <p><strong>{t.model}:</strong> {selectedModel}</p>
+            <p><strong>{t('brand')}:</strong> {selectedBrand.brand}</p>
+            <p><strong>{t('model')}:</strong> {selectedModel}</p>
           </div>
         ) : (
-          <p>{t.modelSelector}</p>
+          <p>{t('modelSelector')}</p>
         )}
       </div>
       {selectedBrand && selectedModel && (
         <Button onClick={handleViewCars} className="mt-4">
-          {t.viewCars}
+          {t('viewCars')}
         </Button>
       )}
     </CardContent>
@@ -99,13 +99,13 @@ export const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t })
 
 export const LatestCar = ({ car, navigate, t }) => (
   <div className="mb-8">
-    <h2 className="text-2xl font-semibold mb-4">{t.latestCar}</h2>
+    <h2 className="text-2xl font-semibold mb-4">{t('latestCar')}</h2>
     <Card>
       <CardContent className="p-4">
         <img src={car.photos[0]} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover mb-4 rounded" />
         <h3 className="text-xl font-semibold">{car.year} {car.make} {car.model}</h3>
         <p className="text-lg font-bold">{car.price} OMR</p>
-        <Button className="w-full mt-4" onClick={() => navigate(`/car/${car.id}`)}>{t.viewDetails}</Button>
+        <Button className="w-full mt-4" onClick={() => navigate(`/car/${car.id}`)}>{t('viewDetails')}</Button>
       </CardContent>
     </Card>
   </div>
@@ -114,10 +114,10 @@ export const LatestCar = ({ car, navigate, t }) => (
 export const SellYourCar = ({ navigate, t }) => (
   <Card className="bg-primary text-primary-foreground">
     <CardContent className="p-8 text-center">
-      <h2 className="text-3xl font-bold mb-4">{t.sellYourCar}</h2>
-      <p className="text-xl mb-6">{t.listingMessage}</p>
+      <h2 className="text-3xl font-bold mb-4">{t('sellYourCar')}</h2>
+      <p className="text-xl mb-6">{t('listingMessage')}</p>
       <Button size="lg" variant="secondary" onClick={() => navigate('/add-car')}>
-        {t.listYourCar}
+        {t('listYourCar')}
       </Button>
     </CardContent>
   </Card>

@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Input } from "@/components/ui/input";
 import { carBrands } from '../utils/carData';
 import { getAllCars } from '../utils/indexedDB';
 import { QuickStats, BrandSelector, ModelSelector, SelectedCar, LatestCar, SellYourCar } from './IndexComponents';
@@ -54,7 +50,7 @@ const Index = ({ language, t }) => {
 
   return (
     <div className={`container mx-auto px-4 py-8 ${language === 'ar' ? 'rtl' : 'ltr'}`}>
-      <h1 className="text-4xl font-bold mb-8">{t.appName}</h1>
+      <h1 className="text-4xl font-bold mb-8">{t('appName')}</h1>
       
       <QuickStats stats={stats} t={t} />
       
