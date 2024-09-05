@@ -4,9 +4,12 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { translations } from '../utils/translations';
 
-const FAQ = ({ t }) => {
+const FAQ = ({ language = 'en' }) => {
   const [feedback, setFeedback] = useState('');
+
+  const t = (key) => translations[language]?.[key] || key;
 
   const faqData = [
     {
@@ -32,7 +35,6 @@ const FAQ = ({ t }) => {
   ];
 
   const handleFeedbackSubmit = () => {
-    // Here you would typically send the feedback to your backend
     console.log("Feedback submitted:", feedback);
     toast.success(t('feedbackThankYou'));
     setFeedback('');
