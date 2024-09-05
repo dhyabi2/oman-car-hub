@@ -70,74 +70,90 @@ const CarsList = () => {
   };
 
   const renderCarImage = (photo) => {
-    if (typeof photo === 'string' && photo.startsWith('http')) {
-      return photo;
-    } else if (photo instanceof File) {
-      return URL.createObjectURL(photo);
-    } else {
-      return '/placeholder.svg'; // Fallback to a placeholder image
+    if (typeof photo === 'string') {
+      if (photo.startsWith('data:image')) {
+        return photo; // It's a base64 encoded image
+      } else if (photo.startsWith('http')) {
+        return photo; // It's a URL
+      }
     }
+    return '/placeholder.svg'; // Fallback to placeholder
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Cars List</h1>
       
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Filters</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <FilterSelect
-              label="Make"
-              value={filters.make}
-              options={carMakes}
-              onChange={(value) => handleFilterChange('make', value)}
-            />
-            <FilterSelect
-              label="Model"
-              value={filters.model}
-              options={carModels}
-              onChange={(value) => handleFilterChange('model', value)}
-            />
-            <YearRangeFilter
-              minYear={filters.minYear}
-              maxYear={filters.maxYear}
-              onChange={handleFilterChange}
-            />
-            <PriceRangeFilter
-              minPrice={filters.minPrice}
-              maxPrice={filters.maxPrice}
-              maxPriceInData={maxPriceInData}
-              onChange={handleFilterChange}
-            />
-            <FilterSelect
-              label="Transmission"
-              value={filters.transmission}
-              options={['all', 'Automatic', 'Manual', 'CVT']}
-              onChange={(value) => handleFilterChange('transmission', value)}
-            />
-            <FilterSelect
-              label="Fuel Type"
-              value={filters.fuelType}
-              options={['all', 'Petrol', 'Diesel', 'Electric', 'Hybrid']}
-              onChange={(value) => handleFilterChange('fuelType', value)}
-            />
-          </div>
-        </CardContent>
-      </Card>
+      <FiltersCard
+        filters={filters}
+        carMakes={carMakes}
+        carModels={carModels}
+        maxPriceInData={maxPriceInData}
+        onFilterChange={handleFilterChange}
+      />
 
       <ScrollArea className="h-[calc(100vh-20rem)]">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCars.map((car) => (
-            <CarCard key={car.id} car={car} onViewDetails={handleViewDetails} renderCarImage={renderCarImage} />
+            <CarCard 
+              key={car.id} 
+              car={car} 
+              onViewDetails={handleViewDetails} 
+              renderCarImage={renderCarImage} 
+            />
           ))}
         </div>
       </ScrollArea>
     </div>
   );
 };
+
+const FiltersCard = ({ filters, carMakes, carModels, maxPriceInData, onFilterChange }) => (
+  <Card className="mb-6">
+    <CardHeader>
+      <CardTitle>Filters</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <FilterSelect
+          label="Make"
+          value={filters.make}
+          options={carMakes}
+          onChange={(value) => onFilterChange('make', value)}
+        />
+        <FilterSelect
+          label="Model"
+          value={filters.model}
+          options={carModels}
+          onChange={(value) => onFilterChange('model', value)}
+        />
+        <YearRangeFilter
+          minYear={filters.minYear}
+          maxYear={filters.maxYear}
+          onChange={onFilterChange}
+        />
+        <PriceRangeFilter
+          minPrice={filters.minPrice}
+          maxPrice={filters.maxPrice}
+          maxPriceInData={maxPriceInData}
+          onChange={onFilterChange}
+        />
+        <FilterSelect
+          label="Transmission"
+          value={filters.transmission}
+          options={['all', 'Automatic', 'Manual', 'CVT']}
+          onChange={(value) => onFilterChange('transmission', value)}
+        />
+        <FilterSelect
+          label="Fuel Type"
+          value={filters.fuelType}
+          options={['all', 'Petrol', 'Diesel', 'Electric', 'Hybrid']}
+          onChange={(value) => onFilterChange('fuelType', value)}
+        />
+      </div>
+    </CardContent>
+  </Card>
+);
 
 const FilterSelect = ({ label, value, options, onChange }) => (
   <div>
@@ -203,11 +219,6 @@ const CarCard = ({ car, onViewDetails, renderCarImage }) => (
         src={renderCarImage(car.photos[0])}
         alt={`${car.make} ${car.model}`} 
         className="w-full h-48 object-cover"
-        onLoad={(e) => {
-          if (car.photos[0] instanceof File) {
-            URL.revokeObjectURL(e.target.src);
-          }
-        }}
       />
     )}
     {car.photos && car.photos.length > 1 && (
@@ -218,11 +229,6 @@ const CarCard = ({ car, onViewDetails, renderCarImage }) => (
             src={renderCarImage(photo)}
             alt={`${car.make} ${car.model} thumbnail ${index + 1}`} 
             className="w-16 h-16 object-cover mr-2 flex-shrink-0"
-            onLoad={(e) => {
-              if (photo instanceof File) {
-                URL.revokeObjectURL(e.target.src);
-              }
-            }}
           />
         ))}
       </div>
