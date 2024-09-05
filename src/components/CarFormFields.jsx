@@ -9,13 +9,13 @@ export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange }) =>
   <>
     <ImageSelector
       label="Make"
-      options={carMakes.map(make => ({ value: make, image: `/images/car-logos/${make.toLowerCase().replace(' ', '-')}.png` }))}
+      options={carMakes.map(make => ({ value: make, image: `/images/car-logos/${make.toLowerCase()}.png` }))}
       value={make}
       onChange={onMakeChange}
     />
     <ImageSelector
       label="Model"
-      options={(make ? carModels[make] : []).map(model => ({ value: model, image: `/images/car-models/${make.toLowerCase().replace(' ', '-')}/${model.toLowerCase().replace(' ', '-')}.png` }))}
+      options={(make ? carModels[make] : []).map(model => ({ value: model, image: `/images/car-models/${make.toLowerCase()}/${model.toLowerCase().replace(' ', '-')}.png` }))}
       value={model}
       onChange={onModelChange}
       disabled={!make}
@@ -71,7 +71,7 @@ export const PriceRangeInput = ({ minPrice, maxPrice, onChange }) => (
 export const ColorSelector = ({ value, onChange }) => (
   <ImageSelector
     label="Color"
-    options={colors.map(color => ({ value: color, image: `/images/car-colors/${color.toLowerCase().replace(' ', '-')}.png` }))}
+    options={colors.map(color => ({ value: color, image: `/images/car-colors/${color.toLowerCase()}.png` }))}
     value={value}
     onChange={onChange}
   />
@@ -80,7 +80,7 @@ export const ColorSelector = ({ value, onChange }) => (
 export const FuelTypeSelector = ({ value, onChange }) => (
   <ImageSelector
     label="Fuel Type"
-    options={fuelTypes.map(type => ({ value: type, image: `/images/fuel-types/${type.toLowerCase().replace(' ', '-')}.png` }))}
+    options={fuelTypes.map(type => ({ value: type, image: `/images/fuel-types/${type.toLowerCase()}.png` }))}
     value={value}
     onChange={onChange}
   />
@@ -89,7 +89,7 @@ export const FuelTypeSelector = ({ value, onChange }) => (
 export const TransmissionSelector = ({ value, onChange }) => (
   <ImageSelector
     label="Transmission"
-    options={transmissionTypes.map(type => ({ value: type, image: `/images/transmission-types/${type.toLowerCase().replace(' ', '-')}.png` }))}
+    options={transmissionTypes.map(type => ({ value: type, image: `/images/transmission-types/${type.toLowerCase()}.png` }))}
     value={value}
     onChange={onChange}
   />

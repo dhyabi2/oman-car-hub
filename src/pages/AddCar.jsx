@@ -170,7 +170,7 @@ const AddCar = () => {
               />
               <ImageSelector
                 label="Location"
-                options={locations.map(location => ({ value: location, image: `/images/locations/${location.toLowerCase().replace(' ', '-')}.png` }))}
+                options={locations.map(location => ({ value: location, image: `/images/locations/${location.toLowerCase()}.png` }))}
                 value={formData.location}
                 onChange={(value) => handleInputChange('location', value)}
               />
