@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { carMakes, carModels } from '../utils/carData';
 
 const CarsList = () => {
   const location = useLocation();
@@ -58,26 +59,8 @@ const CarsList = () => {
     });
   };
 
-  const carMakes = ['All Makes', ...new Set(cars.map(car => car.make))];
-  const carModels = filters.make === 'All Makes' 
-    ? ['All Models'] 
-    : ['All Models', ...new Set(cars.filter(car => car.make === filters.make).map(car => car.model))];
-
-  const maxPriceInData = Math.max(...cars.map(car => car.price), 100000);
-
   const handleViewDetails = (carId) => {
     navigate(`/car/${carId}`);
-  };
-
-  const renderCarImage = (photo) => {
-    if (typeof photo === 'string') {
-      if (photo.startsWith('data:image')) {
-        return photo; // It's a base64 encoded image
-      } else if (photo.startsWith('http')) {
-        return `https://preview--oman-car-hub.gptengineer.run${photo}`; // It's a URL, prepend the new host
-      }
-    }
-    return '/placeholder.svg'; // Fallback to placeholder
   };
 
   return (
@@ -86,9 +69,9 @@ const CarsList = () => {
       
       <FiltersCard
         filters={filters}
-        carMakes={carMakes}
-        carModels={carModels}
-        maxPriceInData={maxPriceInData}
+        carMakes={['All Makes', ...carMakes]}
+        carModels={filters.make === 'All Makes' ? ['All Models'] : ['All Models', ...(carModels[filters.make] || [])]}
+        maxPriceInData={Math.max(...cars.map(car => car.price), 100000)}
         onFilterChange={handleFilterChange}
       />
 
@@ -98,8 +81,7 @@ const CarsList = () => {
             <CarCard 
               key={car.id} 
               car={car} 
-              onViewDetails={handleViewDetails} 
-              renderCarImage={renderCarImage} 
+              onViewDetails={handleViewDetails}
             />
           ))}
         </div>
@@ -212,11 +194,11 @@ const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange }) => (
   </div>
 );
 
-const CarCard = ({ car, onViewDetails, renderCarImage }) => (
+const CarCard = ({ car, onViewDetails }) => (
   <Card className="overflow-hidden">
     {car.photos && car.photos.length > 0 && (
       <img 
-        src={renderCarImage(car.photos[0])}
+        src={car.photos[0]}
         alt={`${car.make} ${car.model}`} 
         className="w-full h-48 object-cover"
       />
@@ -226,7 +208,7 @@ const CarCard = ({ car, onViewDetails, renderCarImage }) => (
         {car.photos.slice(1).map((photo, index) => (
           <img 
             key={index} 
-            src={renderCarImage(photo)}
+            src={photo}
             alt={`${car.make} ${car.model} thumbnail ${index + 1}`} 
             className="w-16 h-16 object-cover mr-2 flex-shrink-0"
           />
