@@ -9,7 +9,7 @@ import { translations } from '../utils/translations';
 const FAQ = ({ language = 'en' }) => {
   const [feedback, setFeedback] = useState('');
 
-  const t = (key) => translations[language]?.[key] || key;
+  const t = (key) => translations[language][key] || key;
 
   const faqData = [
     {
