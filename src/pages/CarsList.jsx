@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { carBrands } from '../utils/carData';
+import { carMakes, carModels } from '../utils/carData';
 import { getAllCars } from '../utils/indexedDB';
 import ImageGallery from '../components/ImageGallery';
 
@@ -71,18 +71,31 @@ const CarsList = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Cars List</h1>
+      
       <FiltersCard
         filters={filters}
-        carBrands={carBrands}
+        carMakes={['All Makes', ...carMakes]}
+        carModels={filters.make === 'All Makes' ? ['All Models'] : ['All Models', ...(carModels[filters.make] || [])]}
         maxPriceInData={Math.max(...cars.map(car => car.price), 100000)}
         onFilterChange={handleFilterChange}
       />
-      <CarGrid filteredCars={filteredCars} onViewDetails={handleViewDetails} />
+
+      <ScrollArea className="h-[calc(100vh-20rem)]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCars.map((car) => (
+            <CarCard 
+              key={car.id} 
+              car={car} 
+              onViewDetails={handleViewDetails}
+            />
+          ))}
+        </div>
+      </ScrollArea>
     </div>
   );
 };
 
-const FiltersCard = ({ filters, carBrands, maxPriceInData, onFilterChange }) => (
+const FiltersCard = ({ filters, carMakes, carModels, maxPriceInData, onFilterChange }) => (
   <Card className="mb-6">
     <CardHeader>
       <CardTitle>Filters</CardTitle>
@@ -92,13 +105,13 @@ const FiltersCard = ({ filters, carBrands, maxPriceInData, onFilterChange }) => 
         <FilterSelect
           label="Make"
           value={filters.make}
-          options={['All Makes', ...carBrands.map(brand => brand.brand)]}
+          options={carMakes}
           onChange={(value) => onFilterChange('make', value)}
         />
         <FilterSelect
           label="Model"
           value={filters.model}
-          options={['All Models', ...(filters.make !== 'All Makes' ? carBrands.find(b => b.brand === filters.make)?.models || [] : [])]}
+          options={carModels}
           onChange={(value) => onFilterChange('model', value)}
         />
         <YearRangeFilter
@@ -184,20 +197,6 @@ const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange }) => (
       <span>{maxPrice} OMR</span>
     </div>
   </div>
-);
-
-const CarGrid = ({ filteredCars, onViewDetails }) => (
-  <ScrollArea className="h-[calc(100vh-20rem)]">
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {filteredCars.map((car) => (
-        <CarCard 
-          key={car.id} 
-          car={car} 
-          onViewDetails={onViewDetails}
-        />
-      ))}
-    </div>
-  </ScrollArea>
 );
 
 const CarCard = ({ car, onViewDetails }) => (
