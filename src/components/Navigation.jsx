@@ -77,7 +77,7 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
                     onClick={() => setIsOpen(false)}
                   >
                     {item.icon}
-                    <span>{t[item.title.toLowerCase()] || item.title}</span>
+                    <span>{t[item.title.toLowerCase()] || t[item.to.slice(1)] || item.title}</span>
                   </Link>
                 ))}
               </nav>
