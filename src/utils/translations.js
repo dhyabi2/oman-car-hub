@@ -79,6 +79,15 @@ export const translations = {
     techFuturism: "Tech Futurism",
     frankincenseTrail: "Frankincense Trail",
     royalOpulence: "Royal Opulence",
+    // New translations for AddCar
+    addCarForSale: "Add Car for Sale",
+    submitListing: "Submit Listing",
+    basicInformation: "Basic Information",
+    vehicleDetails: "Vehicle Details",
+    pleaseAllRequiredFields: "Please fill all required fields",
+    invalidPhoneNumber: "Invalid phone number. Please enter 8 digits.",
+    carListingAddedSuccess: "Car listing added successfully!",
+    failedToAddCarListing: "Failed to add car listing. Please try again.",
   },
   ar: {
     appName: "سوق عمان للسيارات",
@@ -160,5 +169,14 @@ export const translations = {
     techFuturism: "مستقبل تقني",
     frankincenseTrail: "درب اللبان",
     royalOpulence: "فخامة ملكية",
+    // New translations for AddCar
+    addCarForSale: "إضافة سيارة للبيع",
+    submitListing: "إرسال القائمة",
+    basicInformation: "المعلومات الأساسية",
+    vehicleDetails: "تفاصيل السيارة",
+    pleaseAllRequiredFields: "يرجى ملء جميع الحقول المطلوبة",
+    invalidPhoneNumber: "رقم هاتف غير صالح. الرجاء إدخال 8 أرقام.",
+    carListingAddedSuccess: "تمت إضافة قائمة السيارة بنجاح!",
+    failedToAddCarListing: "فشل في إضافة قائمة السيارة. يرجى المحاولة مرة أخرى.",
   },
 };
