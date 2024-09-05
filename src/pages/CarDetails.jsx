@@ -7,34 +7,23 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 const CarDetails = () => {
   const { id } = useParams();
   
-  // Mock data for demonstration purposes
-  const carDetails = {
-    id: id,
-    make: 'Toyota',
-    model: 'Camry',
-    year: 2020,
-    mileage: 30000,
-    transmission: 'Automatic',
-    fuel_type: 'Petrol',
-    engine_size: 2500,
-    color: 'White',
-    number_of_doors: 4,
-    number_of_seats: 5,
-    drivetrain: 'FWD',
-    condition: 'Used',
-    price: 25000,
-    vin: 'ABC123XYZ456789',
-    location: 'Muscat',
-    seller_type: 'Private',
-    description: 'Well-maintained Toyota Camry with low mileage. Perfect family car with excellent fuel efficiency.',
-    additional_features: 'Bluetooth connectivity, Backup camera, Keyless entry',
-    photos: [
-      'https://example.com/toyota-camry-1.jpg',
-      'https://example.com/toyota-camry-2.jpg',
-      'https://example.com/toyota-camry-3.jpg'
-    ],
-    contact_phone: '12345678',
-    listing_expiration_date: '2023-12-31'
+  // Fetch car details from localStorage
+  const cars = JSON.parse(localStorage.getItem('cars') || '[]');
+  const carDetails = cars.find(car => car.id.toString() === id);
+
+  if (!carDetails) {
+    return <div>Car not found</div>;
+  }
+
+  const renderCarImage = (photo) => {
+    if (typeof photo === 'string') {
+      if (photo.startsWith('data:image')) {
+        return photo; // It's a base64 encoded image
+      } else if (photo.startsWith('http')) {
+        return photo; // It's a URL
+      }
+    }
+    return '/placeholder.svg'; // Fallback to placeholder
   };
 
   return (
@@ -85,8 +74,8 @@ const CarDetails = () => {
             <h2 className="text-xl font-semibold mb-4">Photos</h2>
             <ScrollArea className="h-64 w-full">
               <div className="flex space-x-4">
-                {carDetails.photos.map((photo, index) => (
-                  <img key={index} src={photo} alt={`${carDetails.make} ${carDetails.model}`} className="w-64 h-48 object-cover" />
+                {carDetails.photos && carDetails.photos.map((photo, index) => (
+                  <img key={index} src={renderCarImage(photo)} alt={`${carDetails.make} ${carDetails.model}`} className="w-64 h-48 object-cover" />
                 ))}
               </div>
             </ScrollArea>
