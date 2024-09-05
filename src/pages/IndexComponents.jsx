@@ -23,7 +23,7 @@ const fadeInUp = {
   transition: { duration: 0.5 }
 };
 
-export const QuickStats = ({ stats, t }) => {
+const QuickStats = ({ stats, t, language }) => {
   const statEntries = Object.entries(stats).filter(([key]) => key !== 'latestCar');
   const currentIndex = useAutoSlide(statEntries.length);
 
@@ -61,8 +61,17 @@ export const QuickStats = ({ stats, t }) => {
           <Card className="w-full max-w-sm">
             <CardContent className="p-4 text-center">
               <h3 className="text-lg font-semibold flex items-center justify-center">
-                {getIconForStat(statEntries[currentIndex][0])}
-                <span className="ml-2">{t[statEntries[currentIndex][0]]}</span>
+                {language === 'ar' ? (
+                  <>
+                    <span className="ml-2">{t[statEntries[currentIndex][0]]}</span>
+                    {getIconForStat(statEntries[currentIndex][0])}
+                  </>
+                ) : (
+                  <>
+                    {getIconForStat(statEntries[currentIndex][0])}
+                    <span className="ml-2">{t[statEntries[currentIndex][0]]}</span>
+                  </>
+                )}
               </h3>
               <p className="text-2xl font-bold">
                 {formatStatValue(statEntries[currentIndex][0], statEntries[currentIndex][1])}
@@ -75,11 +84,21 @@ export const QuickStats = ({ stats, t }) => {
   );
 };
 
-export const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBrand, handleBrandSelect, t }) => (
+const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBrand, handleBrandSelect, t, language }) => (
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4">
       <motion.h2 className="text-2xl font-semibold mb-4 flex items-center" {...fadeInUp}>
-        <Car className="mr-2" /> {t.brandSelector}
+        {language === 'ar' ? (
+          <>
+            {t.brandSelector}
+            <Car className="mr-2 rtl:ml-2 rtl:mr-0" />
+          </>
+        ) : (
+          <>
+            <Car className="mr-2" />
+            {t.brandSelector}
+          </>
+        )}
       </motion.h2>
       <motion.div {...fadeInUp} transition={{ delay: 0.1 }}>
         <div className="relative">
@@ -114,19 +133,19 @@ export const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selec
   </Card>
 );
 
-export const ModelSelector = ({ selectedBrand, selectedModel, handleModelSelect, t }) => (
+const ModelSelector = ({ selectedBrand, selectedModel, handleModelSelect, t, language }) => (
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4">
       <motion.h2 className="text-2xl font-semibold mb-4 flex items-center" {...fadeInUp}>
-        {selectedBrand ? (
+        {language === 'ar' ? (
           <>
-            <Car className="mr-2" />
-            {`${selectedBrand.brand} ${t.model}`}
+            {selectedBrand ? `${selectedBrand.brand} ${t.model}` : t.modelSelector}
+            <Car className="mr-2 rtl:ml-2 rtl:mr-0" />
           </>
         ) : (
           <>
             <Car className="mr-2" />
-            {t.modelSelector}
+            {selectedBrand ? `${selectedBrand.brand} ${t.model}` : t.modelSelector}
           </>
         )}
       </motion.h2>
@@ -151,12 +170,22 @@ export const ModelSelector = ({ selectedBrand, selectedModel, handleModelSelect,
   </Card>
 );
 
-export const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t }) => (
+const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t, language }) => (
   <Card className="h-[calc(100vh-12rem)] overflow-hidden">
     <CardContent className="p-4 flex flex-col justify-between">
       <div>
         <motion.h2 className="text-2xl font-semibold mb-4 flex items-center" {...fadeInUp}>
-          <Sparkles className="mr-2" /> {t.selectedCar}
+          {language === 'ar' ? (
+            <>
+              {t.selectedCar}
+              <Sparkles className="mr-2 rtl:ml-2 rtl:mr-0" />
+            </>
+          ) : (
+            <>
+              <Sparkles className="mr-2" />
+              {t.selectedCar}
+            </>
+          )}
         </motion.h2>
         {selectedBrand && selectedModel ? (
           <motion.div {...fadeInUp} transition={{ delay: 0.1 }}>
@@ -170,8 +199,17 @@ export const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t })
       {selectedBrand && selectedModel && (
         <motion.div {...fadeInUp} transition={{ delay: 0.2 }}>
           <Button onClick={handleViewCars} className="mt-4 w-full flex items-center justify-center">
-            <Eye className="mr-2" />
-            {t.viewCars}
+            {language === 'ar' ? (
+              <>
+                {t.viewCars}
+                <Eye className="ml-2" />
+              </>
+            ) : (
+              <>
+                <Eye className="mr-2" />
+                {t.viewCars}
+              </>
+            )}
           </Button>
         </motion.div>
       )}
@@ -179,10 +217,20 @@ export const SelectedCar = ({ selectedBrand, selectedModel, handleViewCars, t })
   </Card>
 );
 
-export const LatestCar = ({ car, navigate, t }) => (
+const LatestCar = ({ car, navigate, t, language }) => (
   <motion.div className="mb-8" {...fadeInUp}>
     <h2 className="text-2xl font-semibold mb-4 flex items-center">
-      <Zap className="mr-2" /> {t.latestCar}
+      {language === 'ar' ? (
+        <>
+          {t.latestCar}
+          <Zap className="mr-2 rtl:ml-2 rtl:mr-0" />
+        </>
+      ) : (
+        <>
+          <Zap className="mr-2" />
+          {t.latestCar}
+        </>
+      )}
     </h2>
     <Card>
       <CardContent className="p-4">
@@ -197,8 +245,17 @@ export const LatestCar = ({ car, navigate, t }) => (
         <p className="text-lg font-bold">{car.price} {t.currency}</p>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button className="w-full mt-4 flex items-center justify-center" onClick={() => navigate(`/car/${car.id}`)}>
-            <Search className="mr-2" />
-            {t.viewDetails}
+            {language === 'ar' ? (
+              <>
+                {t.viewDetails}
+                <Search className="ml-2" />
+              </>
+            ) : (
+              <>
+                <Search className="mr-2" />
+                {t.viewDetails}
+              </>
+            )}
           </Button>
         </motion.div>
       </CardContent>
@@ -206,7 +263,7 @@ export const LatestCar = ({ car, navigate, t }) => (
   </motion.div>
 );
 
-export const SellYourCar = ({ navigate, t }) => (
+const SellYourCar = ({ navigate, t, language }) => (
   <motion.div
     initial={{ opacity: 0, y: 50 }}
     animate={{ opacity: 1, y: 0 }}
@@ -215,16 +272,37 @@ export const SellYourCar = ({ navigate, t }) => (
     <Card className="bg-primary text-primary-foreground">
       <CardContent className="p-8 text-center">
         <h2 className="text-3xl font-bold mb-4 flex items-center justify-center">
-          <DollarSign className="mr-2" /> {t.sellYourCar}
+          {language === 'ar' ? (
+            <>
+              {t.sellYourCar}
+              <DollarSign className="mr-2 rtl:ml-2 rtl:mr-0" />
+            </>
+          ) : (
+            <>
+              <DollarSign className="mr-2" />
+              {t.sellYourCar}
+            </>
+          )}
         </h2>
         <p className="text-xl mb-6">{t.listingMessage}</p>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button size="lg" variant="secondary" onClick={() => navigate('/add-car')} className="flex items-center">
-            <PlusCircle className="mr-2" />
-            {t.listYourCar}
+            {language === 'ar' ? (
+              <>
+                {t.listYourCar}
+                <PlusCircle className="ml-2" />
+              </>
+            ) : (
+              <>
+                <PlusCircle className="mr-2" />
+                {t.listYourCar}
+              </>
+            )}
           </Button>
         </motion.div>
       </CardContent>
     </Card>
   </motion.div>
 );
+
+export { QuickStats, BrandSelector, ModelSelector, SelectedCar, LatestCar, SellYourCar };

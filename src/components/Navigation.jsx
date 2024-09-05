@@ -86,7 +86,7 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
                 <DropdownMenuItem key={theme.value} onSelect={() => onThemeChange(theme.value)}>
                   <div className="flex items-center">
                     {theme.icon}
-                    <span className="ml-2">{t[theme.name]}</span>
+                    <span className={`ml-2 ${language === 'ar' ? 'mr-2' : ''}`}>{t[theme.name]}</span>
                   </div>
                 </DropdownMenuItem>
               ))}
@@ -111,8 +111,17 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
-                    {item.icon}
-                    <span className="text-lg">{t[item.title.toLowerCase()] || t[item.to.slice(1)] || item.title}</span>
+                    {language === 'ar' ? (
+                      <>
+                        <span className="text-lg">{t[item.title.toLowerCase()] || t[item.to.slice(1)] || item.title}</span>
+                        <span className="rtl:mr-3">{item.icon}</span>
+                      </>
+                    ) : (
+                      <>
+                        {item.icon}
+                        <span className="text-lg">{t[item.title.toLowerCase()] || t[item.to.slice(1)] || item.title}</span>
+                      </>
+                    )}
                   </Link>
                 ))}
               </nav>
