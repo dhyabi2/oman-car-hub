@@ -5,12 +5,17 @@ import { carMakes, carModels } from '../utils/carData';
 import { getAllCars } from '../utils/indexedDB';
 import { NoCarsList, CarCard, FiltersCard } from './CarsListComponents';
 
+// Helper function to safely access translations
+const getTranslation = (t, key, fallback = key) => {
+  return t[key] || fallback;
+};
+
 const CarsList = ({ t }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const initialMake = searchParams.get('make') || t.allMakes;
-  const initialModel = searchParams.get('model') || t.allModels;
+  const initialMake = searchParams.get('make') || getTranslation(t, 'allMakes', 'All Makes');
+  const initialModel = searchParams.get('model') || getTranslation(t, 'allModels', 'All Models');
 
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
@@ -36,8 +41,8 @@ const CarsList = ({ t }) => {
 
   useEffect(() => {
     const filtered = cars.filter(car => 
-      (filters.make === t.allMakes || car.make === filters.make) &&
-      (filters.model === t.allModels || car.model === filters.model) &&
+      (filters.make === getTranslation(t, 'allMakes', 'All Makes') || car.make === filters.make) &&
+      (filters.model === getTranslation(t, 'allModels', 'All Models') || car.model === filters.model) &&
       car.year >= filters.minYear &&
       car.year <= filters.maxYear &&
       car.price >= filters.minPrice &&
@@ -52,7 +57,7 @@ const CarsList = ({ t }) => {
     setFilters(prev => {
       const newFilters = { ...prev, [name]: value };
       if (name === 'make') {
-        newFilters.model = t.allModels;
+        newFilters.model = getTranslation(t, 'allModels', 'All Models');
       }
       return newFilters;
     });
@@ -64,12 +69,12 @@ const CarsList = ({ t }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">{t.carsList}</h1>
+      <h1 className="text-3xl font-bold mb-6">{getTranslation(t, 'carsList', 'Cars List')}</h1>
       
       <FiltersCard
         filters={filters}
-        carMakes={[t.allMakes, ...carMakes]}
-        carModels={filters.make === t.allMakes ? [t.allModels] : [t.allModels, ...(carModels[filters.make] || [])]}
+        carMakes={[getTranslation(t, 'allMakes', 'All Makes'), ...carMakes]}
+        carModels={filters.make === getTranslation(t, 'allMakes', 'All Makes') ? [getTranslation(t, 'allModels', 'All Models')] : [getTranslation(t, 'allModels', 'All Models'), ...(carModels[filters.make] || [])]}
         maxPriceInData={Math.max(...cars.map(car => car.price), 100000)}
         onFilterChange={handleFilterChange}
         t={t}
