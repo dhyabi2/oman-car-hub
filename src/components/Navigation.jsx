@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { navItems } from '../nav-items';
 import { Menu, Sun, Moon, Palette, Globe } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import {
   Sheet,
   SheetContent,
@@ -70,7 +71,20 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
   return (
     <>
       <nav className={`p-4 flex justify-between items-center ${getHeaderClass()}`}>
-        <Link to="/" className="text-xl font-bold">{t.appName}</Link>
+        <Link to="/" className="text-xl font-bold">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.span
+              animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              {t.appName}
+            </motion.span>
+          </motion.div>
+        </Link>
         <div className="flex items-center space-x-4">
           <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
             <Globe className="h-4 w-4" />
