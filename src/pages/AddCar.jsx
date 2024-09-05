@@ -27,7 +27,7 @@ import {
 } from '../components/CarFormFields';
 import ImageSelector from '../components/ImageSelector';
 
-const AddCar = () => {
+const AddCar = ({ t }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     make: '',
@@ -63,11 +63,11 @@ const AddCar = () => {
 
     try {
       await addCar(formData);
-      toast.success('Car listing added successfully!');
+      toast.success(t('carListingAddedSuccess'));
       navigate('/cars-list');
     } catch (error) {
       console.error('Error adding car:', error);
-      toast.error('Failed to add car listing. Please try again.');
+      toast.error(t('failedToAddCarListing'));
     }
   };
 
@@ -76,7 +76,7 @@ const AddCar = () => {
     const emptyFields = requiredFields.filter(field => !formData[field]);
     
     if (emptyFields.length > 0) {
-      toast.error(`Please fill in all required fields: ${emptyFields.join(', ')}`);
+      toast.error(`${t('pleaseAllRequiredFields')}: ${emptyFields.map(field => t(field)).join(', ')}`);
       return false;
     }
     return true;
@@ -99,7 +99,7 @@ const AddCar = () => {
       })
       .catch(error => {
         console.error('Error processing images:', error);
-        toast.error('Error uploading images. Please try again.');
+        toast.error(t('errorUploadingImages'));
       });
   };
 
@@ -107,73 +107,83 @@ const AddCar = () => {
     <div className="container mx-auto px-4 py-8">
       <Card>
         <CardHeader>
-          <CardTitle>Add a Car for Sale</CardTitle>
+          <CardTitle>{t('addCarForSale')}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <FormSection title="Basic Information">
+            <FormSection title={t('basicInformation')}>
               <MakeModelSelect
                 make={formData.make}
                 model={formData.model}
                 onMakeChange={(value) => handleInputChange('make', value)}
                 onModelChange={(value) => handleInputChange('model', value)}
+                t={t}
               />
               <MileageInput
                 value={formData.mileage}
                 onChange={(value) => handleInputChange('mileage', value)}
+                t={t}
               />
             </FormSection>
 
-            <FormSection title="Vehicle Details">
+            <FormSection title={t('vehicleDetails')}>
               <TransmissionSelector
                 value={formData.transmission}
                 onChange={(value) => handleInputChange('transmission', value)}
+                t={t}
               />
               <FuelTypeSelector
                 value={formData.fuel_type}
                 onChange={(value) => handleInputChange('fuel_type', value)}
+                t={t}
               />
               <ColorSelector
                 value={formData.color}
                 onChange={(value) => handleInputChange('color', value)}
+                t={t}
               />
               <DoorsSelector
                 value={formData.number_of_doors}
                 onChange={(value) => handleInputChange('number_of_doors', value)}
+                t={t}
               />
               <SeatsSelector
                 value={formData.number_of_seats}
                 onChange={(value) => handleInputChange('number_of_seats', value)}
+                t={t}
               />
               <DrivetrainSelector
                 value={formData.drivetrain}
                 onChange={(value) => handleInputChange('drivetrain', value)}
+                t={t}
               />
               <ConditionSelector
                 value={formData.condition}
                 onChange={(value) => handleInputChange('condition', value)}
+                t={t}
               />
             </FormSection>
 
-            <FormSection title="Listing Details">
+            <FormSection title={t('listingDetails')}>
               <PriceRangeInput
                 minPrice={formData.price}
                 maxPrice={formData.price}
                 onChange={(field, value) => handleInputChange('price', value)}
+                t={t}
               />
               <Input
-                label="VIN (Optional)"
+                label={t('vinOptional')}
                 value={formData.vin}
                 onChange={(e) => handleInputChange('vin', e.target.value)}
               />
               <ImageSelector
-                label="Location"
+                label={t('location')}
                 options={locations.map(location => ({ value: location, icon: <MapPin size={24} /> }))}
                 value={formData.location}
                 onChange={(value) => handleInputChange('location', value)}
               />
               <ImageSelector
-                label="Seller Type"
+                label={t('sellerType')}
                 options={[
                   { value: 'Private', icon: <User size={24} /> },
                   { value: 'Dealer', icon: <User size={24} /> }
@@ -182,7 +192,7 @@ const AddCar = () => {
                 onChange={(value) => handleInputChange('seller_type', value)}
               />
               <div>
-                <Label htmlFor="contact_phone">Contact Phone</Label>
+                <Label htmlFor="contact_phone">{t('contactPhone')}</Label>
                 <Input
                   id="contact_phone"
                   type="tel"
@@ -191,41 +201,42 @@ const AddCar = () => {
                 />
               </div>
               <DatePickerField
-                label="Listing Expiration Date"
+                label={t('listingExpirationDate')}
                 value={formData.listing_expiration_date}
                 onChange={(date) => handleInputChange('listing_expiration_date', date ? date.toISOString() : null)}
+                t={t}
               />
             </FormSection>
 
-            <FormSection title="Additional Information">
+            <FormSection title={t('additionalInformation')}>
               <Textarea
-                label="Description (Optional)"
+                label={t('descriptionOptional')}
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
               />
               <Textarea
-                label="Additional Features (Optional)"
+                label={t('additionalFeaturesOptional')}
                 value={formData.additional_features}
                 onChange={(e) => handleInputChange('additional_features', e.target.value)}
               />
             </FormSection>
 
             <div>
-              <Label htmlFor="photos">Photos (Max 10)</Label>
+              <Label htmlFor="photos">{t('photosMax10')}</Label>
               <Input id="photos" type="file" multiple onChange={handlePhotoUpload} accept="image/*" />
               {formData.photos.length > 0 && (
                 <div className="mt-2">
-                  <p>{formData.photos.length} file(s) selected</p>
+                  <p>{formData.photos.length} {t('filesSelected')}</p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mt-2">
                     {formData.photos.map((photo, index) => (
-                      <img key={index} src={photo} alt={`Uploaded car ${index + 1}`} className="w-full h-24 object-cover rounded" />
+                      <img key={index} src={photo} alt={`${t('uploadedCar')} ${index + 1}`} className="w-full h-24 object-cover rounded" />
                     ))}
                   </div>
                 </div>
               )}
             </div>
 
-            <Button type="submit" className="w-full">Submit Listing</Button>
+            <Button type="submit" className="w-full">{t('submitListing')}</Button>
           </form>
         </CardContent>
       </Card>
@@ -242,7 +253,7 @@ const FormSection = ({ title, children }) => (
   </div>
 );
 
-const DatePickerField = ({ label, value, onChange }) => (
+const DatePickerField = ({ label, value, onChange, t }) => (
   <div>
     <Label>{label}</Label>
     <Popover>
@@ -255,7 +266,7 @@ const DatePickerField = ({ label, value, onChange }) => (
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {value ? format(new Date(value), "PPP") : <span>Pick a date</span>}
+          {value ? format(new Date(value), "PPP") : <span>{t('pickDate')}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

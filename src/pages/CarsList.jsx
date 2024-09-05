@@ -10,12 +10,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { carMakes, carModels } from '../utils/carData';
 import { getAllCars } from '../utils/indexedDB';
 
-const CarsList = () => {
+const CarsList = ({ t }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const initialMake = searchParams.get('make') || 'All Makes';
-  const initialModel = searchParams.get('model') || 'All Models';
+  const initialMake = searchParams.get('make') || t('allMakes');
+  const initialModel = searchParams.get('model') || t('allModels');
 
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
@@ -41,8 +41,8 @@ const CarsList = () => {
 
   useEffect(() => {
     const filtered = cars.filter(car => 
-      (filters.make === 'All Makes' || car.make === filters.make) &&
-      (filters.model === 'All Models' || car.model === filters.model) &&
+      (filters.make === t('allMakes') || car.make === filters.make) &&
+      (filters.model === t('allModels') || car.model === filters.model) &&
       car.year >= filters.minYear &&
       car.year <= filters.maxYear &&
       car.price >= filters.minPrice &&
@@ -51,13 +51,13 @@ const CarsList = () => {
       (filters.fuelType === 'all' || car.fuel_type === filters.fuelType)
     );
     setFilteredCars(filtered);
-  }, [filters, cars]);
+  }, [filters, cars, t]);
 
   const handleFilterChange = (name, value) => {
     setFilters(prev => {
       const newFilters = { ...prev, [name]: value };
       if (name === 'make') {
-        newFilters.model = 'All Models';
+        newFilters.model = t('allModels');
       }
       return newFilters;
     });
@@ -69,14 +69,15 @@ const CarsList = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Cars List</h1>
+      <h1 className="text-3xl font-bold mb-6">{t('carsList')}</h1>
       
       <FiltersCard
         filters={filters}
-        carMakes={['All Makes', ...carMakes]}
-        carModels={filters.make === 'All Makes' ? ['All Models'] : ['All Models', ...(carModels[filters.make] || [])]}
+        carMakes={[t('allMakes'), ...carMakes]}
+        carModels={filters.make === t('allMakes') ? [t('allModels')] : [t('allModels'), ...(carModels[filters.make] || [])]}
         maxPriceInData={Math.max(...cars.map(car => car.price), 100000)}
         onFilterChange={handleFilterChange}
+        t={t}
       />
 
       <ScrollArea className="h-[calc(100vh-20rem)]">
@@ -86,6 +87,7 @@ const CarsList = () => {
               key={car.id} 
               car={car} 
               onViewDetails={handleViewDetails}
+              t={t}
             />
           ))}
         </div>
@@ -94,21 +96,21 @@ const CarsList = () => {
   );
 };
 
-const FiltersCard = ({ filters, carMakes, carModels, maxPriceInData, onFilterChange }) => (
+const FiltersCard = ({ filters, carMakes, carModels, maxPriceInData, onFilterChange, t }) => (
   <Card className="mb-6">
     <CardHeader>
-      <CardTitle>Filters</CardTitle>
+      <CardTitle>{t('filters')}</CardTitle>
     </CardHeader>
     <CardContent>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <FilterSelect
-          label="Make"
+          label={t('make')}
           value={filters.make}
           options={carMakes}
           onChange={(value) => onFilterChange('make', value)}
         />
         <FilterSelect
-          label="Model"
+          label={t('model')}
           value={filters.model}
           options={carModels}
           onChange={(value) => onFilterChange('model', value)}
@@ -117,21 +119,23 @@ const FiltersCard = ({ filters, carMakes, carModels, maxPriceInData, onFilterCha
           minYear={filters.minYear}
           maxYear={filters.maxYear}
           onChange={onFilterChange}
+          t={t}
         />
         <PriceRangeFilter
           minPrice={filters.minPrice}
           maxPrice={filters.maxPrice}
           maxPriceInData={maxPriceInData}
           onChange={onFilterChange}
+          t={t}
         />
         <FilterSelect
-          label="Transmission"
+          label={t('transmission')}
           value={filters.transmission}
           options={['all', 'Automatic', 'Manual', 'CVT']}
           onChange={(value) => onFilterChange('transmission', value)}
         />
         <FilterSelect
-          label="Fuel Type"
+          label={t('fuelType')}
           value={filters.fuelType}
           options={['all', 'Petrol', 'Diesel', 'Electric', 'Hybrid']}
           onChange={(value) => onFilterChange('fuelType', value)}
@@ -157,9 +161,9 @@ const FilterSelect = ({ label, value, options, onChange }) => (
   </div>
 );
 
-const YearRangeFilter = ({ minYear, maxYear, onChange }) => (
+const YearRangeFilter = ({ minYear, maxYear, onChange, t }) => (
   <div>
-    <Label>Year Range</Label>
+    <Label>{t('yearRange')}</Label>
     <div className="flex items-center space-x-2">
       <Input
         type="number"
@@ -167,7 +171,7 @@ const YearRangeFilter = ({ minYear, maxYear, onChange }) => (
         onChange={(e) => onChange('minYear', parseInt(e.target.value))}
         className="w-20"
       />
-      <span>to</span>
+      <span>{t('to')}</span>
       <Input
         type="number"
         value={maxYear}
@@ -178,9 +182,9 @@ const YearRangeFilter = ({ minYear, maxYear, onChange }) => (
   </div>
 );
 
-const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange }) => (
+const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange, t }) => (
   <div>
-    <Label>Price Range (OMR)</Label>
+    <Label>{t('priceRange')} (OMR)</Label>
     <Slider
       min={0}
       max={maxPriceInData}
@@ -198,14 +202,14 @@ const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange }) => (
   </div>
 );
 
-const CarCard = ({ car, onViewDetails }) => (
+const CarCard = ({ car, onViewDetails, t }) => (
   <Card className="overflow-hidden">
     <CardContent className="p-4">
       <h2 className="text-xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
-      <p className="text-gray-600 mb-2">Price: {car.price} OMR</p>
-      <p className="text-gray-600 mb-2">Mileage: {car.mileage} km</p>
-      <p className="text-gray-600 mb-2">Transmission: {car.transmission}</p>
-      <p className="text-gray-600 mb-2">Fuel Type: {car.fuel_type}</p>
+      <p className="text-gray-600 mb-2">{t('price')}: {car.price} OMR</p>
+      <p className="text-gray-600 mb-2">{t('mileage')}: {car.mileage} km</p>
+      <p className="text-gray-600 mb-2">{t('transmission')}: {car.transmission}</p>
+      <p className="text-gray-600 mb-2">{t('fuelType')}: {car.fuel_type}</p>
       <div className="flex flex-wrap gap-2 mb-4">
         {car.photos.slice(0, 4).map((photo, index) => (
           <img
@@ -221,7 +225,7 @@ const CarCard = ({ car, onViewDetails }) => (
           </div>
         )}
       </div>
-      <Button className="w-full mt-2" onClick={() => onViewDetails(car.id)}>View Details</Button>
+      <Button className="w-full mt-2" onClick={() => onViewDetails(car.id)}>{t('viewDetails')}</Button>
     </CardContent>
   </Card>
 );
