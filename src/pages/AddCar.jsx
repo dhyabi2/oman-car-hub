@@ -27,7 +27,7 @@ import {
 } from '../components/CarFormFields';
 import ImageSelector from '../components/ImageSelector';
 
-const AddCar = ({ language, translations }) => {
+const AddCar = ({ language = 'en', translations = {} }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     make: '',
@@ -53,7 +53,7 @@ const AddCar = ({ language, translations }) => {
     additional_features: '',
   });
 
-  const t = (key) => translations[language][key] || key;
+  const t = (key) => translations[language]?.[key] || key;
 
   const handleInputChange = (name, value) => {
     setFormData(prevState => ({ ...prevState, [name]: value }));
@@ -160,77 +160,23 @@ const AddCar = ({ language, translations }) => {
               />
             </FormSection>
 
-            <FormSection title={t('listingDetails')}>
-              <PriceRangeInput
-                minPrice={formData.price}
-                maxPrice={formData.price}
-                onChange={(field, value) => handleInputChange('price', value)}
-                t={t}
-              />
-              <Input
-                label={t('vinOptional')}
-                value={formData.vin}
-                onChange={(e) => handleInputChange('vin', e.target.value)}
-              />
-              <ImageSelector
-                label={t('location')}
-                options={locations.map(location => ({ value: location, icon: <MapPin size={24} /> }))}
-                value={formData.location}
-                onChange={(value) => handleInputChange('location', value)}
-              />
-              <ImageSelector
-                label={t('sellerType')}
-                options={[
-                  { value: 'Private', icon: <User size={24} /> },
-                  { value: 'Dealer', icon: <User size={24} /> }
-                ]}
-                value={formData.seller_type}
-                onChange={(value) => handleInputChange('seller_type', value)}
-              />
-              <div>
-                <Label htmlFor="contact_phone">{t('contactPhone')}</Label>
-                <Input
-                  id="contact_phone"
-                  type="tel"
-                  value={formData.contact_phone}
-                  onChange={(e) => handleInputChange('contact_phone', e.target.value)}
-                />
-              </div>
-              <DatePickerField
-                label={t('listingExpirationDate')}
-                value={formData.listing_expiration_date}
-                onChange={(date) => handleInputChange('listing_expiration_date', date ? date.toISOString() : null)}
-                t={t}
-              />
-            </FormSection>
+            <ListingDetails
+              formData={formData}
+              handleInputChange={handleInputChange}
+              t={t}
+            />
 
-            <FormSection title={t('additionalInformation')}>
-              <Textarea
-                label={t('descriptionOptional')}
-                value={formData.description}
-                onChange={(e) => handleInputChange('description', e.target.value)}
-              />
-              <Textarea
-                label={t('additionalFeaturesOptional')}
-                value={formData.additional_features}
-                onChange={(e) => handleInputChange('additional_features', e.target.value)}
-              />
-            </FormSection>
+            <AdditionalInformation
+              formData={formData}
+              handleInputChange={handleInputChange}
+              t={t}
+            />
 
-            <div>
-              <Label htmlFor="photos">{t('photosMax10')}</Label>
-              <Input id="photos" type="file" multiple onChange={handlePhotoUpload} accept="image/*" />
-              {formData.photos.length > 0 && (
-                <div className="mt-2">
-                  <p>{formData.photos.length} {t('filesSelected')}</p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mt-2">
-                    {formData.photos.map((photo, index) => (
-                      <img key={index} src={photo} alt={`${t('uploadedCar')} ${index + 1}`} className="w-full h-24 object-cover rounded" />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+            <PhotoUpload
+              photos={formData.photos}
+              handlePhotoUpload={handlePhotoUpload}
+              t={t}
+            />
 
             <Button type="submit" className="w-full">{t('submitListing')}</Button>
           </form>
@@ -246,6 +192,84 @@ const FormSection = ({ title, children }) => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {children}
     </div>
+  </div>
+);
+
+const ListingDetails = ({ formData, handleInputChange, t }) => (
+  <FormSection title={t('listingDetails')}>
+    <PriceRangeInput
+      minPrice={formData.price}
+      maxPrice={formData.price}
+      onChange={(field, value) => handleInputChange('price', value)}
+      t={t}
+    />
+    <Input
+      label={t('vinOptional')}
+      value={formData.vin}
+      onChange={(e) => handleInputChange('vin', e.target.value)}
+    />
+    <ImageSelector
+      label={t('location')}
+      options={locations.map(location => ({ value: location, icon: <MapPin size={24} /> }))}
+      value={formData.location}
+      onChange={(value) => handleInputChange('location', value)}
+    />
+    <ImageSelector
+      label={t('sellerType')}
+      options={[
+        { value: 'Private', icon: <User size={24} /> },
+        { value: 'Dealer', icon: <User size={24} /> }
+      ]}
+      value={formData.seller_type}
+      onChange={(value) => handleInputChange('seller_type', value)}
+    />
+    <div>
+      <Label htmlFor="contact_phone">{t('contactPhone')}</Label>
+      <Input
+        id="contact_phone"
+        type="tel"
+        value={formData.contact_phone}
+        onChange={(e) => handleInputChange('contact_phone', e.target.value)}
+      />
+    </div>
+    <DatePickerField
+      label={t('listingExpirationDate')}
+      value={formData.listing_expiration_date}
+      onChange={(date) => handleInputChange('listing_expiration_date', date ? date.toISOString() : null)}
+      t={t}
+    />
+  </FormSection>
+);
+
+const AdditionalInformation = ({ formData, handleInputChange, t }) => (
+  <FormSection title={t('additionalInformation')}>
+    <Textarea
+      label={t('descriptionOptional')}
+      value={formData.description}
+      onChange={(e) => handleInputChange('description', e.target.value)}
+    />
+    <Textarea
+      label={t('additionalFeaturesOptional')}
+      value={formData.additional_features}
+      onChange={(e) => handleInputChange('additional_features', e.target.value)}
+    />
+  </FormSection>
+);
+
+const PhotoUpload = ({ photos, handlePhotoUpload, t }) => (
+  <div>
+    <Label htmlFor="photos">{t('photosMax10')}</Label>
+    <Input id="photos" type="file" multiple onChange={handlePhotoUpload} accept="image/*" />
+    {photos.length > 0 && (
+      <div className="mt-2">
+        <p>{photos.length} {t('filesSelected')}</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mt-2">
+          {photos.map((photo, index) => (
+            <img key={index} src={photo} alt={`${t('uploadedCar')} ${index + 1}`} className="w-full h-24 object-cover rounded" />
+          ))}
+        </div>
+      </div>
+    )}
   </div>
 );
 
