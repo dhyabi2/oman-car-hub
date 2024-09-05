@@ -55,6 +55,8 @@ export const translations = {
     editListingAnswer: "Yes, you can edit your listing at any time by logging into your account and accessing your active listings.",
     howToContactSeller: "How do I contact a seller?",
     contactSellerAnswer: "Each listing has a 'Contact Seller' button. Click it to get the seller's contact information or send a message directly through our platform.",
+    howToContactDeveloper: "How can I contact the developer?",
+    contactDeveloperAnswer: "You can contact the developer directly through WhatsApp for any technical issues or suggestions.",
     haveMoreQuestions: "Have more questions?",
     typeFeedbackOrQuestion: "Type your feedback or question here...",
     submitFeedback: "Submit Feedback",
@@ -97,6 +99,7 @@ export const translations = {
     contactPhone: "Contact Phone",
     listingExpirationDate: "Listing Expiration Date",
     uploadPhotos: "Upload Photos",
+    contactViaWhatsApp: "Contact via WhatsApp",
   },
   ar: {
     appName: "سوق عمان للسيارات",
@@ -154,6 +157,8 @@ export const translations = {
     editListingAnswer: "نعم، يمكنك تعديل إعلانك في أي وقت عن طريق تسجيل الدخول إلى حسابك والوصول إلى إعلاناتك النشطة.",
     howToContactSeller: "كيف يمكنني التواصل مع البائع؟",
     contactSellerAnswer: "كل إعلان يحتوي على زر 'تواصل مع البائع'. انقر عليه للحصول على معلومات الاتصال بالبائع أو إرسال رسالة مباشرة عبر منصتنا.",
+    howToContactDeveloper: "كيف يمكنني التواصل مع المطور؟",
+    contactDeveloperAnswer: "يمكنك التواصل مع المطور مباشرة عبر واتساب لأي مشاكل تقنية أو اقتراحات.",
     haveMoreQuestions: "هل لديك المزيد من الأسئلة؟",
     typeFeedbackOrQuestion: "اكتب ملاحظاتك أو سؤالك هنا...",
     submitFeedback: "إرسال الملاحظات",
@@ -196,5 +201,6 @@ export const translations = {
     contactPhone: "رقم الاتصال",
     listingExpirationDate: "تاريخ انتهاء الإعلان",
     uploadPhotos: "تحميل الصور",
+    contactViaWhatsApp: "التواصل عبر واتساب",
   },
 };
