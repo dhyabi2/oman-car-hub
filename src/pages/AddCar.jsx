@@ -203,11 +203,14 @@ const ListingDetails = ({ formData, handleInputChange, t }) => (
       onChange={(field, value) => handleInputChange('price', value)}
       t={t}
     />
-    <Input
-      label={t('vinOptional')}
-      value={formData.vin}
-      onChange={(e) => handleInputChange('vin', e.target.value)}
-    />
+    <div>
+      <Label htmlFor="vin">{t('vinOptional')}</Label>
+      <Input
+        id="vin"
+        value={formData.vin}
+        onChange={(e) => handleInputChange('vin', e.target.value)}
+      />
+    </div>
     <ImageSelector
       label={t('location')}
       options={locations.map(location => ({ value: location, icon: <MapPin size={24} /> }))}
@@ -243,16 +246,22 @@ const ListingDetails = ({ formData, handleInputChange, t }) => (
 
 const AdditionalInformation = ({ formData, handleInputChange, t }) => (
   <FormSection title={t('additionalInformation')}>
-    <Textarea
-      label={t('descriptionOptional')}
-      value={formData.description}
-      onChange={(e) => handleInputChange('description', e.target.value)}
-    />
-    <Textarea
-      label={t('additionalFeaturesOptional')}
-      value={formData.additional_features}
-      onChange={(e) => handleInputChange('additional_features', e.target.value)}
-    />
+    <div>
+      <Label htmlFor="description">{t('descriptionOptional')}</Label>
+      <Textarea
+        id="description"
+        value={formData.description}
+        onChange={(e) => handleInputChange('description', e.target.value)}
+      />
+    </div>
+    <div>
+      <Label htmlFor="additional_features">{t('additionalFeaturesOptional')}</Label>
+      <Textarea
+        id="additional_features"
+        value={formData.additional_features}
+        onChange={(e) => handleInputChange('additional_features', e.target.value)}
+      />
+    </div>
   </FormSection>
 );
 
