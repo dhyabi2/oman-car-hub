@@ -12,42 +12,51 @@ export const FormSection = ({ title, children }) => (
   </div>
 );
 
-export const ListingDetails = ({ formData, handleInputChange, t }) => (
-  <FormSection title={t.listingDetails}>
-    <div>
-      <Label htmlFor="price">{t.price} (OMR)</Label>
-      <Input
-        id="price"
-        type="number"
-        value={formData.price}
-        onChange={(e) => handleInputChange('price', Number(e.target.value))}
-      />
-    </div>
-    <div>
-      <Label htmlFor="location">{t.location}</Label>
-      <Select value={formData.location} onValueChange={(value) => handleInputChange('location', value)}>
-        <SelectTrigger>
-          <SelectValue placeholder={t.selectLocation} />
-        </SelectTrigger>
-        <SelectContent>
-          {locations.map((location) => (
-            <SelectItem key={location} value={location}>{location}</SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-    <div>
-      <Label htmlFor="contact_phone">{t.contactPhone}</Label>
-      <Input
-        id="contact_phone"
-        type="tel"
-        value={formData.contact_phone}
-        onChange={(e) => handleInputChange('contact_phone', e.target.value)}
-        placeholder="8 digits"
-      />
-    </div>
-  </FormSection>
-);
+export const ListingDetails = ({ formData, handleInputChange, t }) => {
+  const handlePhoneChange = (e) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 8);
+    handleInputChange('contact_phone', value);
+  };
+
+  return (
+    <FormSection title={t.listingDetails}>
+      <div>
+        <Label htmlFor="price">{t.price} (OMR)</Label>
+        <Input
+          id="price"
+          type="number"
+          value={formData.price}
+          onChange={(e) => handleInputChange('price', Number(e.target.value))}
+        />
+      </div>
+      <div>
+        <Label htmlFor="location">{t.location}</Label>
+        <Select value={formData.location} onValueChange={(value) => handleInputChange('location', value)}>
+          <SelectTrigger>
+            <SelectValue placeholder={t.selectLocation} />
+          </SelectTrigger>
+          <SelectContent>
+            {locations.map((location) => (
+              <SelectItem key={location} value={location}>{location}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <Label htmlFor="contact_phone">{t.contactPhone}</Label>
+        <Input
+          id="contact_phone"
+          type="tel"
+          value={formData.contact_phone}
+          onChange={handlePhoneChange}
+          pattern="[0-9]*"
+          maxLength={8}
+          placeholder={t.phoneNumberPlaceholder}
+        />
+      </div>
+    </FormSection>
+  );
+};
 
 export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
   <FormSection title={t.additionalInformation}>
