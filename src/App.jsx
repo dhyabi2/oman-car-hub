@@ -2,13 +2,10 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { navItems } from "./nav-items";
-import Navigation from "./components/Navigation";
 import { useState, useEffect } from "react";
 import { getLanguage, setLanguage } from "./utils/indexedDB";
 import { translations } from "./utils/translations";
-
-// Import all page components
+import Navigation from "./components/Navigation";
 import Index from "./pages/Index";
 import AddCar from "./pages/AddCar";
 import CarsList from "./pages/CarsList";
@@ -46,7 +43,7 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <BrowserRouter>
-          <div className={`app ${theme} ${language === 'ar' ? 'rtl' : 'ltr'}`}>
+          <div className={`app ${theme} ${language === 'ar' ? 'rtl' : 'ltr'}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <Navigation currentTheme={theme} onThemeChange={setTheme} language={language} toggleLanguage={toggleLanguage} t={t} />
             <Routes>
               <Route path="/" element={<Index language={language} t={t} />} />
