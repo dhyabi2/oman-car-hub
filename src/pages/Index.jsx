@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Input } from "@/components/ui/input";
 import { carBrands } from '../utils/carData';
-import { getAllCars } from '../utils/indexedDB';
+import { getCarStatistics } from '../utils/indexedDB';
 import { QuickStats, BrandSelector, ModelSelector, SelectedCar, LatestCar, SellYourCar } from './IndexComponents';
 
 const Index = ({ language, t }) => {
@@ -14,7 +10,15 @@ const Index = ({ language, t }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredBrands, setFilteredBrands] = useState(carBrands);
   const [latestCar, setLatestCar] = useState(null);
-  const [stats, setStats] = useState({ totalListings: 0, activeSellers: 0, averagePrice: 0 });
+  const [stats, setStats] = useState({
+    totalListings: 0,
+    activeSellers: 0,
+    averagePrice: 0,
+    mostPopularBrand: '',
+    mostExpensiveCar: '',
+    newestListing: '',
+    totalValue: 0
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,13 +30,9 @@ const Index = ({ language, t }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const allCars = await getAllCars();
-      setLatestCar(allCars[allCars.length - 1]);
-      setStats({
-        totalListings: allCars.length,
-        activeSellers: new Set(allCars.map(car => car.seller_id)).size,
-        averagePrice: Math.round(allCars.reduce((sum, car) => sum + car.price, 0) / allCars.length)
-      });
+      const statistics = await getCarStatistics();
+      setStats(statistics);
+      setLatestCar(statistics.latestCar);
     };
     fetchData();
   }, []);

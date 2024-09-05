@@ -53,3 +53,32 @@ export async function setLanguage(language) {
   const db = await initDB();
   return db.put(settingsStoreName, { key: 'language', value: language });
 }
+
+export async function getCarStatistics() {
+  const allCars = await getAllCars();
+  
+  const totalListings = allCars.length;
+  const activeSellers = new Set(allCars.map(car => car.seller_id)).size;
+  const totalValue = allCars.reduce((sum, car) => sum + car.price, 0);
+  const averagePrice = totalListings > 0 ? Math.round(totalValue / totalListings) : 0;
+  
+  const brandCounts = allCars.reduce((acc, car) => {
+    acc[car.make] = (acc[car.make] || 0) + 1;
+    return acc;
+  }, {});
+  const mostPopularBrand = Object.entries(brandCounts).reduce((a, b) => a[1] > b[1] ? a : b)[0];
+  
+  const mostExpensiveCar = allCars.reduce((max, car) => max.price > car.price ? max : car, allCars[0]);
+  const newestListing = allCars.reduce((newest, car) => newest.id > car.id ? newest : car, allCars[0]);
+  
+  return {
+    totalListings,
+    activeSellers,
+    averagePrice,
+    mostPopularBrand,
+    mostExpensiveCar: mostExpensiveCar ? `${mostExpensiveCar.year} ${mostExpensiveCar.make} ${mostExpensiveCar.model}` : '',
+    newestListing: newestListing ? `${newestListing.year} ${newestListing.make} ${newestListing.model}` : '',
+    totalValue,
+    latestCar: newestListing
+  };
+}

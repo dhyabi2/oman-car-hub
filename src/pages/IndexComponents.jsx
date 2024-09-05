@@ -5,15 +5,22 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 
 export const QuickStats = ({ stats, t }) => (
-  <div className="grid grid-cols-3 gap-4 mb-8">
-    {Object.entries(stats).map(([key, value]) => (
-      <Card key={key}>
-        <CardContent className="p-4 text-center">
-          <h3 className="text-lg font-semibold">{t[key]}</h3>
-          <p className="text-3xl font-bold">{value}</p>
-        </CardContent>
-      </Card>
-    ))}
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    {Object.entries(stats).map(([key, value]) => {
+      if (key === 'latestCar') return null; // Skip latestCar as it's not a statistic
+      return (
+        <Card key={key}>
+          <CardContent className="p-4 text-center">
+            <h3 className="text-lg font-semibold">{t[key] || key}</h3>
+            <p className="text-2xl font-bold">
+              {key === 'averagePrice' || key === 'totalValue' 
+                ? `${value.toLocaleString()} OMR` 
+                : value}
+            </p>
+          </CardContent>
+        </Card>
+      );
+    })}
   </div>
 );
 
