@@ -201,6 +201,11 @@ const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange }) => (
 const CarCard = ({ car, onViewDetails }) => (
   <Card className="overflow-hidden">
     <CardContent className="p-4">
+      <h2 className="text-xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
+      <p className="text-gray-600 mb-2">Price: {car.price} OMR</p>
+      <p className="text-gray-600 mb-2">Mileage: {car.mileage} km</p>
+      <p className="text-gray-600 mb-2">Transmission: {car.transmission}</p>
+      <p className="text-gray-600 mb-2">Fuel Type: {car.fuel_type}</p>
       <div className="flex flex-wrap gap-2 mb-4">
         {car.photos.slice(0, 4).map((photo, index) => (
           <img
@@ -216,11 +221,6 @@ const CarCard = ({ car, onViewDetails }) => (
           </div>
         )}
       </div>
-      <h2 className="text-xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
-      <p className="text-gray-600 mb-2">Price: {car.price} OMR</p>
-      <p className="text-gray-600 mb-2">Mileage: {car.mileage} km</p>
-      <p className="text-gray-600 mb-2">Transmission: {car.transmission}</p>
-      <p className="text-gray-600 mb-2">Fuel Type: {car.fuel_type}</p>
       <Button className="w-full mt-2" onClick={() => onViewDetails(car.id)}>View Details</Button>
     </CardContent>
   </Card>
