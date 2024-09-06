@@ -102,6 +102,11 @@ export const translations = {
     contactViaWhatsApp: "Contact via WhatsApp",
     showFilters: "Show Filters",
     hideFilters: "Hide Filters",
+    photos: "Photos",
+    loading: "Loading...",
+    km: "km",
+    cc: "cc",
+    contactSellerWhatsApp: "Contact Seller on WhatsApp",
   },
   ar: {
     appName: "سوق عمان للسيارات",
@@ -206,5 +211,10 @@ export const translations = {
     contactViaWhatsApp: "التواصل عبر واتساب",
     showFilters: "إظهار الفلاتر",
     hideFilters: "إخفاء الفلاتر",
+    photos: "الصور",
+    loading: "جاري التحميل...",
+    km: "كم",
+    cc: "سم³",
+    contactSellerWhatsApp: "تواصل مع البائع عبر واتساب",
   },
 };

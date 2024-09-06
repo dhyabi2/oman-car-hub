@@ -34,7 +34,7 @@ const CarDetails = ({ language, t }) => {
           </div>
           <Description description={carDetails.description} t={t} />
           <AdditionalFeatures features={carDetails.additional_features} t={t} />
-          <ImageGallery photos={carDetails.photos} make={carDetails.make} model={carDetails.model} />
+          <ImageGallery photos={carDetails.photos} make={carDetails.make} model={carDetails.model} t={t} />
           <ContactButton phone={carDetails.contact_phone} t={t} />
         </CardContent>
       </Card>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const ImageGallery = ({ photos, make, model }) => {
+const ImageGallery = ({ photos, make, model, t }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const openImage = (image) => setSelectedImage(image);
@@ -10,7 +10,7 @@ const ImageGallery = ({ photos, make, model }) => {
 
   return (
     <div className="mt-6">
-      <h2 className="text-xl font-semibold mb-4">Photos</h2>
+      <h2 className="text-xl font-semibold mb-4">{t.photos}</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {photos && photos.map((photo, index) => (
           <img
