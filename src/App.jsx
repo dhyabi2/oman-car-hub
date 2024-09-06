@@ -3,7 +3,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getLanguage, setLanguage, incrementCurrentViewers, decrementCurrentViewers, getTheme, setTheme } from "./utils/indexedDB";
+import { v4 as uuidv4 } from 'uuid';
+import { incrementCurrentViewers, decrementCurrentViewers } from "./utils/indexedDB";
 import { translations } from "./utils/translations";
 import Navigation from "./components/Navigation";
 import Index from "./pages/Index";
@@ -18,24 +19,36 @@ const queryClient = new QueryClient();
 const App = () => {
   const [theme, setThemeState] = useState('light');
   const [language, setLanguageState] = useState('ar');
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     document.body.className = theme;
   }, [theme]);
 
   useEffect(() => {
-    const fetchLanguageAndTheme = async () => {
-      let lang = await getLanguage();
-      if (!lang) {
-        lang = 'ar';
-        await setLanguage(lang);
+    const fetchUserIdAndSettings = async () => {
+      let storedUserId = localStorage.getItem('userId');
+      if (!storedUserId) {
+        storedUserId = uuidv4();
+        localStorage.setItem('userId', storedUserId);
       }
-      setLanguageState(lang);
-      const savedTheme = await getTheme();
-      setThemeState(savedTheme);
-    };
-    fetchLanguageAndTheme();
+      setUserId(storedUserId);
 
+      try {
+        const response = await fetch(`/api/settings/${storedUserId}`);
+        if (response.ok) {
+          const settings = await response.json();
+          setThemeState(settings.theme || 'light');
+          setLanguageState(settings.language || 'ar');
+        } else {
+          console.error('Failed to fetch user settings');
+        }
+      } catch (error) {
+        console.error('Error fetching user settings:', error);
+      }
+    };
+
+    fetchUserIdAndSettings();
     incrementCurrentViewers();
 
     return () => {
@@ -43,15 +56,38 @@ const App = () => {
     };
   }, []);
 
+  const updateUserSettings = async (newTheme, newLanguage) => {
+    if (!userId) return;
+
+    try {
+      const response = await fetch(`/api/settings/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          theme: newTheme,
+          language: newLanguage,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update user settings');
+      }
+    } catch (error) {
+      console.error('Error updating user settings:', error);
+    }
+  };
+
   const toggleLanguage = async () => {
     const newLanguage = language === 'en' ? 'ar' : 'en';
-    await setLanguage(newLanguage);
     setLanguageState(newLanguage);
+    await updateUserSettings(theme, newLanguage);
   };
 
   const changeTheme = async (newTheme) => {
-    await setTheme(newTheme);
     setThemeState(newTheme);
+    await updateUserSettings(newTheme, language);
   };
 
   const t = translations[language] || translations['ar'];
