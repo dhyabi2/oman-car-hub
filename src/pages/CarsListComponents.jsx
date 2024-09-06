@@ -81,11 +81,11 @@ export const CarCard = ({ car, onViewDetails, language }) => (
         <p className="flex items-center"><Calendar className="mr-1" /> {car.year}</p>
       </div>
       <div className="flex space-x-2">
-        <Button className="flex-1 flex items-center justify-center" onClick={() => window.open(`https://wa.me/${car.contact_phone}`, '_blank')}>
+        <Button className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600" onClick={() => window.open(`https://wa.me/${car.contact_phone}`, '_blank')}>
           <MessageCircle className="mr-2" />
           WhatsApp
         </Button>
-        <Button className="flex-1 flex items-center justify-center" onClick={() => window.open(`tel:${car.contact_phone}`)}>
+        <Button className="flex-1 flex items-center justify-center bg-blue-500 hover:bg-blue-600" onClick={() => window.open(`tel:${car.contact_phone}`)}>
           <Phone className="mr-2" />
           Call
         </Button>
