@@ -10,7 +10,32 @@ To run this API, you'll need Node.js and Express.js installed. Install the follo
 npm install express body-parser cors
 ```
 
-## API Script
+## API Endpoints
+
+### Cars
+- `POST /api/cars`: Add a new car
+- `GET /api/cars`: Get all cars
+- `GET /api/cars/:id`: Get a specific car
+- `PUT /api/cars/:id`: Update a specific car
+- `DELETE /api/cars/:id`: Delete a specific car
+
+### User Settings
+- `GET /api/settings/:userId`: Get settings for a specific user
+- `PUT /api/settings/:userId`: Update settings for a specific user
+
+### Stats
+- `GET /api/stats/currentViewers`: Get current viewers count
+- `POST /api/stats/incrementViewers`: Increment viewers count
+- `POST /api/stats/decrementViewers`: Decrement viewers count
+- `GET /api/stats`: Get all statistics
+
+### Favorites
+- `POST /api/favorites/:carId`: Toggle favorite status for a car
+- `GET /api/favorites`: Get all favorite cars
+- `DELETE /api/favorites/:carId`: Remove a car from favorites
+- `GET /api/favorites/:carId`: Check if a car is favorited
+
+## API Implementation
 
 ```javascript
 const express = require("express");
@@ -57,6 +82,7 @@ function saveData() {
   );
 }
 
+// Car endpoints
 app.post("/api/cars", (req, res) => {
   const newCar = { ...req.body, id: Date.now() };
   cars.push(newCar);
@@ -93,17 +119,19 @@ app.delete("/api/cars/:id", (req, res) => {
   }
 });
 
-app.get("/api/settings/:key", (req, res) => {
-  const value = settings[req.params.key];
-  value !== undefined ? res.json({ value }) : res.status(404).json({ message: "Setting not found" });
+// User Settings endpoints
+app.get("/api/settings/:userId", (req, res) => {
+  const userSettings = settings[req.params.userId] || { theme: "light", language: "en" };
+  res.json(userSettings);
 });
 
-app.put("/api/settings/:key", (req, res) => {
-  settings[req.params.key] = req.body.value;
+app.put("/api/settings/:userId", (req, res) => {
+  settings[req.params.userId] = req.body;
   saveData();
-  res.json({ key: req.params.key, value: req.body.value });
+  res.json(settings[req.params.userId]);
 });
 
+// Stats endpoints
 app.get("/api/stats/currentViewers", (req, res) => res.json({ currentViewers: stats.currentViewers }));
 
 app.post("/api/stats/incrementViewers", (req, res) => {
@@ -143,6 +171,7 @@ app.get("/api/stats", (req, res) => {
   });
 });
 
+// Favorites endpoints
 app.post("/api/favorites/:carId", (req, res) => {
   const carId = parseInt(req.params.carId);
   const index = favorites.findIndex(f => f.id === carId);
@@ -185,31 +214,6 @@ app.listen(port, "0.0.0.0", () => {
 });
 ```
 
-## API Endpoints
-
-### Cars
-- `POST /api/cars`: Add a new car
-- `GET /api/cars`: Get all cars
-- `GET /api/cars/:id`: Get a specific car
-- `PUT /api/cars/:id`: Update a specific car
-- `DELETE /api/cars/:id`: Delete a specific car
-
-### Settings
-- `GET /api/settings/:key`: Get a specific setting
-- `PUT /api/settings/:key`: Update a specific setting
-
-### Stats
-- `GET /api/stats/currentViewers`: Get current viewers count
-- `POST /api/stats/incrementViewers`: Increment viewers count
-- `POST /api/stats/decrementViewers`: Decrement viewers count
-- `GET /api/stats`: Get all statistics
-
-### Favorites
-- `POST /api/favorites/:carId`: Toggle favorite status for a car
-- `GET /api/favorites`: Get all favorite cars
-- `DELETE /api/favorites/:carId`: Remove a car from favorites
-- `GET /api/favorites/:carId`: Check if a car is favorited
-
 ## Usage
 
-Update your frontend code to make HTTP requests to these endpoints instead of using IndexedDB or localStorage.
+Update your frontend code to make HTTP requests to these endpoints instead of using IndexedDB or localStorage. Ensure to include the user ID when making requests to the settings endpoints.
