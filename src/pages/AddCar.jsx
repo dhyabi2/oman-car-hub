@@ -44,7 +44,26 @@ const AddCar = ({ language, t }) => {
     if (!validateForm()) return;
 
     try {
-      await addCar(formData);
+      // Convert photos to base64 strings
+      const photosPromises = formData.photos.map(photo => 
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(photo);
+        })
+      );
+      const photoBase64Strings = await Promise.all(photosPromises);
+
+      // Prepare the car data object
+      const carData = {
+        ...formData,
+        photos: photoBase64Strings,
+        listing_expiration_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+      };
+
+      // Send the car data to the API
+      await addCar(carData);
       toast.success(t.carListingAddedSuccess);
       navigate('/cars-list');
     } catch (error) {
