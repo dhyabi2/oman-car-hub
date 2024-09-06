@@ -7,7 +7,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { translations } from '../utils/translations';
 import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye } from 'lucide-react';
-import { carMakes, carModels } from '../utils/carData';
+import { carMakes, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 
 const getTranslation = (language, key, fallback = key) => {
   return translations[language]?.[key] || fallback;
@@ -75,7 +75,7 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language 
       </CardTitle>
     </CardHeader>
     <CardContent>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <FilterSelect
           label={getTranslation(language, 'make', 'Make')}
           value={filters.make}
@@ -108,14 +108,32 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language 
         <FilterSelect
           label={getTranslation(language, 'transmission', 'Transmission')}
           value={filters.transmission}
-          options={['all', 'Automatic', 'Manual', 'CVT']}
+          options={['all', ...transmissionTypes]}
           onChange={(value) => onFilterChange('transmission', value)}
         />
         <FilterSelect
           label={getTranslation(language, 'fuelType', 'Fuel Type')}
           value={filters.fuelType}
-          options={['all', 'Petrol', 'Diesel', 'Electric', 'Hybrid']}
+          options={['all', ...fuelTypes]}
           onChange={(value) => onFilterChange('fuelType', value)}
+        />
+        <FilterSelect
+          label={getTranslation(language, 'color', 'Color')}
+          value={filters.color}
+          options={['all', ...colors]}
+          onChange={(value) => onFilterChange('color', value)}
+        />
+        <MileageRangeFilter
+          minMileage={filters.minMileage}
+          maxMileage={filters.maxMileage}
+          onChange={onFilterChange}
+          language={language}
+        />
+        <FilterSelect
+          label={getTranslation(language, 'condition', 'Condition')}
+          value={filters.condition}
+          options={['all', 'New', 'Used']}
+          onChange={(value) => onFilterChange('condition', value)}
         />
       </div>
     </CardContent>
@@ -184,6 +202,30 @@ const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange, langua
     <div className="flex justify-between mt-2">
       <span>{minPrice} OMR</span>
       <span>{maxPrice} OMR</span>
+    </div>
+  </div>
+);
+
+const MileageRangeFilter = ({ minMileage, maxMileage, onChange, language }) => (
+  <div>
+    <Label className="flex items-center">
+      <Car className="mr-2" />
+      {getTranslation(language, 'mileageRange', 'Mileage Range')} (km)
+    </Label>
+    <div className="flex items-center space-x-2">
+      <Input
+        type="number"
+        value={minMileage}
+        onChange={(e) => onChange('minMileage', parseInt(e.target.value))}
+        className="w-24"
+      />
+      <span>{getTranslation(language, 'to', 'to')}</span>
+      <Input
+        type="number"
+        value={maxMileage}
+        onChange={(e) => onChange('maxMileage', parseInt(e.target.value))}
+        className="w-24"
+      />
     </div>
   </div>
 );

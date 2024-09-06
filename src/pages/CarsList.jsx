@@ -6,7 +6,6 @@ import { getAllCars } from '../utils/indexedDB';
 import { NoCarsList, CarCard, FiltersCard } from './CarsListComponents';
 import { translations } from '../utils/translations';
 
-// Helper function to safely access translations
 const getTranslation = (language, key, fallback = key) => {
   return translations[language]?.[key] || fallback;
 };
@@ -29,6 +28,10 @@ const CarsList = ({ language = 'en' }) => {
     maxPrice: 100000,
     transmission: 'all',
     fuelType: 'all',
+    color: 'all',
+    minMileage: 0,
+    maxMileage: 1000000,
+    condition: 'all',
   });
 
   useEffect(() => {
@@ -36,6 +39,13 @@ const CarsList = ({ language = 'en' }) => {
       const allCars = await getAllCars();
       setCars(allCars);
       setFilteredCars(allCars);
+      const maxPrice = Math.max(...allCars.map(car => car.price), 100000);
+      const maxMileage = Math.max(...allCars.map(car => car.mileage), 1000000);
+      setFilters(prev => ({
+        ...prev,
+        maxPrice,
+        maxMileage,
+      }));
     };
     fetchCars();
   }, []);
@@ -49,7 +59,11 @@ const CarsList = ({ language = 'en' }) => {
       car.price >= filters.minPrice &&
       car.price <= filters.maxPrice &&
       (filters.transmission === 'all' || car.transmission === filters.transmission) &&
-      (filters.fuelType === 'all' || car.fuel_type === filters.fuelType)
+      (filters.fuelType === 'all' || car.fuel_type === filters.fuelType) &&
+      (filters.color === 'all' || car.color === filters.color) &&
+      car.mileage >= filters.minMileage &&
+      car.mileage <= filters.maxMileage &&
+      (filters.condition === 'all' || car.condition === filters.condition)
     );
     setFilteredCars(filtered);
   }, [filters, cars, language]);
