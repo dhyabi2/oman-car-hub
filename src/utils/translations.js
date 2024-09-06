@@ -100,6 +100,8 @@ export const translations = {
     listingExpirationDate: "Listing Expiration Date",
     uploadPhotos: "Upload Photos",
     contactViaWhatsApp: "Contact via WhatsApp",
+    showFilters: "Show Filters",
+    hideFilters: "Hide Filters",
   },
   ar: {
     appName: "سوق عمان للسيارات",
@@ -202,5 +204,7 @@ export const translations = {
     listingExpirationDate: "تاريخ انتهاء الإعلان",
     uploadPhotos: "تحميل الصور",
     contactViaWhatsApp: "التواصل عبر واتساب",
+    showFilters: "إظهار الفلاتر",
+    hideFilters: "إخفاء الفلاتر",
   },
 };
