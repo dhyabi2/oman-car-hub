@@ -3,10 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye } from 'lucide-react';
-import { carMakes, carModels, colors, fuelTypes, transmissionTypes, locations } from '../utils/carData';
+import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye, Phone, MessageCircle } from 'lucide-react';
+import { carMakes, carModels, fuelTypes, transmissionTypes } from '../utils/carData';
 import { translations } from '../utils/translations';
 
 const getTranslation = (language, key, fallback = key) => {
@@ -80,6 +79,16 @@ export const CarCard = ({ car, onViewDetails, language }) => (
         <p className="flex items-center"><Sliders className="mr-1" /> {car.transmission}</p>
         <p className="flex items-center"><Fuel className="mr-1" /> {car.fuel_type}</p>
         <p className="flex items-center"><Calendar className="mr-1" /> {car.year}</p>
+      </div>
+      <div className="flex space-x-2">
+        <Button className="flex-1 flex items-center justify-center" onClick={() => window.open(`https://wa.me/${car.contact_phone}`, '_blank')}>
+          <MessageCircle className="mr-2" />
+          WhatsApp
+        </Button>
+        <Button className="flex-1 flex items-center justify-center" onClick={() => window.open(`tel:${car.contact_phone}`)}>
+          <Phone className="mr-2" />
+          Call
+        </Button>
       </div>
       <Button className="w-full mt-2 flex items-center justify-center" onClick={() => onViewDetails(car.id)}>
         <Eye className="mr-2" />
