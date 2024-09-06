@@ -68,72 +68,62 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
   };
 
   return (
-    <>
-      <nav className={`p-4 flex justify-between items-center ${getHeaderClass()}`}>
-        <Link to="/" className="text-xl font-bold">{t.appName}</Link>
-        <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
-            <Globe className="h-4 w-4" />
+    <nav className={`p-4 flex justify-between items-center ${getHeaderClass()}`}>
+      <Link to="/" className="text-xl font-bold">{t.appName}</Link>
+      <div className="flex items-center space-x-4">
+        <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
+          <Globe className="h-4 w-4" />
+        </Button>
+        <Link to="/favorite">
+          <Button variant="ghost" size="icon" className="text-current">
+            <Heart className="h-4 w-4" />
           </Button>
-          <Link to="/favorite">
-            <Button variant="ghost" size="icon" className="text-current">
-              <Heart className="h-4 w-4" />
-            </Button>
-          </Link>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-current">
-                {currentThemeIcon}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              {themes.map((theme) => (
-                <DropdownMenuItem key={theme.value} onSelect={() => onThemeChange(theme.value)}>
-                  <div className="flex items-center">
-                    {theme.icon}
-                    <span className="ml-2">{t[theme.name]}</span>
-                  </div>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-current">
-                <Menu className="h-6 w-6" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className={`w-[300px] sm:w-[400px] ${getHeaderClass()}`}>
-              <nav className="flex flex-col space-y-6 mt-8">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.to}
-                    to={item.to}
-                    className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
-                      location.pathname === item.to
-                        ? 'bg-primary text-primary-foreground'
-                        : 'hover:bg-secondary hover:text-secondary-foreground'
-                    }`}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {item.icon}
-                    <span className="text-lg">{t[item.title.toLowerCase()] || t[item.to.slice(1)] || item.title}</span>
-                  </Link>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </nav>
-      {location.pathname === '/' && (
-        <Link
-          to="/add-car"
-          className="fixed bottom-16 right-8 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-4 shadow-lg transition-colors duration-200 z-50"
-        >
-          {t.addCar}
         </Link>
-      )}
-    </>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="text-current">
+              {currentThemeIcon}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {themes.map((theme) => (
+              <DropdownMenuItem key={theme.value} onSelect={() => onThemeChange(theme.value)}>
+                <div className="flex items-center">
+                  {theme.icon}
+                  <span className="ml-2">{t[theme.name]}</span>
+                </div>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="text-current">
+              <Menu className="h-6 w-6" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className={`w-[300px] sm:w-[400px] ${getHeaderClass()}`}>
+            <nav className="flex flex-col space-y-6 mt-8">
+              {navItems.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
+                    location.pathname === item.to
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-secondary hover:text-secondary-foreground'
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.icon}
+                  <span className="text-lg">{t[item.title.toLowerCase()] || t[item.to.slice(1)] || item.title}</span>
+                </Link>
+              ))}
+            </nav>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </nav>
   );
 };
 
