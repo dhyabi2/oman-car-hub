@@ -7,6 +7,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye } from 'lucide-react';
 import { carMakes, carModels, colors, fuelTypes, transmissionTypes, locations } from '../utils/carData';
+import { translations } from '../utils/translations';
 
 const getTranslation = (language, key, fallback = key) => {
   return translations[language]?.[key] || fallback;
@@ -42,27 +43,31 @@ export const CarCard = ({ car, onViewDetails, language }) => (
         <Fuel className="mr-1" /> 
         {getTranslation(language, 'fuelType', 'Fuel Type')}: {car.fuel_type}
       </p>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {car.photos.slice(0, 4).map((photo, index) => (
-          <img
-            key={index}
-            src={photo}
-            alt={`${car.make} ${car.model}`}
-            className="w-16 h-16 object-cover rounded"
-          />
-        ))}
-        {car.photos.length > 4 && (
-          <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center text-sm font-semibold">
-            +{car.photos.length - 4}
-          </div>
-        )}
-      </div>
+      <CarImages car={car} />
       <Button className="w-full mt-2 flex items-center justify-center" onClick={() => onViewDetails(car.id)}>
         <Eye className="mr-2" />
         {getTranslation(language, 'viewDetails', 'View Details')}
       </Button>
     </CardContent>
   </Card>
+);
+
+const CarImages = ({ car }) => (
+  <div className="flex flex-wrap gap-2 mb-4">
+    {car.photos.slice(0, 4).map((photo, index) => (
+      <img
+        key={index}
+        src={photo}
+        alt={`${car.make} ${car.model}`}
+        className="w-16 h-16 object-cover rounded"
+      />
+    ))}
+    {car.photos.length > 4 && (
+      <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center text-sm font-semibold">
+        +{car.photos.length - 4}
+      </div>
+    )}
+  </div>
 );
 
 export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language }) => (
