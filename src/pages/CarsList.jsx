@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { carMakes, carModels } from '../utils/carData';
 import { getAllCars } from '../utils/indexedDB';
 import { NoCarsList, CarCard, FiltersCard } from './CarsListComponents';
 import { translations } from '../utils/translations';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const getTranslation = (language, key, fallback = key) => {
   return translations[language]?.[key] || fallback;
@@ -19,6 +22,7 @@ const CarsList = ({ language = 'en' }) => {
 
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [filters, setFilters] = useState({
     make: initialMake,
     model: initialModel,
@@ -90,18 +94,39 @@ const CarsList = ({ language = 'en' }) => {
     navigate(`/car/${carId}`);
   };
 
+  const toggleFilters = () => {
+    setIsFiltersOpen(!isFiltersOpen);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">{getTranslation(language, 'carsList', 'Cars List')}</h1>
       
-      <FiltersCard
-        filters={filters}
-        carMakes={[getTranslation(language, 'allMakes', 'All Makes'), ...carMakes]}
-        carModels={filters.make === getTranslation(language, 'allMakes', 'All Makes') ? [getTranslation(language, 'allModels', 'All Models')] : [getTranslation(language, 'allModels', 'All Models'), ...(carModels[filters.make] || [])]}
-        maxPriceInData={Math.max(...cars.map(car => car.price), 100000)}
-        onFilterChange={handleFilterChange}
-        language={language}
-      />
+      <Collapsible open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
+        <CollapsibleTrigger asChild>
+          <Button variant="outline" className="mb-4 w-full">
+            {isFiltersOpen ? (
+              <>
+                {getTranslation(language, 'hideFilters', 'Hide Filters')} <ChevronUp className="ml-2" />
+              </>
+            ) : (
+              <>
+                {getTranslation(language, 'showFilters', 'Show Filters')} <ChevronDown className="ml-2" />
+              </>
+            )}
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <FiltersCard
+            filters={filters}
+            carMakes={[getTranslation(language, 'allMakes', 'All Makes'), ...carMakes]}
+            carModels={filters.make === getTranslation(language, 'allMakes', 'All Makes') ? [getTranslation(language, 'allModels', 'All Models')] : [getTranslation(language, 'allModels', 'All Models'), ...(carModels[filters.make] || [])]}
+            maxPriceInData={Math.max(...cars.map(car => car.price), 100000)}
+            onFilterChange={handleFilterChange}
+            language={language}
+          />
+        </CollapsibleContent>
+      </Collapsible>
 
       <ScrollArea className="h-[calc(100vh-20rem)]">
         {filteredCars.length > 0 ? (
