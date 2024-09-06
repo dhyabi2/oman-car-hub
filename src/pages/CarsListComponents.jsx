@@ -58,7 +58,7 @@ export const NoCarsList = ({ language }) => (
     <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center">
       <AlertCircle className="mr-2" />
       {getTranslation(language, 'noCarsFound', 'No Cars Found')}
-    </2>
+    </h2>
     <p>{getTranslation(language, 'tryDifferentFilters', 'Try adjusting your filters or search criteria')}</p>
   </div>
 );
