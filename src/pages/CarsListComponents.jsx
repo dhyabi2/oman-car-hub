@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye, Phone, MessageCircle, Heart } from 'lucide-react';
 import { carMakes, carModels, fuelTypes, transmissionTypes } from '../utils/carData';
 import { translations } from '../utils/translations';
-import { toggleFavoriteCar } from '../utils/indexedDB';
 
 const getTranslation = (language, key, fallback = key) => {
   return translations[language]?.[key] || fallback;

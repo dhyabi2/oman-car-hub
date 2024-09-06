@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { motion } from "framer-motion";
 import { carMakes, carModels } from '../utils/carData';
-import { getAllCars } from '../utils/indexedDB';
+import { getAllCars, toggleFavoriteCar, isFavoriteCar } from '../utils/indexedDB';
 import { NoCarsList, CarCard, FiltersCard } from './CarsListComponents';
 import { translations } from '../utils/translations';
 import { ChevronDown, ChevronUp } from 'lucide-react';
@@ -23,6 +23,7 @@ const CarsList = ({ language = 'en' }) => {
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [favorites, setFavorites] = useState({});
   const [filters, setFilters] = useState({
     make: initialMake,
     model: initialModel,
@@ -54,6 +55,13 @@ const CarsList = ({ language = 'en' }) => {
         maxPrice,
         maxMileage,
       }));
+
+      // Fetch favorite status for each car
+      const favoritesStatus = {};
+      for (const car of allCars) {
+        favoritesStatus[car.id] = await isFavoriteCar(car.id);
+      }
+      setFavorites(favoritesStatus);
     };
     fetchCars();
   }, []);
@@ -96,6 +104,14 @@ const CarsList = ({ language = 'en' }) => {
 
   const toggleFilters = () => {
     setIsFiltersOpen(!isFiltersOpen);
+  };
+
+  const handleToggleFavorite = async (carId) => {
+    const newFavoriteStatus = await toggleFavoriteCar(carId);
+    setFavorites(prev => ({
+      ...prev,
+      [carId]: newFavoriteStatus
+    }));
   };
 
   return (
@@ -146,6 +162,8 @@ const CarsList = ({ language = 'en' }) => {
                 car={car} 
                 onViewDetails={handleViewDetails}
                 language={language}
+                isFavorite={favorites[car.id]}
+                onToggleFavorite={handleToggleFavorite}
               />
             </motion.div>
           ))}
