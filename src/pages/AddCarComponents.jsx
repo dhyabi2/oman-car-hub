@@ -3,10 +3,18 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { carMakes, carModels, locations, fuelTypes, transmissionTypes } from '../utils/carData';
 import { getNestedTranslation } from '../utils/translations';
 
-// ... other existing imports and components ...
+export const FormSection = ({ title, children }) => (
+  <div className="mb-6">
+    <h3 className="text-lg font-semibold mb-3">{title}</h3>
+    <div className="space-y-4">
+      {children}
+    </div>
+  </div>
+);
 
 export const ListingDetails = ({ formData, handleInputChange, t }) => {
   const handlePhoneChange = (e) => {
@@ -55,8 +63,6 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => {
     </FormSection>
   );
 };
-
-// ... other existing components ...
 
 export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => (
   <>
@@ -125,4 +131,52 @@ export const FuelTypeSelector = ({ value, onChange, t }) => (
   </div>
 );
 
-// ... other existing components ...
+export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
+  <FormSection title={t.additionalInformation}>
+    <div>
+      <Label htmlFor="description">{t.description}</Label>
+      <Textarea
+        id="description"
+        value={formData.description}
+        onChange={(e) => handleInputChange('description', e.target.value)}
+        rows={4}
+      />
+    </div>
+    <div>
+      <Label htmlFor="additional_features">{t.additionalFeatures}</Label>
+      <Textarea
+        id="additional_features"
+        value={formData.additional_features}
+        onChange={(e) => handleInputChange('additional_features', e.target.value)}
+        rows={4}
+      />
+    </div>
+  </FormSection>
+);
+
+export const PhotoUpload = ({ photos, handlePhotoUpload, t }) => (
+  <FormSection title={t.photos}>
+    <div>
+      <Label htmlFor="photos">{t.uploadPhotos}</Label>
+      <Input
+        id="photos"
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={(e) => handlePhotoUpload(Array.from(e.target.files))}
+      />
+    </div>
+    {photos.length > 0 && (
+      <div className="grid grid-cols-3 gap-4 mt-4">
+        {photos.map((photo, index) => (
+          <img
+            key={index}
+            src={URL.createObjectURL(photo)}
+            alt={`Car photo ${index + 1}`}
+            className="w-full h-32 object-cover rounded"
+          />
+        ))}
+      </div>
+    )}
+  </FormSection>
+);
