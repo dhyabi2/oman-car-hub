@@ -94,11 +94,11 @@ export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavo
       <div className="flex flex-col space-y-2">
         <Button className="w-full bg-green-500 hover:bg-green-600 text-white" onClick={() => window.open(`https://wa.me/${car.contact_phone}`, '_blank')}>
           <MessageCircle className="mr-2" />
-          {getTranslation(language, 'contactWhatsApp', 'Contact on WhatsApp')}
+          {getTranslation(language, 'whatsappButton', 'WhatsApp')}
         </Button>
         <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white" onClick={() => window.open(`tel:${car.contact_phone}`)}>
           <Phone className="mr-2" />
-          {getTranslation(language, 'call', 'Call')}
+          {getTranslation(language, 'callButton', 'Call')}
         </Button>
         <Button className="w-full" onClick={() => onViewDetails(car.id)}>
           <Eye className="mr-2" />

@@ -28,7 +28,6 @@ export const translations = {
     currentViewers: "Current Viewers",
     make: "Make",
     year: "Year",
-    
     mileage: "Mileage",
     transmission: "Transmission",
     fuelType: "Fuel Type",
@@ -112,6 +111,8 @@ export const translations = {
     favoriteCars: "Favorite Cars",
     remove: "Remove",
     noFavoriteCars: "You haven't added any cars to your favorites yet.",
+    whatsappButton: "WhatsApp",
+    callButton: "Call",
   },
   ar: {
     appName: "سوق عمان للسيارات",
@@ -225,5 +226,7 @@ export const translations = {
     favoriteCars: "السيارات المفضلة",
     remove: "إزالة",
     noFavoriteCars: "لم تقم بإضافة أي سيارات إلى المفضلة بعد.",
+    whatsappButton: "واتساب",
+    callButton: "اتصال",
   },
 };
