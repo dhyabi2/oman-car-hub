@@ -46,28 +46,39 @@ const fs = require("fs");
 const app = express();
 const port = 443;
 
+// Enable CORS for all origins
 app.use(cors({ origin: "*", credentials: true }));
+
+// Increase the limit for the JSON bodies
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-let cars = [], settings = {}, stats = { currentViewers: 0 }, favorites = [];
+// In-memory storage (replace with a database in production)
+let cars = [];
+let settings = {};
+let stats = { currentViewers: 0 };
+let favorites = [];
 
+// Function to ensure JSON files exist with default content
 const ensureFileExists = (filePath, defaultData) => {
   if (!fs.existsSync(filePath)) {
     fs.writeFileSync(filePath, JSON.stringify(defaultData, null, 2));
   }
 };
 
-["cars.json", "settings.json", "stats.json", "favorites.json"].forEach(file => 
-  ensureFileExists(file, file === "stats.json" ? { currentViewers: 0 } : (file === "settings.json" ? {} : []))
-);
+// Ensure all necessary JSON files exist
+ensureFileExists("cars.json", []);
+ensureFileExists("settings.json", {});
+ensureFileExists("stats.json", { currentViewers: 0 });
+ensureFileExists("favorites.json", []);
 
+// Load initial data from JSON files
 const loadData = (filePath, defaultData) => {
   try {
     return JSON.parse(fs.readFileSync(filePath, "utf8"));
   } catch (error) {
     console.error(`Error loading ${filePath}:`, error);
-    return defaultData;
+    return defaultData; // Return default data if file reading fails
   }
 };
 
@@ -76,10 +87,12 @@ settings = loadData("settings.json", {});
 stats = loadData("stats.json", { currentViewers: 0 });
 favorites = loadData("favorites.json", []);
 
+// Helper function to save data to JSON files
 function saveData() {
-  ["cars", "settings", "stats", "favorites"].forEach(data => 
-    fs.writeFileSync(`${data}.json`, JSON.stringify(eval(data), null, 2))
-  );
+  fs.writeFileSync("cars.json", JSON.stringify(cars, null, 2));
+  fs.writeFileSync("settings.json", JSON.stringify(settings, null, 2));
+  fs.writeFileSync("stats.json", JSON.stringify(stats, null, 2));
+  fs.writeFileSync("favorites.json", JSON.stringify(favorites, null, 2));
 }
 
 // Car endpoints
@@ -90,15 +103,21 @@ app.post("/api/cars", (req, res) => {
   res.status(201).json(newCar);
 });
 
-app.get("/api/cars", (req, res) => res.json(cars));
+app.get("/api/cars", (req, res) => {
+  res.json(cars);
+});
 
 app.get("/api/cars/:id", (req, res) => {
-  const car = cars.find(c => c.id === parseInt(req.params.id));
-  car ? res.json(car) : res.status(404).json({ message: "Car not found" });
+  const car = cars.find((c) => c.id === parseInt(req.params.id));
+  if (car) {
+    res.json(car);
+  } else {
+    res.status(404).json({ message: "Car not found" });
+  }
 });
 
 app.put("/api/cars/:id", (req, res) => {
-  const index = cars.findIndex(c => c.id === parseInt(req.params.id));
+  const index = cars.findIndex((c) => c.id === parseInt(req.params.id));
   if (index !== -1) {
     cars[index] = { ...cars[index], ...req.body };
     saveData();
@@ -109,7 +128,7 @@ app.put("/api/cars/:id", (req, res) => {
 });
 
 app.delete("/api/cars/:id", (req, res) => {
-  const index = cars.findIndex(c => c.id === parseInt(req.params.id));
+  const index = cars.findIndex((c) => c.id === parseInt(req.params.id));
   if (index !== -1) {
     cars.splice(index, 1);
     saveData();
@@ -119,20 +138,30 @@ app.delete("/api/cars/:id", (req, res) => {
   }
 });
 
-// User Settings endpoints
+// Settings endpoints - now user-specific
 app.get("/api/settings/:userId", (req, res) => {
-  const userSettings = settings[req.params.userId] || { theme: "light", language: "en" };
-  res.json(userSettings);
+  const userSettings = settings[req.params.userId];
+  if (userSettings) {
+    res.json(userSettings);
+  } else {
+    res.status(404).json({ message: "Settings not found for user" });
+  }
 });
 
 app.put("/api/settings/:userId", (req, res) => {
-  settings[req.params.userId] = req.body;
+  const { theme, language } = req.body;
+  settings[req.params.userId] = {
+    theme: theme || settings[req.params.userId]?.theme || "default",
+    language: language || settings[req.params.userId]?.language || "en",
+  };
   saveData();
   res.json(settings[req.params.userId]);
 });
 
 // Stats endpoints
-app.get("/api/stats/currentViewers", (req, res) => res.json({ currentViewers: stats.currentViewers }));
+app.get("/api/stats/currentViewers", (req, res) => {
+  res.json({ currentViewers: stats.currentViewers });
+});
 
 app.post("/api/stats/incrementViewers", (req, res) => {
   stats.currentViewers += 1;
@@ -149,32 +178,50 @@ app.post("/api/stats/decrementViewers", (req, res) => {
 app.get("/api/stats", (req, res) => {
   const allCars = cars;
   const totalListings = allCars.length;
-  const activeSellers = new Set(allCars.map(car => car.seller_id)).size;
+  const activeSellers = new Set(allCars.map((car) => car.seller_id)).size;
   const totalValue = allCars.reduce((sum, car) => sum + car.price, 0);
-  const averagePrice = totalListings > 0 ? Math.round(totalValue / totalListings) : 0;
-  
+  const averagePrice =
+    totalListings > 0 ? Math.round(totalValue / totalListings) : 0;
+
   const brandCounts = allCars.reduce((acc, car) => {
     acc[car.make] = (acc[car.make] || 0) + 1;
     return acc;
   }, {});
-  const mostPopularBrand = Object.entries(brandCounts).reduce((a, b) => a[1] > b[1] ? a : b)[0];
-  
-  const mostExpensiveCar = allCars.reduce((max, car) => max.price > car.price ? max : car, allCars[0]);
-  const newestListing = allCars.reduce((newest, car) => newest.id > car.id ? newest : car, allCars[0]);
+  const mostPopularBrand = Object.entries(brandCounts).reduce((a, b) =>
+    a[1] > b[1] ? a : b,
+  )[0];
 
-  res.json({
-    totalListings, activeSellers, averagePrice, mostPopularBrand,
-    mostExpensiveCar: mostExpensiveCar ? `${mostExpensiveCar.year} ${mostExpensiveCar.make} ${mostExpensiveCar.model}` : "",
-    newestListing: newestListing ? `${newestListing.year} ${newestListing.make} ${newestListing.model}` : "",
+  const mostExpensiveCar = allCars.reduce(
+    (max, car) => (max.price > car.price ? max : car),
+    allCars[0],
+  );
+  const newestListing = allCars.reduce(
+    (newest, car) => (newest.id > car.id ? newest : car),
+    allCars[0],
+  );
+
+  const statistics = {
+    totalListings,
+    activeSellers,
+    averagePrice,
+    mostPopularBrand,
+    mostExpensiveCar: mostExpensiveCar
+      ? `${mostExpensiveCar.year} ${mostExpensiveCar.make} ${mostExpensiveCar.model}`
+      : "",
+    newestListing: newestListing
+      ? `${newestListing.year} ${newestListing.make} ${newestListing.model}`
+      : "",
     latestCar: newestListing,
-    currentViewers: stats.currentViewers
-  });
+    currentViewers: stats.currentViewers,
+  };
+
+  res.json(statistics);
 });
 
 // Favorites endpoints
 app.post("/api/favorites/:carId", (req, res) => {
   const carId = parseInt(req.params.carId);
-  const index = favorites.findIndex(f => f.id === carId);
+  const index = favorites.findIndex((f) => f.id === carId);
   if (index === -1) {
     favorites.push({ id: carId });
     saveData();
@@ -187,13 +234,15 @@ app.post("/api/favorites/:carId", (req, res) => {
 });
 
 app.get("/api/favorites", (req, res) => {
-  const favoriteCars = cars.filter(car => favorites.some(f => f.id === car.id));
+  const favoriteCars = cars.filter((car) =>
+    favorites.some((f) => f.id === car.id),
+  );
   res.json(favoriteCars);
 });
 
 app.delete("/api/favorites/:carId", (req, res) => {
   const carId = parseInt(req.params.carId);
-  const index = favorites.findIndex(f => f.id === carId);
+  const index = favorites.findIndex((f) => f.id === carId);
   if (index !== -1) {
     favorites.splice(index, 1);
     saveData();
@@ -205,13 +254,15 @@ app.delete("/api/favorites/:carId", (req, res) => {
 
 app.get("/api/favorites/:carId", (req, res) => {
   const carId = parseInt(req.params.carId);
-  const isFavorite = favorites.some(f => f.id === carId);
+  const isFavorite = favorites.some((f) => f.id === carId);
   res.json({ isFavorite });
 });
 
+// Create HTTP server
 app.listen(port, "0.0.0.0", () => {
   console.log(`API server running on port ${port}`);
 });
+
 ```
 
 ## Usage
