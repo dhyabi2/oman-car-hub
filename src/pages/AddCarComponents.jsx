@@ -3,16 +3,12 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { carMakes, carModels, locations, fuelTypes, transmissionTypes } from '../utils/carData';
-import { getNestedTranslation } from '../utils/translations';
+import { carMakes, carModels, locations } from '../utils/carData';
 
 export const FormSection = ({ title, children }) => (
-  <div className="mb-6">
-    <h3 className="text-lg font-semibold mb-3">{title}</h3>
-    <div className="space-y-4">
-      {children}
-    </div>
+  <div>
+    <h3 className="text-lg font-semibold mb-4">{title}</h3>
+    <div className="space-y-4">{children}</div>
   </div>
 );
 
@@ -41,9 +37,7 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => {
           </SelectTrigger>
           <SelectContent>
             {locations.map((location) => (
-              <SelectItem key={location} value={location}>
-                {getNestedTranslation(t, location.toLowerCase()) || location}
-              </SelectItem>
+              <SelectItem key={location} value={location}>{t[location.toLowerCase()] || location}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -63,73 +57,6 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => {
     </FormSection>
   );
 };
-
-export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => (
-  <>
-    <div>
-      <Label htmlFor="make">{t.make}</Label>
-      <Select value={make} onValueChange={onMakeChange}>
-        <SelectTrigger>
-          <SelectValue placeholder={t.selectMake} />
-        </SelectTrigger>
-        <SelectContent>
-          {carMakes.map((brand) => (
-            <SelectItem key={brand} value={brand}>{brand}</SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-    <div>
-      <Label htmlFor="model">{t.model}</Label>
-      <Select value={model} onValueChange={onModelChange} disabled={!make}>
-        <SelectTrigger>
-          <SelectValue placeholder={t.selectModel} />
-        </SelectTrigger>
-        <SelectContent>
-          {make && carModels[make]?.map((model) => (
-            <SelectItem key={model} value={model}>{model}</SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-  </>
-);
-
-export const TransmissionSelector = ({ value, onChange, t }) => (
-  <div>
-    <Label htmlFor="transmission">{t.transmission}</Label>
-    <Select value={value} onValueChange={onChange}>
-      <SelectTrigger>
-        <SelectValue placeholder={t.selectTransmission} />
-      </SelectTrigger>
-      <SelectContent>
-        {transmissionTypes.map((type) => (
-          <SelectItem key={type} value={type}>
-            {getNestedTranslation(t, type.toLowerCase()) || type}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  </div>
-);
-
-export const FuelTypeSelector = ({ value, onChange, t }) => (
-  <div>
-    <Label htmlFor="fuelType">{t.fuelType}</Label>
-    <Select value={value} onValueChange={onChange}>
-      <SelectTrigger>
-        <SelectValue placeholder={t.selectFuelType} />
-      </SelectTrigger>
-      <SelectContent>
-        {fuelTypes.map((type) => (
-          <SelectItem key={type} value={type}>
-            {getNestedTranslation(t, type.toLowerCase()) || type}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  </div>
-);
 
 export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
   <FormSection title={t.additionalInformation}>
@@ -179,4 +106,35 @@ export const PhotoUpload = ({ photos, handlePhotoUpload, t }) => (
       </div>
     )}
   </FormSection>
+);
+
+export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => (
+  <>
+    <div>
+      <Label htmlFor="make">{t.make}</Label>
+      <Select value={make} onValueChange={onMakeChange}>
+        <SelectTrigger>
+          <SelectValue placeholder={t.selectMake} />
+        </SelectTrigger>
+        <SelectContent>
+          {carMakes.map((brand) => (
+            <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+    <div>
+      <Label htmlFor="model">{t.model}</Label>
+      <Select value={model} onValueChange={onModelChange} disabled={!make}>
+        <SelectTrigger>
+          <SelectValue placeholder={t.selectModel} />
+        </SelectTrigger>
+        <SelectContent>
+          {make && carModels[make]?.map((model) => (
+            <SelectItem key={model} value={model}>{model}</SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  </>
 );
