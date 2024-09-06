@@ -154,7 +154,7 @@ export const locations = [
   'Al Madina A\'Zarqa', 'Al Mazyona', 'Al Mudhaibi', 'Al Musanaah', 'Al Qabil', 'Al Seeb', 'Al Suwaiq',
   'Bahla', 'Bidbid', 'Bidiyah', 'Daba', 'Duqm', 'Haima', 'Izki', 'Jabrin', 'Jalan Bani Bu Ali',
   'Jalan Bani Bu Hassan', 'Khasab', 'Mahooth', 'Manah', 'Masirah', 'Mhadha', 'Mirbat', 'Mudhaibi',
-  'Mukhaizna', 'Muladdah', 'Musannah', 'Qalhat', 'Quriyat', 'Rakhyut', 'Saham', 'Salalah', 'Samail',
+  'Mukhaizna', 'Muladdah', 'Musannah', 'Qalhat', 'Quriyat', 'Rakhyut', 'Saham', 'Salalah (Dhofar)', 'Samail',
   'Shinas', 'Suhar', 'Suwaiq', 'Taqah', 'Thumrait', 'Wadi Bani Khalid', 'Yanqul'
 ];
 
