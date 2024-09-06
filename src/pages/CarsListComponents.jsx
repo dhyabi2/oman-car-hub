@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye, Phone, MessageCircle, Heart } from 'lucide-react';
+import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye, Phone, MessageCircle, Heart, MapPin } from 'lucide-react';
 import { carMakes, carModels, fuelTypes, transmissionTypes } from '../utils/carData';
 import { translations } from '../utils/translations';
 
@@ -63,8 +63,8 @@ export const NoCarsList = ({ language }) => (
 );
 
 export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavorite }) => (
-  <Card className="overflow-hidden">
-    <div className="relative pb-[75%]">
+  <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="relative pb-[56.25%]">
       <img
         src={car.photos[0]}
         alt={`${car.make} ${car.model}`}
@@ -73,35 +73,38 @@ export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavo
       <Button
         variant="ghost"
         size="icon"
-        className={`absolute top-2 right-2 ${isFavorite ? 'text-red-500' : 'text-gray-500'}`}
+        className={`absolute top-2 right-2 bg-white bg-opacity-70 hover:bg-opacity-100 ${isFavorite ? 'text-red-500' : 'text-gray-500'}`}
         onClick={() => onToggleFavorite(car.id)}
       >
         <Heart className={`h-6 w-6 ${isFavorite ? 'fill-current' : ''}`} />
       </Button>
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+        <h2 className="text-2xl font-bold text-white mb-1">{car.year} {car.make} {car.model}</h2>
+        <p className="text-3xl font-bold text-yellow-400">{car.price} {getTranslation(language, 'currency', 'OMR')}</p>
+      </div>
     </div>
     <CardContent className="p-4">
-      <h2 className="text-2xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
-      <p className="text-3xl font-bold text-red-600 mb-4">{car.price} {getTranslation(language, 'currency', 'OMR')}</p>
-      <div className="grid grid-cols-2 gap-2 mb-4 text-lg">
-        <p className="flex items-center"><Car className="mr-1" /> {car.mileage} km</p>
-        <p className="flex items-center"><Sliders className="mr-1" /> {car.transmission}</p>
-        <p className="flex items-center"><Fuel className="mr-1" /> {car.fuel_type}</p>
-        <p className="flex items-center"><Calendar className="mr-1" /> {car.year}</p>
+      <div className="grid grid-cols-2 gap-2 mb-4 text-sm">
+        <p className="flex items-center"><Car className="mr-1 text-blue-500" /> {car.mileage} km</p>
+        <p className="flex items-center"><Sliders className="mr-1 text-green-500" /> {car.transmission}</p>
+        <p className="flex items-center"><Fuel className="mr-1 text-red-500" /> {car.fuel_type}</p>
+        <p className="flex items-center"><Calendar className="mr-1 text-purple-500" /> {car.year}</p>
+        <p className="flex items-center col-span-2"><MapPin className="mr-1 text-indigo-500" /> {car.location}</p>
       </div>
-      <div className="flex space-x-2">
-        <Button className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600" onClick={() => window.open(`https://wa.me/${car.contact_phone}`, '_blank')}>
+      <div className="flex flex-col space-y-2">
+        <Button className="w-full bg-green-500 hover:bg-green-600 text-white" onClick={() => window.open(`https://wa.me/${car.contact_phone}`, '_blank')}>
           <MessageCircle className="mr-2" />
-          WhatsApp
+          {getTranslation(language, 'contactWhatsApp', 'Contact on WhatsApp')}
         </Button>
-        <Button className="flex-1 flex items-center justify-center bg-blue-500 hover:bg-blue-600" onClick={() => window.open(`tel:${car.contact_phone}`)}>
+        <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white" onClick={() => window.open(`tel:${car.contact_phone}`)}>
           <Phone className="mr-2" />
-          Call
+          {getTranslation(language, 'call', 'Call')}
+        </Button>
+        <Button className="w-full" onClick={() => onViewDetails(car.id)}>
+          <Eye className="mr-2" />
+          {getTranslation(language, 'viewDetails', 'View Details')}
         </Button>
       </div>
-      <Button className="w-full mt-2 flex items-center justify-center" onClick={() => onViewDetails(car.id)}>
-        <Eye className="mr-2" />
-        {getTranslation(language, 'viewDetails', 'View Details')}
-      </Button>
     </CardContent>
   </Card>
 );
