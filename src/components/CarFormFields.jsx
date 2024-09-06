@@ -5,13 +5,13 @@ import { Slider } from "@/components/ui/slider";
 import ImageSelector from './ImageSelector';
 import { Car, Fuel, Palette, Settings, DoorOpen, Users, Compass, CheckCircle } from 'lucide-react';
 
-import { carMakes, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
+import { carBrands, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 
 export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => (
   <>
     <ImageSelector
       label={t.make}
-      options={carMakes.map(make => ({ value: make, icon: <Car size={24} />, label: make }))}
+      options={carBrands.map(brand => ({ value: brand.brand, icon: <img src={brand.logo} alt={brand.brand} className="w-6 h-6 object-contain" />, label: brand.brand }))}
       value={make}
       onChange={onMakeChange}
     />
