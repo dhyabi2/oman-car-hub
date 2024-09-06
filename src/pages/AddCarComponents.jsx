@@ -3,14 +3,10 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { carMakes, carModels, locations } from '../utils/carData';
+import { carMakes, carModels, locations, fuelTypes, transmissionTypes } from '../utils/carData';
+import { getNestedTranslation } from '../utils/translations';
 
-export const FormSection = ({ title, children }) => (
-  <div>
-    <h3 className="text-lg font-semibold mb-4">{title}</h3>
-    <div className="space-y-4">{children}</div>
-  </div>
-);
+// ... other existing imports and components ...
 
 export const ListingDetails = ({ formData, handleInputChange, t }) => {
   const handlePhoneChange = (e) => {
@@ -37,7 +33,9 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => {
           </SelectTrigger>
           <SelectContent>
             {locations.map((location) => (
-              <SelectItem key={location} value={location}>{t[location.toLowerCase()] || location}</SelectItem>
+              <SelectItem key={location} value={location}>
+                {getNestedTranslation(t, location.toLowerCase()) || location}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -58,55 +56,7 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => {
   );
 };
 
-export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
-  <FormSection title={t.additionalInformation}>
-    <div>
-      <Label htmlFor="description">{t.description}</Label>
-      <Textarea
-        id="description"
-        value={formData.description}
-        onChange={(e) => handleInputChange('description', e.target.value)}
-        rows={4}
-      />
-    </div>
-    <div>
-      <Label htmlFor="additional_features">{t.additionalFeatures}</Label>
-      <Textarea
-        id="additional_features"
-        value={formData.additional_features}
-        onChange={(e) => handleInputChange('additional_features', e.target.value)}
-        rows={4}
-      />
-    </div>
-  </FormSection>
-);
-
-export const PhotoUpload = ({ photos, handlePhotoUpload, t }) => (
-  <FormSection title={t.photos}>
-    <div>
-      <Label htmlFor="photos">{t.uploadPhotos}</Label>
-      <Input
-        id="photos"
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={(e) => handlePhotoUpload(Array.from(e.target.files))}
-      />
-    </div>
-    {photos.length > 0 && (
-      <div className="grid grid-cols-3 gap-4 mt-4">
-        {photos.map((photo, index) => (
-          <img
-            key={index}
-            src={URL.createObjectURL(photo)}
-            alt={`Car photo ${index + 1}`}
-            className="w-full h-32 object-cover rounded"
-          />
-        ))}
-      </div>
-    )}
-  </FormSection>
-);
+// ... other existing components ...
 
 export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => (
   <>
@@ -138,3 +88,41 @@ export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t })
     </div>
   </>
 );
+
+export const TransmissionSelector = ({ value, onChange, t }) => (
+  <div>
+    <Label htmlFor="transmission">{t.transmission}</Label>
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger>
+        <SelectValue placeholder={t.selectTransmission} />
+      </SelectTrigger>
+      <SelectContent>
+        {transmissionTypes.map((type) => (
+          <SelectItem key={type} value={type}>
+            {getNestedTranslation(t, type.toLowerCase()) || type}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
+);
+
+export const FuelTypeSelector = ({ value, onChange, t }) => (
+  <div>
+    <Label htmlFor="fuelType">{t.fuelType}</Label>
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger>
+        <SelectValue placeholder={t.selectFuelType} />
+      </SelectTrigger>
+      <SelectContent>
+        {fuelTypes.map((type) => (
+          <SelectItem key={type} value={type}>
+            {getNestedTranslation(t, type.toLowerCase()) || type}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
+);
+
+// ... other existing components ...

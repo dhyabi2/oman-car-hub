@@ -7,13 +7,11 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye } from 'lucide-react';
 import { carMakes, carModels, colors, fuelTypes, transmissionTypes, locations } from '../utils/carData';
-import { translations } from '../utils/translations';
+import { getNestedTranslation } from '../utils/translations';
 
-const getTranslation = (language, key, fallback = key) => {
-  return translations[language]?.[key] || fallback;
-};
+// ... existing imports and components ...
 
-const FilterSelect = ({ label, value, options, onChange }) => (
+const FilterSelect = ({ label, value, options, onChange, t }) => (
   <div>
     <Label htmlFor={label}>{label}</Label>
     <Select value={value} onValueChange={onChange}>
@@ -22,118 +20,47 @@ const FilterSelect = ({ label, value, options, onChange }) => (
       </SelectTrigger>
       <SelectContent>
         {options.map((option) => (
-          <SelectItem key={option} value={option}>{option}</SelectItem>
+          <SelectItem key={option} value={option}>
+            {getNestedTranslation(t, option.toLowerCase()) || option}
+          </SelectItem>
         ))}
       </SelectContent>
     </Select>
   </div>
 );
 
-const RangeFilter = ({ label, min, max, value, onChange, unit, icon: Icon }) => (
-  <div>
-    <Label className="flex items-center">
-      {Icon && <Icon className="mr-2" />}
-      {label} ({unit})
-    </Label>
-    <div className="flex items-center space-x-2">
-      <Input
-        type="number"
-        value={value[0]}
-        onChange={(e) => onChange([parseInt(e.target.value), value[1]])}
-        className="w-20"
-      />
-      <span>to</span>
-      <Input
-        type="number"
-        value={value[1]}
-        onChange={(e) => onChange([value[0], parseInt(e.target.value)])}
-        className="w-20"
-      />
-    </div>
-  </div>
-);
+// ... other existing components ...
 
-export const NoCarsList = ({ language }) => (
-  <div className="text-center py-10">
-    <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center">
-      <AlertCircle className="mr-2" />
-      {getTranslation(language, 'noCarsFound', 'No Cars Found')}
-    </h2>
-    <p>{getTranslation(language, 'tryDifferentFilters', 'Try adjusting your filters or search criteria')}</p>
-  </div>
-);
-
-export const CarCard = ({ car, onViewDetails, language }) => (
-  <Card className="overflow-hidden">
-    <CardContent className="p-4">
-      <h2 className="text-xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
-      <p className="text-gray-600 mb-2 flex items-center">
-        <DollarSign className="mr-1" /> 
-        {getTranslation(language, 'price', 'Price')}: {car.price} OMR
-      </p>
-      <p className="text-gray-600 mb-2 flex items-center">
-        <Car className="mr-1" /> 
-        {getTranslation(language, 'mileage', 'Mileage')}: {car.mileage} km
-      </p>
-      <p className="text-gray-600 mb-2 flex items-center">
-        <Sliders className="mr-1" /> 
-        {getTranslation(language, 'transmission', 'Transmission')}: {car.transmission}
-      </p>
-      <p className="text-gray-600 mb-2 flex items-center">
-        <Fuel className="mr-1" /> 
-        {getTranslation(language, 'fuelType', 'Fuel Type')}: {car.fuel_type}
-      </p>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {car.photos.slice(0, 4).map((photo, index) => (
-          <img
-            key={index}
-            src={photo}
-            alt={`${car.make} ${car.model}`}
-            className="w-16 h-16 object-cover rounded"
-          />
-        ))}
-        {car.photos.length > 4 && (
-          <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center text-sm font-semibold">
-            +{car.photos.length - 4}
-          </div>
-        )}
-      </div>
-      <Button className="w-full mt-2 flex items-center justify-center" onClick={() => onViewDetails(car.id)}>
-        <Eye className="mr-2" />
-        {getTranslation(language, 'viewDetails', 'View Details')}
-      </Button>
-    </CardContent>
-  </Card>
-);
-
-export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language }) => (
+export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, t }) => (
   <Card className="mb-6">
     <CardHeader>
       <CardTitle className="flex items-center">
         <Sliders className="mr-2" />
-        {getTranslation(language, 'filters', 'Filters')}
+        {t.filters}
       </CardTitle>
     </CardHeader>
     <CardContent>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <FilterSelect
-          label={getTranslation(language, 'make', 'Make')}
+          label={t.make}
           value={filters.make}
-          options={[getTranslation(language, 'allMakes', 'All Makes'), ...carMakes]}
+          options={[t.allMakes, ...carMakes]}
           onChange={(value) => onFilterChange('make', value)}
+          t={t}
         />
         <FilterSelect
-          label={getTranslation(language, 'model', 'Model')}
+          label={t.model}
           value={filters.model}
           options={
-            filters.make === getTranslation(language, 'allMakes', 'All Makes')
-              ? [getTranslation(language, 'allModels', 'All Models')]
-              : [getTranslation(language, 'allModels', 'All Models'), ...(carModels[filters.make] || [])]
+            filters.make === t.allMakes
+              ? [t.allModels]
+              : [t.allModels, ...(carModels[filters.make] || [])]
           }
           onChange={(value) => onFilterChange('model', value)}
+          t={t}
         />
         <RangeFilter
-          label={getTranslation(language, 'yearRange', 'Year Range')}
+          label={t.yearRange}
           min={1990}
           max={new Date().getFullYear()}
           value={[filters.minYear, filters.maxYear]}
@@ -141,11 +68,11 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language 
             onFilterChange('minYear', min);
             onFilterChange('maxYear', max);
           }}
-          unit="year"
+          unit={t.year}
           icon={Calendar}
         />
         <RangeFilter
-          label={getTranslation(language, 'priceRange', 'Price Range')}
+          label={t.priceRange}
           min={0}
           max={maxPriceInData}
           value={[filters.minPrice, filters.maxPrice]}
@@ -153,29 +80,32 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language 
             onFilterChange('minPrice', min);
             onFilterChange('maxPrice', max);
           }}
-          unit="OMR"
+          unit={t.currency}
           icon={DollarSign}
         />
         <FilterSelect
-          label={getTranslation(language, 'transmission', 'Transmission')}
+          label={t.transmission}
           value={filters.transmission}
           options={['all', ...transmissionTypes]}
           onChange={(value) => onFilterChange('transmission', value)}
+          t={t}
         />
         <FilterSelect
-          label={getTranslation(language, 'fuelType', 'Fuel Type')}
+          label={t.fuelType}
           value={filters.fuelType}
           options={['all', ...fuelTypes]}
           onChange={(value) => onFilterChange('fuelType', value)}
+          t={t}
         />
         <FilterSelect
-          label={getTranslation(language, 'color', 'Color')}
+          label={t.color}
           value={filters.color}
           options={['all', ...colors]}
           onChange={(value) => onFilterChange('color', value)}
+          t={t}
         />
         <RangeFilter
-          label={getTranslation(language, 'mileageRange', 'Mileage Range')}
+          label={t.mileageRange}
           min={0}
           max={1000000}
           value={[filters.minMileage, filters.maxMileage]}
@@ -187,36 +117,43 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language 
           icon={Car}
         />
         <FilterSelect
-          label={getTranslation(language, 'condition', 'Condition')}
+          label={t.condition}
           value={filters.condition}
           options={['all', 'New', 'Used']}
           onChange={(value) => onFilterChange('condition', value)}
+          t={t}
         />
         <FilterSelect
-          label={getTranslation(language, 'location', 'Location')}
+          label={t.location}
           value={filters.location}
           options={['all', ...locations]}
           onChange={(value) => onFilterChange('location', value)}
+          t={t}
         />
         <FilterSelect
-          label={getTranslation(language, 'numberOfDoors', 'Number of Doors')}
+          label={t.numberOfDoors}
           value={filters.numberOfDoors}
           options={['all', '2', '3', '4', '5']}
           onChange={(value) => onFilterChange('numberOfDoors', value)}
+          t={t}
         />
         <FilterSelect
-          label={getTranslation(language, 'numberOfSeats', 'Number of Seats')}
+          label={t.numberOfSeats}
           value={filters.numberOfSeats}
           options={['all', '2', '4', '5', '7', '8']}
           onChange={(value) => onFilterChange('numberOfSeats', value)}
+          t={t}
         />
         <FilterSelect
-          label={getTranslation(language, 'drivetrain', 'Drivetrain')}
+          label={t.drivetrain}
           value={filters.drivetrain}
           options={['all', 'FWD', 'RWD', 'AWD', '4WD']}
           onChange={(value) => onFilterChange('drivetrain', value)}
+          t={t}
         />
       </div>
     </CardContent>
   </Card>
 );
+
+// ... other existing components ...
