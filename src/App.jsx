@@ -15,6 +15,7 @@ import Favorite from "./pages/Favorite";
 import FAQ from "./pages/FAQ";
 
 const queryClient = new QueryClient();
+const API_BASE_URL = 'https://oman-car-hub.replit.app';
 
 const App = () => {
   const [theme, setThemeState] = useState('light');
@@ -35,7 +36,7 @@ const App = () => {
       setUserId(storedUserId);
 
       try {
-        const response = await fetch(`/api/settings/${storedUserId}`);
+        const response = await fetch(`${API_BASE_URL}/api/settings/${storedUserId}`);
         if (response.ok) {
           const settings = await response.json();
           setThemeState(settings.theme || 'light');
@@ -60,7 +61,7 @@ const App = () => {
     if (!userId) return;
 
     try {
-      const response = await fetch(`/api/settings/${userId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/settings/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
