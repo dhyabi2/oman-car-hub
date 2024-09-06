@@ -5,9 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
-import { translations } from '../utils/translations';
 import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye } from 'lucide-react';
-import { carMakes, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
+import { carMakes, carModels, colors, fuelTypes, transmissionTypes, locations } from '../utils/carData';
 
 const getTranslation = (language, key, fallback = key) => {
   return translations[language]?.[key] || fallback;
@@ -135,6 +134,30 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language 
           options={['all', 'New', 'Used']}
           onChange={(value) => onFilterChange('condition', value)}
         />
+        <FilterSelect
+          label={getTranslation(language, 'location', 'Location')}
+          value={filters.location}
+          options={['all', ...locations]}
+          onChange={(value) => onFilterChange('location', value)}
+        />
+        <FilterSelect
+          label={getTranslation(language, 'numberOfDoors', 'Number of Doors')}
+          value={filters.numberOfDoors}
+          options={['all', '2', '3', '4', '5']}
+          onChange={(value) => onFilterChange('numberOfDoors', value)}
+        />
+        <FilterSelect
+          label={getTranslation(language, 'numberOfSeats', 'Number of Seats')}
+          value={filters.numberOfSeats}
+          options={['all', '2', '4', '5', '7', '8']}
+          onChange={(value) => onFilterChange('numberOfSeats', value)}
+        />
+        <FilterSelect
+          label={getTranslation(language, 'drivetrain', 'Drivetrain')}
+          value={filters.drivetrain}
+          options={['all', 'FWD', 'RWD', 'AWD', '4WD']}
+          onChange={(value) => onFilterChange('drivetrain', value)}
+        />
       </div>
     </CardContent>
   </Card>
@@ -209,7 +232,7 @@ const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange, langua
 const MileageRangeFilter = ({ minMileage, maxMileage, onChange, language }) => (
   <div>
     <Label className="flex items-center">
-      <Car className="mr-2" />
+      <Car className="mr-1" />
       {getTranslation(language, 'mileageRange', 'Mileage Range')} (km)
     </Label>
     <div className="flex items-center space-x-2">

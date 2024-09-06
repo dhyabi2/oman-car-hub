@@ -32,6 +32,10 @@ const CarsList = ({ language = 'en' }) => {
     minMileage: 0,
     maxMileage: 1000000,
     condition: 'all',
+    location: 'all',
+    numberOfDoors: 'all',
+    numberOfSeats: 'all',
+    drivetrain: 'all',
   });
 
   useEffect(() => {
@@ -63,7 +67,11 @@ const CarsList = ({ language = 'en' }) => {
       (filters.color === 'all' || car.color === filters.color) &&
       car.mileage >= filters.minMileage &&
       car.mileage <= filters.maxMileage &&
-      (filters.condition === 'all' || car.condition === filters.condition)
+      (filters.condition === 'all' || car.condition === filters.condition) &&
+      (filters.location === 'all' || car.location === filters.location) &&
+      (filters.numberOfDoors === 'all' || car.number_of_doors.toString() === filters.numberOfDoors) &&
+      (filters.numberOfSeats === 'all' || car.number_of_seats.toString() === filters.numberOfSeats) &&
+      (filters.drivetrain === 'all' || car.drivetrain === filters.drivetrain)
     );
     setFilteredCars(filtered);
   }, [filters, cars, language]);
