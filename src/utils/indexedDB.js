@@ -12,11 +12,17 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
     options.body = JSON.stringify(body);
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.statusText}`);
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error('API request failed:', error);
+    throw new Error(`API request failed: ${error.message}`);
   }
-  return response.json();
 }
 
 export async function addCar(car) {
@@ -40,8 +46,13 @@ export async function deleteCar(id) {
 }
 
 export async function getLanguage() {
-  const result = await apiRequest('/api/settings/language');
-  return result.value;
+  try {
+    const result = await apiRequest('/api/settings/language');
+    return result.value;
+  } catch (error) {
+    console.error('Failed to get language:', error);
+    return 'en'; // Default to English if there's an error
+  }
 }
 
 export async function setLanguage(language) {
@@ -49,8 +60,13 @@ export async function setLanguage(language) {
 }
 
 export async function getTheme() {
-  const result = await apiRequest('/api/settings/theme');
-  return result.value;
+  try {
+    const result = await apiRequest('/api/settings/theme');
+    return result.value;
+  } catch (error) {
+    console.error('Failed to get theme:', error);
+    return 'light'; // Default to light theme if there's an error
+  }
 }
 
 export async function setTheme(theme) {
@@ -66,21 +82,49 @@ export async function decrementCurrentViewers() {
 }
 
 export async function getCurrentViewers() {
-  const result = await apiRequest('/api/stats/currentViewers');
-  return result.currentViewers;
+  try {
+    const result = await apiRequest('/api/stats/currentViewers');
+    return result.currentViewers;
+  } catch (error) {
+    console.error('Failed to get current viewers:', error);
+    return 0; // Default to 0 if there's an error
+  }
 }
 
 export async function getCarStatistics() {
-  return apiRequest('/api/stats');
+  try {
+    return await apiRequest('/api/stats');
+  } catch (error) {
+    console.error('Failed to get car statistics:', error);
+    return {
+      totalListings: 0,
+      activeSellers: 0,
+      averagePrice: 0,
+      mostPopularBrand: '',
+      mostExpensiveCar: '',
+      newestListing: '',
+      currentViewers: 0
+    };
+  }
 }
 
 export async function toggleFavoriteCar(carId) {
-  const result = await apiRequest(`/api/favorites/${carId}`, 'POST');
-  return result.isFavorite;
+  try {
+    const result = await apiRequest(`/api/favorites/${carId}`, 'POST');
+    return result.isFavorite;
+  } catch (error) {
+    console.error('Failed to toggle favorite car:', error);
+    return false;
+  }
 }
 
 export async function getFavoriteCars() {
-  return apiRequest('/api/favorites');
+  try {
+    return await apiRequest('/api/favorites');
+  } catch (error) {
+    console.error('Failed to get favorite cars:', error);
+    return [];
+  }
 }
 
 export async function removeFavoriteCar(carId) {
@@ -88,6 +132,11 @@ export async function removeFavoriteCar(carId) {
 }
 
 export async function isFavoriteCar(carId) {
-  const result = await apiRequest(`/api/favorites/${carId}`);
-  return result.isFavorite;
+  try {
+    const result = await apiRequest(`/api/favorites/${carId}`);
+    return result.isFavorite;
+  } catch (error) {
+    console.error('Failed to check if car is favorite:', error);
+    return false;
+  }
 }
