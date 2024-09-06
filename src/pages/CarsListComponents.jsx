@@ -13,6 +13,46 @@ const getTranslation = (language, key, fallback = key) => {
   return translations[language]?.[key] || fallback;
 };
 
+const FilterSelect = ({ label, value, options, onChange }) => (
+  <div>
+    <Label htmlFor={label}>{label}</Label>
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger>
+        <SelectValue placeholder={`Select ${label.toLowerCase()}`} />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option) => (
+          <SelectItem key={option} value={option}>{option}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
+);
+
+const RangeFilter = ({ label, min, max, value, onChange, unit, icon: Icon }) => (
+  <div>
+    <Label className="flex items-center">
+      {Icon && <Icon className="mr-2" />}
+      {label} ({unit})
+    </Label>
+    <div className="flex items-center space-x-2">
+      <Input
+        type="number"
+        value={value[0]}
+        onChange={(e) => onChange([parseInt(e.target.value), value[1]])}
+        className="w-20"
+      />
+      <span>to</span>
+      <Input
+        type="number"
+        value={value[1]}
+        onChange={(e) => onChange([value[0], parseInt(e.target.value)])}
+        className="w-20"
+      />
+    </div>
+  </div>
+);
+
 export const NoCarsList = ({ language }) => (
   <div className="text-center py-10">
     <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center">
@@ -43,31 +83,27 @@ export const CarCard = ({ car, onViewDetails, language }) => (
         <Fuel className="mr-1" /> 
         {getTranslation(language, 'fuelType', 'Fuel Type')}: {car.fuel_type}
       </p>
-      <CarImages car={car} />
+      <div className="flex flex-wrap gap-2 mb-4">
+        {car.photos.slice(0, 4).map((photo, index) => (
+          <img
+            key={index}
+            src={photo}
+            alt={`${car.make} ${car.model}`}
+            className="w-16 h-16 object-cover rounded"
+          />
+        ))}
+        {car.photos.length > 4 && (
+          <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center text-sm font-semibold">
+            +{car.photos.length - 4}
+          </div>
+        )}
+      </div>
       <Button className="w-full mt-2 flex items-center justify-center" onClick={() => onViewDetails(car.id)}>
         <Eye className="mr-2" />
         {getTranslation(language, 'viewDetails', 'View Details')}
       </Button>
     </CardContent>
   </Card>
-);
-
-const CarImages = ({ car }) => (
-  <div className="flex flex-wrap gap-2 mb-4">
-    {car.photos.slice(0, 4).map((photo, index) => (
-      <img
-        key={index}
-        src={photo}
-        alt={`${car.make} ${car.model}`}
-        className="w-16 h-16 object-cover rounded"
-      />
-    ))}
-    {car.photos.length > 4 && (
-      <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center text-sm font-semibold">
-        +{car.photos.length - 4}
-      </div>
-    )}
-  </div>
 );
 
 export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language }) => (
@@ -96,18 +132,29 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language 
           }
           onChange={(value) => onFilterChange('model', value)}
         />
-        <YearRangeFilter
-          minYear={filters.minYear}
-          maxYear={filters.maxYear}
-          onChange={onFilterChange}
-          language={language}
+        <RangeFilter
+          label={getTranslation(language, 'yearRange', 'Year Range')}
+          min={1990}
+          max={new Date().getFullYear()}
+          value={[filters.minYear, filters.maxYear]}
+          onChange={([min, max]) => {
+            onFilterChange('minYear', min);
+            onFilterChange('maxYear', max);
+          }}
+          unit="year"
+          icon={Calendar}
         />
-        <PriceRangeFilter
-          minPrice={filters.minPrice}
-          maxPrice={filters.maxPrice}
-          maxPriceInData={maxPriceInData}
-          onChange={onFilterChange}
-          language={language}
+        <RangeFilter
+          label={getTranslation(language, 'priceRange', 'Price Range')}
+          min={0}
+          max={maxPriceInData}
+          value={[filters.minPrice, filters.maxPrice]}
+          onChange={([min, max]) => {
+            onFilterChange('minPrice', min);
+            onFilterChange('maxPrice', max);
+          }}
+          unit="OMR"
+          icon={DollarSign}
         />
         <FilterSelect
           label={getTranslation(language, 'transmission', 'Transmission')}
@@ -127,11 +174,17 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language 
           options={['all', ...colors]}
           onChange={(value) => onFilterChange('color', value)}
         />
-        <MileageRangeFilter
-          minMileage={filters.minMileage}
-          maxMileage={filters.maxMileage}
-          onChange={onFilterChange}
-          language={language}
+        <RangeFilter
+          label={getTranslation(language, 'mileageRange', 'Mileage Range')}
+          min={0}
+          max={1000000}
+          value={[filters.minMileage, filters.maxMileage]}
+          onChange={([min, max]) => {
+            onFilterChange('minMileage', min);
+            onFilterChange('maxMileage', max);
+          }}
+          unit="km"
+          icon={Car}
         />
         <FilterSelect
           label={getTranslation(language, 'condition', 'Condition')}
@@ -166,94 +219,4 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language 
       </div>
     </CardContent>
   </Card>
-);
-
-const FilterSelect = ({ label, value, options, onChange }) => (
-  <div>
-    <Label htmlFor={label}>{label}</Label>
-    <Select value={value} onValueChange={onChange}>
-      <SelectTrigger>
-        <SelectValue placeholder={`Select ${label.toLowerCase()}`} />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option} value={option}>{option}</SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  </div>
-);
-
-const YearRangeFilter = ({ minYear, maxYear, onChange, language }) => (
-  <div>
-    <Label className="flex items-center">
-      <Calendar className="mr-2" />
-      {getTranslation(language, 'yearRange', 'Year Range')}
-    </Label>
-    <div className="flex items-center space-x-2">
-      <Input
-        type="number"
-        value={minYear}
-        onChange={(e) => onChange('minYear', parseInt(e.target.value))}
-        className="w-20"
-      />
-      <span>{getTranslation(language, 'to', 'to')}</span>
-      <Input
-        type="number"
-        value={maxYear}
-        onChange={(e) => onChange('maxYear', parseInt(e.target.value))}
-        className="w-20"
-      />
-    </div>
-  </div>
-);
-
-const PriceRangeFilter = ({ minPrice, maxPrice, maxPriceInData, onChange, language }) => (
-  <div>
-    <Label className="flex items-center">
-      <DollarSign className="mr-2" />
-      {getTranslation(language, 'priceRange', 'Price Range')} (OMR)
-    </Label>
-    <div className="mt-2">
-      <Slider
-        min={0}
-        max={maxPriceInData}
-        step={100}
-        value={[minPrice, maxPrice]}
-        onValueChange={(value) => {
-          onChange('minPrice', value[0]);
-          onChange('maxPrice', value[1]);
-        }}
-        className="w-full"
-      />
-    </div>
-    <div className="flex justify-between mt-2">
-      <span>{minPrice} OMR</span>
-      <span>{maxPrice} OMR</span>
-    </div>
-  </div>
-);
-
-const MileageRangeFilter = ({ minMileage, maxMileage, onChange, language }) => (
-  <div>
-    <Label className="flex items-center">
-      <Car className="mr-1" />
-      {getTranslation(language, 'mileageRange', 'Mileage Range')} (km)
-    </Label>
-    <div className="flex items-center space-x-2">
-      <Input
-        type="number"
-        value={minMileage}
-        onChange={(e) => onChange('minMileage', parseInt(e.target.value))}
-        className="w-24"
-      />
-      <span>{getTranslation(language, 'to', 'to')}</span>
-      <Input
-        type="number"
-        value={maxMileage}
-        onChange={(e) => onChange('maxMileage', parseInt(e.target.value))}
-        className="w-24"
-      />
-    </div>
-  </div>
 );
