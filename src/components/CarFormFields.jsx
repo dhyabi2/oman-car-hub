@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import ImageSelector from './ImageSelector';
-import { Car, Fuel, Palette, Settings, DoorOpen, Users, Compass, CheckCircle } from 'lucide-react';
+import { Car, Fuel, Palette, Settings, Users, Compass, CheckCircle } from 'lucide-react';
 
 import { carBrands, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 
@@ -104,7 +104,7 @@ export const TransmissionSelector = ({ value, onChange, t }) => (
 export const DoorsSelector = ({ value, onChange, t }) => (
   <ImageSelector
     label={t.numberOfDoors}
-    options={[2, 3, 4, 5].map(num => ({ value: num, icon: <DoorOpen size={24} />, label: num.toString() }))}
+    options={[2, 3, 4, 5].map(num => ({ value: num, icon: null, label: num.toString() }))}
     value={value}
     onChange={onChange}
   />
