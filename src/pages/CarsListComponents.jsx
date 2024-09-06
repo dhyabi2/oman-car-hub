@@ -9,8 +9,6 @@ import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye } from 'luci
 import { carMakes, carModels, colors, fuelTypes, transmissionTypes, locations } from '../utils/carData';
 import { getNestedTranslation } from '../utils/translations';
 
-// ... existing imports and components ...
-
 const FilterSelect = ({ label, value, options, onChange, t }) => (
   <div>
     <Label htmlFor={label}>{label}</Label>
@@ -29,7 +27,25 @@ const FilterSelect = ({ label, value, options, onChange, t }) => (
   </div>
 );
 
-// ... other existing components ...
+const RangeFilter = ({ label, min, max, value, onChange, unit, icon: Icon }) => (
+  <div>
+    <Label>{label}</Label>
+    <div className="flex items-center space-x-2">
+      <Icon className="h-4 w-4" />
+      <Slider
+        min={min}
+        max={max}
+        step={(max - min) / 100}
+        value={value}
+        onValueChange={onChange}
+        className="flex-grow"
+      />
+      <span className="text-sm">
+        {value[0]} - {value[1]} {unit}
+      </span>
+    </div>
+  </div>
+);
 
 export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, t }) => (
   <Card className="mb-6">
@@ -156,4 +172,31 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, t }) => (
   </Card>
 );
 
-// ... other existing components ...
+export const CarCard = ({ car, onViewDetails, language }) => (
+  <Card className="hover:shadow-lg transition-shadow duration-300">
+    <CardContent className="p-4">
+      <img src={car.photos[0]} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover mb-4 rounded" />
+      <h3 className="text-lg font-semibold">{car.year} {car.make} {car.model}</h3>
+      <p className="text-sm text-gray-600 mb-2">{car.mileage} km | {car.transmission} | {car.fuel_type}</p>
+      <p className="text-lg font-bold mb-4">{car.price} OMR</p>
+      <Button onClick={() => onViewDetails(car.id)} className="w-full flex items-center justify-center">
+        <Eye className="mr-2" />
+        {language === 'ar' ? 'عرض التفاصيل' : 'View Details'}
+      </Button>
+    </CardContent>
+  </Card>
+);
+
+export const NoCarsList = ({ language }) => (
+  <div className="text-center py-8">
+    <AlertCircle className="mx-auto h-12 w-12 text-yellow-500 mb-4" />
+    <h2 className="text-2xl font-semibold mb-2">
+      {language === 'ar' ? 'لا توجد سيارات متاحة' : 'No Cars Available'}
+    </h2>
+    <p className="text-gray-600">
+      {language === 'ar'
+        ? 'لم يتم العثور على سيارات تطابق معايير البحث الخاصة بك. يرجى تعديل المرشحات وحاول مرة أخرى.'
+        : 'No cars found matching your search criteria. Please adjust your filters and try again.'}
+    </p>
+  </div>
+);
