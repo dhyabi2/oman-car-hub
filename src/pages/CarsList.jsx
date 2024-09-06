@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { motion } from "framer-motion";
 import { carMakes, carModels } from '../utils/carData';
 import { getAllCars } from '../utils/indexedDB';
 import { NoCarsList, CarCard, FiltersCard } from './CarsListComponents';
@@ -128,22 +128,31 @@ const CarsList = ({ language = 'en' }) => {
         </CollapsibleContent>
       </Collapsible>
 
-      <ScrollArea className="h-[calc(100vh-20rem)]">
-        {filteredCars.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCars.map((car) => (
+      {filteredCars.length > 0 ? (
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {filteredCars.map((car, index) => (
+            <motion.div
+              key={car.id}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
               <CarCard 
-                key={car.id} 
                 car={car} 
                 onViewDetails={handleViewDetails}
                 language={language}
               />
-            ))}
-          </div>
-        ) : (
-          <NoCarsList language={language} />
-        )}
-      </ScrollArea>
+            </motion.div>
+          ))}
+        </motion.div>
+      ) : (
+        <NoCarsList language={language} />
+      )}
     </div>
   );
 };
