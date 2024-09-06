@@ -65,7 +65,7 @@ export const NoCarsList = ({ language }) => (
 
 export const CarCard = ({ car, onViewDetails, language }) => (
   <Card className="overflow-hidden">
-    <div className="relative pb-[56.25%]">
+    <div className="relative pb-[75%]">
       <img
         src={car.photos[0]}
         alt={`${car.make} ${car.model}`}
@@ -73,12 +73,13 @@ export const CarCard = ({ car, onViewDetails, language }) => (
       />
     </div>
     <CardContent className="p-4">
-      <h2 className="text-xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
-      <div className="grid grid-cols-2 gap-2 mb-4">
-        <p className="flex items-center"><DollarSign className="mr-1" /> {car.price} OMR</p>
+      <h2 className="text-2xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
+      <p className="text-3xl font-bold text-red-600 mb-4">{car.price} {getTranslation(language, 'currency', 'OMR')}</p>
+      <div className="grid grid-cols-2 gap-2 mb-4 text-lg">
         <p className="flex items-center"><Car className="mr-1" /> {car.mileage} km</p>
         <p className="flex items-center"><Sliders className="mr-1" /> {car.transmission}</p>
         <p className="flex items-center"><Fuel className="mr-1" /> {car.fuel_type}</p>
+        <p className="flex items-center"><Calendar className="mr-1" /> {car.year}</p>
       </div>
       <Button className="w-full mt-2 flex items-center justify-center" onClick={() => onViewDetails(car.id)}>
         <Eye className="mr-2" />
@@ -141,36 +142,6 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language 
       value={filters.fuelType}
       options={['all', ...fuelTypes]}
       onChange={(value) => onFilterChange('fuelType', value)}
-    />
-    <FilterSelect
-      label={getTranslation(language, 'color', 'Color')}
-      value={filters.color}
-      options={['all', ...colors]}
-      onChange={(value) => onFilterChange('color', value)}
-    />
-    <RangeFilter
-      label={getTranslation(language, 'mileageRange', 'Mileage Range')}
-      min={0}
-      max={1000000}
-      value={[filters.minMileage, filters.maxMileage]}
-      onChange={([min, max]) => {
-        onFilterChange('minMileage', min);
-        onFilterChange('maxMileage', max);
-      }}
-      unit="km"
-      icon={Car}
-    />
-    <FilterSelect
-      label={getTranslation(language, 'condition', 'Condition')}
-      value={filters.condition}
-      options={['all', 'New', 'Used']}
-      onChange={(value) => onFilterChange('condition', value)}
-    />
-    <FilterSelect
-      label={getTranslation(language, 'location', 'Location')}
-      value={filters.location}
-      options={['all', ...locations]}
-      onChange={(value) => onFilterChange('location', value)}
     />
   </div>
 );
