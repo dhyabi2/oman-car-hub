@@ -54,6 +54,8 @@ const CarsList = ({ language = 'en' }) => {
         ...prev,
         maxPrice,
         maxMileage,
+        make: getTranslation(language, 'allMakes', 'All Makes'),
+        model: getTranslation(language, 'allModels', 'All Models'),
       }));
 
       // Fetch favorite status for each car
@@ -64,7 +66,7 @@ const CarsList = ({ language = 'en' }) => {
       setFavorites(favoritesStatus);
     };
     fetchCars();
-  }, []);
+  }, [language]);
 
   useEffect(() => {
     const filtered = cars.filter(car => 
