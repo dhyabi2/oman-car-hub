@@ -10,13 +10,14 @@ import Index from "./pages/Index";
 import AddCar from "./pages/AddCar";
 import CarsList from "./pages/CarsList";
 import CarDetails from "./pages/CarDetails";
+import Favorite from "./pages/Favorite";
 import FAQ from "./pages/FAQ";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const [theme, setThemeState] = useState('light');
-  const [language, setLanguageState] = useState('ar'); // Set initial language to Arabic
+  const [language, setLanguageState] = useState('ar');
 
   useEffect(() => {
     document.body.className = theme;
@@ -26,7 +27,6 @@ const App = () => {
     const fetchLanguageAndTheme = async () => {
       let lang = await getLanguage();
       if (!lang) {
-        // If no language is set, default to Arabic and save it
         lang = 'ar';
         await setLanguage(lang);
       }
@@ -36,10 +36,8 @@ const App = () => {
     };
     fetchLanguageAndTheme();
 
-    // Increment current viewers when the app loads
     incrementCurrentViewers();
 
-    // Decrement current viewers when the app unloads
     return () => {
       decrementCurrentViewers();
     };
@@ -56,7 +54,7 @@ const App = () => {
     setThemeState(newTheme);
   };
 
-  const t = translations[language] || translations['ar']; // Default to Arabic if translation is missing
+  const t = translations[language] || translations['ar'];
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -70,6 +68,7 @@ const App = () => {
               <Route path="/add-car" element={<AddCar language={language} t={t} />} />
               <Route path="/cars-list" element={<CarsList language={language} t={t} />} />
               <Route path="/car/:id" element={<CarDetails language={language} t={t} />} />
+              <Route path="/favorite" element={<Favorite language={language} t={t} />} />
               <Route path="/faq" element={<FAQ language={language} t={t} />} />
             </Routes>
           </div>

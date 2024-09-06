@@ -6,6 +6,7 @@ export const translations = {
     carsList: "Cars List",
     carDetails: "Car Details",
     faq: "FAQ",
+    favorite: "Favorites",
     brandSelector: "Car Brands",
     modelSelector: "Select a Brand",
     selectedCar: "Selected Car",
@@ -27,6 +28,7 @@ export const translations = {
     currentViewers: "Current Viewers",
     make: "Make",
     year: "Year",
+    
     mileage: "Mileage",
     transmission: "Transmission",
     fuelType: "Fuel Type",
@@ -107,6 +109,9 @@ export const translations = {
     km: "km",
     cc: "cc",
     contactSellerWhatsApp: "Contact Seller on WhatsApp",
+    favoriteCars: "Favorite Cars",
+    remove: "Remove",
+    noFavoriteCars: "You haven't added any cars to your favorites yet.",
   },
   ar: {
     appName: "سوق عمان للسيارات",
@@ -115,6 +120,7 @@ export const translations = {
     carsList: "قائمة السيارات",
     carDetails: "تفاصيل السيارة",
     faq: "الأسئلة الشائعة",
+    favorite: "المفضلة",
     brandSelector: "ماركات السيارات",
     modelSelector: "اختر ماركة",
     selectedCar: "السيارة المختارة",
@@ -216,5 +222,8 @@ export const translations = {
     km: "كم",
     cc: "سم³",
     contactSellerWhatsApp: "تواصل مع البائع عبر واتساب",
+    favoriteCars: "السيارات المفضلة",
+    remove: "إزالة",
+    noFavoriteCars: "لم تقم بإضافة أي سيارات إلى المفضلة بعد.",
   },
 };

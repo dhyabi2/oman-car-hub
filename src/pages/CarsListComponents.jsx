@@ -4,9 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye, Phone, MessageCircle } from 'lucide-react';
+import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye, Phone, MessageCircle, Heart } from 'lucide-react';
 import { carMakes, carModels, fuelTypes, transmissionTypes } from '../utils/carData';
 import { translations } from '../utils/translations';
+import { toggleFavoriteCar } from '../utils/indexedDB';
 
 const getTranslation = (language, key, fallback = key) => {
   return translations[language]?.[key] || fallback;
@@ -57,12 +58,12 @@ export const NoCarsList = ({ language }) => (
     <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center">
       <AlertCircle className="mr-2" />
       {getTranslation(language, 'noCarsFound', 'No Cars Found')}
-    </h2>
+    </2>
     <p>{getTranslation(language, 'tryDifferentFilters', 'Try adjusting your filters or search criteria')}</p>
   </div>
 );
 
-export const CarCard = ({ car, onViewDetails, language }) => (
+export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavorite }) => (
   <Card className="overflow-hidden">
     <div className="relative pb-[75%]">
       <img
@@ -70,6 +71,14 @@ export const CarCard = ({ car, onViewDetails, language }) => (
         alt={`${car.make} ${car.model}`}
         className="absolute top-0 left-0 w-full h-full object-cover"
       />
+      <Button
+        variant="ghost"
+        size="icon"
+        className={`absolute top-2 right-2 ${isFavorite ? 'text-red-500' : 'text-gray-500'}`}
+        onClick={() => onToggleFavorite(car.id)}
+      >
+        <Heart className={`h-6 w-6 ${isFavorite ? 'fill-current' : ''}`} />
+      </Button>
     </div>
     <CardContent className="p-4">
       <h2 className="text-2xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>

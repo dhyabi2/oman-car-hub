@@ -4,7 +4,8 @@ const dbName = 'CarDatabase';
 const carStoreName = 'cars';
 const settingsStoreName = 'settings';
 const statsStoreName = 'stats';
-const version = 3;
+const favoritesStoreName = 'favorites';
+const version = 4;
 
 async function initDB() {
   return openDB(dbName, version, {
@@ -17,6 +18,9 @@ async function initDB() {
       }
       if (!db.objectStoreNames.contains(statsStoreName)) {
         db.createObjectStore(statsStoreName, { keyPath: 'key' });
+      }
+      if (!db.objectStoreNames.contains(favoritesStoreName)) {
+        db.createObjectStore(favoritesStoreName, { keyPath: 'id' });
       }
     },
   });
@@ -124,4 +128,37 @@ export async function getCarStatistics() {
     latestCar: newestListing,
     currentViewers
   };
+}
+
+export async function toggleFavoriteCar(carId) {
+  const db = await initDB();
+  const tx = db.transaction(favoritesStoreName, 'readwrite');
+  const store = tx.objectStore(favoritesStoreName);
+  const favorite = await store.get(carId);
+  
+  if (favorite) {
+    await store.delete(carId);
+    return false;
+  } else {
+    await store.add({ id: carId });
+    return true;
+  }
+}
+
+export async function getFavoriteCars() {
+  const db = await initDB();
+  const favoriteIds = await db.getAll(favoritesStoreName);
+  const allCars = await getAllCars();
+  return allCars.filter(car => favoriteIds.some(fav => fav.id === car.id));
+}
+
+export async function removeFavoriteCar(carId) {
+  const db = await initDB();
+  return db.delete(favoritesStoreName, carId);
+}
+
+export async function isFavoriteCar(carId) {
+  const db = await initDB();
+  const favorite = await db.get(favoritesStoreName, carId);
+  return !!favorite;
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navItems } from '../nav-items';
-import { Menu, Sun, Moon, Palette, Globe } from 'lucide-react';
+import { Menu, Sun, Moon, Palette, Globe, Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -75,6 +75,11 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
           <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
             <Globe className="h-4 w-4" />
           </Button>
+          <Link to="/favorite">
+            <Button variant="ghost" size="icon" className="text-current">
+              <Heart className="h-4 w-4" />
+            </Button>
+          </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="text-current">
