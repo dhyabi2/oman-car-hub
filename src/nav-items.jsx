@@ -1,9 +1,10 @@
-import { HomeIcon, PlusCircleIcon, ListIcon, HelpCircleIcon, HeartIcon } from "lucide-react";
+import { HomeIcon, PlusCircleIcon, ListIcon, HelpCircleIcon, HeartIcon, TrophyIcon } from "lucide-react";
 import Index from "./pages/Index.jsx";
 import AddCar from "./pages/AddCar.jsx";
 import CarsList from "./pages/CarsList.jsx";
 import Favorite from "./pages/Favorite.jsx";
 import FAQ from "./pages/FAQ.jsx";
+import Leaderboard from "./pages/Leaderboard.jsx";
 
 export const navItems = [
   {
@@ -35,5 +36,11 @@ export const navItems = [
     to: "/faq",
     icon: <HelpCircleIcon className="h-4 w-4" />,
     page: <FAQ />,
+  },
+  {
+    title: "Leaderboard",
+    to: "/leaderboard",
+    icon: <TrophyIcon className="h-4 w-4" />,
+    page: <Leaderboard />,
   },
 ];
