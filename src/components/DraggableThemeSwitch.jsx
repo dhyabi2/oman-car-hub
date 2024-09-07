@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { setTheme } from '../utils/indexedDB';
 
 const themes = [
   'light', 'dark', 'desert-sands', 'oasis-breeze', 'spice-market',
@@ -10,6 +11,7 @@ const themes = [
 const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
   const [dragX, setDragX] = useState(0);
   const containerRef = useRef(null);
+  const isDraggingRef = useRef(false);
 
   useEffect(() => {
     const currentIndex = themes.indexOf(currentTheme);
@@ -20,9 +22,17 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
     const containerWidth = containerRef.current?.offsetWidth || 1;
     const newDragX = (info.point.x / containerWidth) * 100;
     setDragX(Math.max(0, Math.min(newDragX, 100)));
+    isDraggingRef.current = true;
+  };
 
-    const themeIndex = Math.round((newDragX / 100) * (themes.length - 1));
-    onThemeChange(themes[themeIndex]);
+  const handleDragEnd = () => {
+    if (isDraggingRef.current) {
+      const themeIndex = Math.round((dragX / 100) * (themes.length - 1));
+      const newTheme = themes[themeIndex];
+      onThemeChange(newTheme);
+      setTheme(newTheme);
+      isDraggingRef.current = false;
+    }
   };
 
   const getThemeLabel = (theme) => {
@@ -42,6 +52,7 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
           dragMomentum={false}
           style={{ x: `${dragX}%` }}
           onDrag={handleDrag}
+          onDragEnd={handleDragEnd}
         />
       </div>
       <div className="mt-2 text-center">
