@@ -7,21 +7,36 @@ export const trackReferralWithIP = async (referralCode) => {
     const ipData = await ipResponse.json();
     const ip = ipData.ip;
 
-    // Generate source key and track referral
+    // Generate source key
     const response = await fetch(`${API_BASE_URL}/api/generate-source-key`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ip, referralCode }),
+      body: JSON.stringify({ ip }),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to generate source key and track referral');
+      throw new Error('Failed to generate source key');
     }
 
     const data = await response.json();
-    console.log('Referral tracked successfully', data);
+    const sourceKey = data.sourceKey;
+
+    // Track referral
+    const trackResponse = await fetch(`${API_BASE_URL}/api/track-referral`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ referralKey: referralCode, sourceKey }),
+    });
+
+    if (!trackResponse.ok) {
+      throw new Error('Failed to track referral');
+    }
+
+    console.log('Referral tracked successfully');
   } catch (error) {
     console.error('Error tracking referral:', error);
   }
