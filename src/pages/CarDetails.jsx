@@ -47,21 +47,14 @@ const CarDetails = ({ language, t }) => {
 
   const handleShare = () => {
     const shareUrl = window.location.href;
-    if (navigator.share) {
-      navigator.share({
-        title: `${carDetails.year} ${carDetails.make} ${carDetails.model}`,
-        text: `Check out this ${carDetails.year} ${carDetails.make} ${carDetails.model} for ${carDetails.price} ${t.currency}`,
-        url: shareUrl
-      }).then(() => console.log('Successful share'))
-        .catch((error) => console.log('Error sharing', error));
-    } else {
-      navigator.clipboard.writeText(shareUrl)
-        .then(() => toast.success(t.linkCopied || 'Link copied to clipboard!'))
-        .catch(err => {
-          console.error('Could not copy text: ', err);
-          toast.error(t.copyFailed || 'Failed to copy link');
-        });
-    }
+    navigator.clipboard.writeText(shareUrl)
+      .then(() => {
+        toast.success(t.linkCopied || 'Link copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Could not copy text: ', err);
+        toast.error(t.copyFailed || 'Failed to copy link');
+      });
   };
 
   return (

@@ -66,21 +66,14 @@ export const NoCarsList = ({ language }) => (
 export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavorite }) => {
   const handleShare = () => {
     const shareUrl = `${window.location.origin}/car/${car.id}`;
-    if (navigator.share) {
-      navigator.share({
-        title: `${car.year} ${car.make} ${car.model}`,
-        text: `Check out this ${car.year} ${car.make} ${car.model} for ${car.price} ${getTranslation(language, 'currency', 'OMR')}`,
-        url: shareUrl
-      }).then(() => console.log('Successful share'))
-        .catch((error) => console.log('Error sharing', error));
-    } else {
-      navigator.clipboard.writeText(shareUrl)
-        .then(() => toast.success(getTranslation(language, 'linkCopied', 'Link copied to clipboard!')))
-        .catch(err => {
-          console.error('Could not copy text: ', err);
-          toast.error(getTranslation(language, 'copyFailed', 'Failed to copy link'));
-        });
-    }
+    navigator.clipboard.writeText(shareUrl)
+      .then(() => {
+        toast.success(getTranslation(language, 'linkCopied', 'Link copied to clipboard!'));
+      })
+      .catch(err => {
+        console.error('Could not copy text: ', err);
+        toast.error(getTranslation(language, 'copyFailed', 'Failed to copy link'));
+      });
   };
 
   return (

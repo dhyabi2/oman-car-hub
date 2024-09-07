@@ -29,21 +29,14 @@ const Favorite = ({ language, t }) => {
 
   const handleShare = (car) => {
     const shareUrl = `${window.location.origin}/car/${car.id}`;
-    if (navigator.share) {
-      navigator.share({
-        title: `${car.year} ${car.make} ${car.model}`,
-        text: `Check out this ${car.year} ${car.make} ${car.model} for ${car.price} ${t.currency}`,
-        url: shareUrl
-      }).then(() => console.log('Successful share'))
-        .catch((error) => console.log('Error sharing', error));
-    } else {
-      navigator.clipboard.writeText(shareUrl)
-        .then(() => toast.success(t.linkCopied || 'Link copied to clipboard!'))
-        .catch(err => {
-          console.error('Could not copy text: ', err);
-          toast.error(t.copyFailed || 'Failed to copy link');
-        });
-    }
+    navigator.clipboard.writeText(shareUrl)
+      .then(() => {
+        toast.success(t.linkCopied || 'Link copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Could not copy text: ', err);
+        toast.error(t.copyFailed || 'Failed to copy link');
+      });
   };
 
   return (
