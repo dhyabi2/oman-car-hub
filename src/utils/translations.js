@@ -94,7 +94,24 @@ export const translations = {
     priceRange: "Price Range",
     automatic: "Automatic",
     manual: "Manual",
-    "semi-automatic": "Semi-Auto"
+    "semi-automatic": "Semi-Auto",
+    // New translations for the leaderboard page
+    todaysLeaderboard: "Today's Leaderboard",
+    yourReferralInfo: "Your Referral Information",
+    referralKey: "Referral Key",
+    enterYourName: "Enter your name",
+    save: "Save",
+    edit: "Edit",
+    rank: "Rank",
+    name: "Name",
+    referrals: "Referrals",
+    currentlyApplied: "Currently Applied",
+    points: "Points",
+    userNameUpdated: "User name updated successfully",
+    failedToUpdateUserName: "Failed to update user name",
+    failedToFetchLeaderboard: "Failed to fetch leaderboard",
+    failedToFetchCurrentlyApplied: "Failed to fetch currently applied users",
+    leaderboard: "Leaderboard"
   },
   ar: {
     appName: "سوق عُمان للسيارات",
@@ -191,6 +208,23 @@ export const translations = {
     priceRange: "نطاق السعر",
     automatic: "أوتوماتيكي",
     manual: "يدوي",
-    "semi-automatic": "نصف أوتوماتيكي"
+    "semi-automatic": "نصف أوتوماتيكي",
+    // New translations for the leaderboard page in Arabic
+    todaysLeaderboard: "لوحة الصدارة اليوم",
+    yourReferralInfo: "معلومات الإحالة الخاصة بك",
+    referralKey: "مفتاح الإحالة",
+    enterYourName: "أدخل اسمك",
+    save: "حفظ",
+    edit: "تعديل",
+    rank: "المرتبة",
+    name: "الاسم",
+    referrals: "الإحالات",
+    currentlyApplied: "المطبق حاليًا",
+    points: "النقاط",
+    userNameUpdated: "تم تحديث اسم المستخدم بنجاح",
+    failedToUpdateUserName: "فشل في تحديث اسم المستخدم",
+    failedToFetchLeaderboard: "فشل في جلب لوحة الصدارة",
+    failedToFetchCurrentlyApplied: "فشل في جلب المستخدمين المطبقين حاليًا",
+    leaderboard: "لوحة الصدارة"
   }
 };
