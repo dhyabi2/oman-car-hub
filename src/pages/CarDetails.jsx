@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getCarById } from '../utils/indexedDB';
 import ImageGallery from '../components/ImageGallery';
-import { Car, DollarSign, MapPin, Phone, Info, Calendar, Gauge, Zap, Droplet, Palette, DoorOpen, Users, Compass, Award, Key } from 'lucide-react';
+import { Car, DollarSign, MapPin, Phone, Info, Calendar, Gauge, Zap, Droplet, Palette, DoorOpen, Users, Compass, Award, Key, MessageCircle } from 'lucide-react';
 
 const CarDetails = ({ language, t }) => {
   const { id } = useParams();
@@ -110,14 +110,20 @@ const CarDetails = ({ language, t }) => {
 
           <ImageGallery photos={carDetails.photos} make={carDetails.make} model={carDetails.model} t={t} />
 
-          <div className="mt-8 flex justify-center">
+          <div className="mt-8 flex justify-center space-x-4">
             <Button
-              size="lg"
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full"
+              size="icon"
+              className="bg-green-500 hover:bg-green-600 text-white"
               onClick={() => window.open(`https://wa.me/968${carDetails.contact_phone}`, '_blank')}
             >
-              <Phone className="mr-2" />
-              {t.contactSellerWhatsApp}
+              <MessageCircle className="h-5 w-5" />
+            </Button>
+            <Button
+              size="icon"
+              className="bg-blue-500 hover:bg-blue-600 text-white"
+              onClick={() => window.open(`tel:${carDetails.contact_phone}`, '_blank')}
+            >
+              <Phone className="h-5 w-5" />
             </Button>
           </div>
         </CardContent>

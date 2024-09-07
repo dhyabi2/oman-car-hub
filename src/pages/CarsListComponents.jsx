@@ -91,19 +91,28 @@ export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavo
         <p className="flex items-center"><Calendar className="mr-1 text-purple-500" /> {car.year}</p>
         <p className="flex items-center col-span-2"><MapPin className="mr-1 text-indigo-500" /> {car.location}</p>
       </div>
-      <div className="flex flex-col space-y-2">
-        <Button className="w-full bg-green-500 hover:bg-green-600 text-white" onClick={() => window.open(`https://wa.me/968${car.contact_phone}`, '_blank')}>
-          <MessageCircle className="mr-2" />
-          {getTranslation(language, 'whatsappButton', 'WhatsApp')}
-        </Button>
-        <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white" onClick={() => window.open(`tel:${car.contact_phone}`)}>
-          <Phone className="mr-2" />
-          {getTranslation(language, 'callButton', 'Call')}
-        </Button>
-        <Button className="w-full" onClick={() => onViewDetails(car.id)}>
+      <div className="flex justify-between items-center">
+        <Button className="flex-1 mr-2" onClick={() => onViewDetails(car.id)}>
           <Eye className="mr-2" />
           {getTranslation(language, 'viewDetails', 'View Details')}
         </Button>
+        <div className="flex">
+          <Button
+            size="icon"
+            variant="outline"
+            className="mr-2"
+            onClick={() => window.open(`https://wa.me/968${car.contact_phone}`, '_blank')}
+          >
+            <MessageCircle className="h-4 w-4" />
+          </Button>
+          <Button
+            size="icon"
+            variant="outline"
+            onClick={() => window.open(`tel:${car.contact_phone}`)}
+          >
+            <Phone className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </CardContent>
   </Card>

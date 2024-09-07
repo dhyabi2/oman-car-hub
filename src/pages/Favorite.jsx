@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getFavoriteCars, removeFavoriteCar } from '../utils/indexedDB';
-import { Heart, Trash2 } from 'lucide-react';
+import { Heart, Trash2, Eye, Phone, MessageCircle } from 'lucide-react';
 
 const Favorite = ({ language, t }) => {
   const [favoriteCars, setFavoriteCars] = useState([]);
@@ -43,12 +43,34 @@ const Favorite = ({ language, t }) => {
               <CardContent className="p-4">
                 <h2 className="text-2xl font-semibold mb-2">{car.year} {car.make} {car.model}</h2>
                 <p className="text-3xl font-bold text-red-600 mb-4">{car.price} {t.currency}</p>
-                <div className="flex justify-between">
-                  <Button onClick={() => handleViewDetails(car.id)}>{t.viewDetails}</Button>
-                  <Button variant="outline" onClick={() => handleRemoveFavorite(car.id)}>
-                    <Trash2 className="mr-2" />
-                    {t.remove}
+                <div className="flex justify-between items-center">
+                  <Button size="sm" onClick={() => handleViewDetails(car.id)}>
+                    <Eye className="mr-2 h-4 w-4" />
+                    {t.viewDetails}
                   </Button>
+                  <div className="flex space-x-2">
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={() => window.open(`https://wa.me/968${car.contact_phone}`, '_blank')}
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={() => window.open(`tel:${car.contact_phone}`, '_blank')}
+                    >
+                      <Phone className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={() => handleRemoveFavorite(car.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
