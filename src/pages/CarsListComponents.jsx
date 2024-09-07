@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye, Phone, MessageCircle, Heart, MapPin, Share2 } from 'lucide-react';
 import { carMakes, carModels, fuelTypes, transmissionTypes } from '../utils/carData';
 import { translations } from '../utils/translations';
+import { toast } from "sonner";
 
 const getTranslation = (language, key, fallback = key) => {
   return translations[language]?.[key] || fallback;
@@ -64,19 +65,21 @@ export const NoCarsList = ({ language }) => (
 
 export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavorite }) => {
   const handleShare = () => {
+    const shareUrl = `${window.location.origin}/car/${car.id}`;
     if (navigator.share) {
       navigator.share({
         title: `${car.year} ${car.make} ${car.model}`,
         text: `Check out this ${car.year} ${car.make} ${car.model} for ${car.price} ${getTranslation(language, 'currency', 'OMR')}`,
-        url: window.location.href
+        url: shareUrl
       }).then(() => console.log('Successful share'))
         .catch((error) => console.log('Error sharing', error));
     } else {
-      console.log('Web Share API not supported');
-      const shareText = `${car.year} ${car.make} ${car.model} - ${car.price} ${getTranslation(language, 'currency', 'OMR')} - ${window.location.href}`;
-      navigator.clipboard.writeText(shareText)
-        .then(() => alert('Link copied to clipboard!'))
-        .catch(err => console.error('Could not copy text: ', err));
+      navigator.clipboard.writeText(shareUrl)
+        .then(() => toast.success(getTranslation(language, 'linkCopied', 'Link copied to clipboard!')))
+        .catch(err => {
+          console.error('Could not copy text: ', err);
+          toast.error(getTranslation(language, 'copyFailed', 'Failed to copy link'));
+        });
     }
   };
 
