@@ -21,7 +21,7 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
     return response.json();
   } catch (error) {
     console.error('API request failed:', error);
-    throw error;
+    throw new Error(`API request failed: ${error.message}`);
   }
 }
 
@@ -51,7 +51,7 @@ export async function getLanguage() {
     return result.value;
   } catch (error) {
     console.error('Failed to get language:', error);
-    return 'en';
+    return 'en'; // Default to English if there's an error
   }
 }
 
@@ -65,7 +65,7 @@ export async function getTheme() {
     return result.value;
   } catch (error) {
     console.error('Failed to get theme:', error);
-    return 'light';
+    return 'light'; // Default to light theme if there's an error
   }
 }
 
@@ -87,23 +87,13 @@ export async function getCurrentViewers() {
     return result.currentViewers;
   } catch (error) {
     console.error('Failed to get current viewers:', error);
-    return 0;
+    return 0; // Default to 0 if there's an error
   }
 }
 
 export async function getCarStatistics() {
   try {
-    const stats = await apiRequest('/api/stats');
-    return {
-      totalListings: stats.totalListings || 0,
-      activeSellers: stats.activeSellers || 0,
-      averagePrice: stats.averagePrice || 0,
-      mostPopularBrand: stats.mostPopularBrand || '',
-      mostExpensiveCar: stats.mostExpensiveCar || '',
-      newestListing: stats.newestListing || '',
-      currentViewers: stats.currentViewers || 0,
-      latestCar: stats.latestCar || null
-    };
+    return await apiRequest('/api/stats');
   } catch (error) {
     console.error('Failed to get car statistics:', error);
     return {
@@ -113,8 +103,7 @@ export async function getCarStatistics() {
       mostPopularBrand: '',
       mostExpensiveCar: '',
       newestListing: '',
-      currentViewers: 0,
-      latestCar: null
+      currentViewers: 0
     };
   }
 }
