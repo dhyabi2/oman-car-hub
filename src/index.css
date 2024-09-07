@@ -136,6 +136,14 @@
     --primary: 220 80% 50%;
     --secondary: 45 70% 50%;
   }
+
+  .national-day {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --primary: 0 100% 50%;
+    --secondary: 120 100% 25%;
+    --accent: 0 0% 0%;
+  }
 }
  
 @layer base {

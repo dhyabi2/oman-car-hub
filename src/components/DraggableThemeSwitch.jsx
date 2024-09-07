@@ -5,7 +5,7 @@ import { setTheme } from '../utils/indexedDB';
 const themes = [
   'light', 'dark', 'desert-sands', 'oasis-breeze', 'spice-market',
   'modern-minimalist', 'coastal-calm', 'arabian-nights', 'bedouin-chic',
-  'tech-futurism', 'frankincense-trail', 'royal-opulence'
+  'tech-futurism', 'frankincense-trail', 'royal-opulence', 'national-day'
 ];
 
 const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
