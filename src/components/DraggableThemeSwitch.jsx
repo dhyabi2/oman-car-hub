@@ -76,7 +76,9 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
       </div>
       <div className="mt-2 text-center">
         <div className="flex items-center justify-center">
-          <span className="mr-2">{getThemeLabel(lastThemeRef.current)}</span>
+          <span className="mr-2">
+            {getThemeLabel(lastThemeRef.current)} {t.theme} / {t.themeArabic}
+          </span>
           <div className="flex">
             {currentThemeObject.colors.map((color, index) => (
               <div
