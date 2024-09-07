@@ -9,6 +9,7 @@ import ImageGallery from '../components/ImageGallery';
 import { Car, DollarSign, MapPin, Phone, Info, Calendar, Gauge, Zap, Droplet, Palette, DoorOpen, Users, Compass, Award, Key, MessageCircle, Share2 } from 'lucide-react';
 import { toast } from "sonner";
 import { addReferralToUrl } from '../utils/referral';
+import { trackReferralWithIP } from '../utils/referralTracking';
 
 const CarDetails = ({ language, t }) => {
   const { id } = useParams();
@@ -20,6 +21,9 @@ const CarDetails = ({ language, t }) => {
       setCarDetails(car);
     };
     fetchCarDetails();
+
+    // Track referral when the page loads
+    trackReferralWithIP();
   }, [id]);
 
   if (!carDetails) {
