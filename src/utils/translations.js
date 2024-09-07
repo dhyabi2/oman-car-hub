@@ -91,7 +91,10 @@ export const translations = {
     allMakes: "All Makes",
     allModels: "All Models",
     yearRange: "Year Range",
-    priceRange: "Price Range"
+    priceRange: "Price Range",
+    automatic: "Automatic",
+    manual: "Manual",
+    "semi-automatic": "Semi-Auto"
   },
   ar: {
     appName: "سوق عُمان للسيارات",
@@ -185,6 +188,9 @@ export const translations = {
     allMakes: "جميع الماركات",
     allModels: "جميع الموديلات",
     yearRange: "نطاق السنة",
-    priceRange: "نطاق السعر"
+    priceRange: "نطاق السعر",
+    automatic: "أوتوماتيكي",
+    manual: "يدوي",
+    "semi-automatic": "نصف أوتوماتيكي"
   }
 };
