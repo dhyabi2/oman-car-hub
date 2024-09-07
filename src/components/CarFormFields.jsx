@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import ImageSelector from './ImageSelector';
-import { Car, Fuel, Palette, Settings, Users, Compass, CheckCircle, Calendar } from 'lucide-react';
+import { Car, Fuel, Palette, Settings, Users, CheckCircle, Calendar } from 'lucide-react';
 
 import { carBrands, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 
@@ -114,15 +114,6 @@ export const SeatsSelector = ({ value, onChange, t }) => (
   <ImageSelector
     label={t.numberOfSeats}
     options={[2, 4, 5, 7, 8].map(num => ({ value: num, icon: <Users size={24} />, label: num.toString() }))}
-    value={value}
-    onChange={onChange}
-  />
-);
-
-export const DrivetrainSelector = ({ value, onChange, t }) => (
-  <ImageSelector
-    label={t.drivetrain}
-    options={['FWD', 'RWD', 'AWD'].map(type => ({ value: type, icon: <Compass size={24} />, label: t[type.toLowerCase()] }))}
     value={value}
     onChange={onChange}
   />
