@@ -27,6 +27,7 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => {
           type="number"
           value={formData.price}
           onChange={(e) => handleInputChange('price', Number(e.target.value))}
+          placeholder={t.enterPrice}
         />
       </div>
       <div>
@@ -61,21 +62,23 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => {
 export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
   <FormSection title={t.additionalInformation}>
     <div>
-      <Label htmlFor="description">{t.description}</Label>
+      <Label htmlFor="description">{t.description} ({t.optional})</Label>
       <Textarea
         id="description"
         value={formData.description}
         onChange={(e) => handleInputChange('description', e.target.value)}
         rows={4}
+        placeholder={t.descriptionPlaceholder}
       />
     </div>
     <div>
-      <Label htmlFor="additional_features">{t.additionalFeatures}</Label>
+      <Label htmlFor="additional_features">{t.additionalFeatures} ({t.optional})</Label>
       <Textarea
         id="additional_features"
         value={formData.additional_features}
         onChange={(e) => handleInputChange('additional_features', e.target.value)}
         rows={4}
+        placeholder={t.additionalFeaturesPlaceholder}
       />
     </div>
   </FormSection>
