@@ -7,18 +7,19 @@ import { addCar } from '../utils/indexedDB';
 import { MakeModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelTypeSelector, TransmissionSelector, DoorsSelector, SeatsSelector, DrivetrainSelector, ConditionSelector, YearSelector } from '../components/CarFormFields';
 import { FormSection, ListingDetails, AdditionalInformation, PhotoUpload } from './AddCarComponents';
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, Loader2 } from 'lucide-react';
 
 const AddCar = ({ language, t }) => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState(() => {
     const savedData = localStorage.getItem('addCarFormData');
     return savedData ? JSON.parse(savedData) : {
       make: '', model: '', year: new Date().getFullYear(), mileage: 0,
       transmission: '', fuel_type: '', engine_size: 1500, color: '',
       number_of_doors: 4, number_of_seats: 5, drivetrain: 'FWD',
-      condition: 'Used', price: 10000, vin: '', location: '',
+      condition: 'Used', price: '', vin: '', location: '',
       seller_type: 'Private', description: '', photos: [],
       contact_phone: '', listing_expiration_date: null, additional_features: '',
     };
@@ -41,7 +42,7 @@ const AddCar = ({ language, t }) => {
       case 3:
         return formData.price && formData.location && formData.contact_phone;
       case 4:
-        return formData.description && formData.additional_features;
+        return true; // Description and additional features are now optional
       case 5:
         return formData.photos.length > 0 && formData.photos.length <= 15;
       default:
@@ -52,6 +53,7 @@ const AddCar = ({ language, t }) => {
   const handleNext = () => {
     if (validateStep()) {
       setStep(prevStep => prevStep + 1);
+      window.scrollTo(0, 0);
     } else {
       toast.error(t.pleaseAllRequiredFields);
     }
@@ -59,11 +61,14 @@ const AddCar = ({ language, t }) => {
 
   const handlePrevious = () => {
     setStep(prevStep => prevStep - 1);
+    window.scrollTo(0, 0);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+
+    setIsSubmitting(true);
 
     try {
       const photosPromises = formData.photos.map(photo => 
@@ -89,6 +94,8 @@ const AddCar = ({ language, t }) => {
     } catch (error) {
       console.error('Error adding car:', error);
       toast.error(t.failedToAddCarListing);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -241,17 +248,26 @@ const AddCar = ({ language, t }) => {
         </CardContent>
         <CardFooter className="flex justify-between">
           {step > 1 && (
-            <Button onClick={handlePrevious} variant="outline">
+            <Button onClick={handlePrevious} variant="outline" disabled={isSubmitting}>
               <ChevronLeft className="mr-2 h-4 w-4" /> {t.previous}
             </Button>
           )}
           {step < 5 ? (
-            <Button onClick={handleNext} className="ml-auto">
+            <Button onClick={handleNext} className="ml-auto" disabled={isSubmitting}>
               {t.next} <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           ) : (
-            <Button onClick={handleSubmit} className="ml-auto">
-              {t.submitListing} <Check className="ml-2 h-4 w-4" />
+            <Button onClick={handleSubmit} className="ml-auto" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t.submitting}
+                </>
+              ) : (
+                <>
+                  {t.submitListing} <Check className="ml-2 h-4 w-4" />
+                </>
+              )}
             </Button>
           )}
         </CardFooter>
