@@ -227,6 +227,7 @@ const AddCar = ({ language, t }) => {
           <CardTitle className="text-2xl font-bold">{t.addCarForSale}</CardTitle>
         </CardHeader>
         <CardContent>
+          <h1 className="text-3xl font-bold mb-6">{t.addCarFormTitle}</h1>
           <div className="mb-8">
             <div className="flex justify-between items-center">
               {[1, 2, 3, 4, 5].map((s) => (
