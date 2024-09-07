@@ -25,6 +25,11 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
     onThemeChange(themes[themeIndex]);
   };
 
+  const getThemeLabel = (theme) => {
+    const label = t[theme] || theme;
+    return label.charAt(0).toUpperCase() + label.slice(1).replace(/-/g, ' ');
+  };
+
   return (
     <div className="p-4">
       <div ref={containerRef} className="relative w-full h-8 bg-gray-200 rounded-full">
@@ -39,7 +44,7 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
         />
       </div>
       <div className="mt-2 text-center">
-        {t[currentTheme] || currentTheme}
+        {getThemeLabel(currentTheme)}
       </div>
     </div>
   );
