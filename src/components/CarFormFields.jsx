@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { carBrands, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 
-export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => {
+export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t, language }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const filteredBrands = carBrands.filter(brand => 
     brand.brand.toLowerCase().includes(searchTerm.toLowerCase())
@@ -37,6 +37,7 @@ export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t })
           value={make}
           onChange={onMakeChange}
           columns={2}
+          language={language}
         />
       </ScrollArea>
       <ImageSelector
@@ -45,6 +46,7 @@ export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t })
         value={model}
         onChange={onModelChange}
         disabled={!make}
+        language={language}
       />
     </>
   );
@@ -95,7 +97,7 @@ export const PriceRangeInput = ({ minPrice, maxPrice, onChange, t }) => (
   </div>
 );
 
-export const ColorSelector = ({ value, onChange, t }) => (
+export const ColorSelector = ({ value, onChange, t, language }) => (
   <ImageSelector
     label={t.color}
     options={colors.map(color => ({ 
@@ -105,60 +107,67 @@ export const ColorSelector = ({ value, onChange, t }) => (
     }))}
     value={value}
     onChange={onChange}
+    language={language}
   />
 );
 
-export const FuelTypeSelector = ({ value, onChange, t }) => (
+export const FuelTypeSelector = ({ value, onChange, t, language }) => (
   <ImageSelector
     label={t.fuelType}
     options={fuelTypes.map(type => ({ value: type, icon: <Fuel size={24} />, label: t[type.toLowerCase()] }))}
     value={value}
     onChange={onChange}
+    language={language}
   />
 );
 
-export const TransmissionSelector = ({ value, onChange, t }) => (
+export const TransmissionSelector = ({ value, onChange, t, language }) => (
   <ImageSelector
     label={t.transmission}
     options={transmissionTypes.map(type => ({ value: type, icon: <Settings size={24} />, label: t[type.toLowerCase()] }))}
     value={value}
     onChange={onChange}
+    language={language}
   />
 );
 
-export const DoorsSelector = ({ value, onChange, t }) => (
+export const DoorsSelector = ({ value, onChange, t, language }) => (
   <ImageSelector
     label={t.numberOfDoors}
     options={[2, 3, 4, 5].map(num => ({ value: num, icon: <Car size={24} />, label: num.toString() }))}
     value={value}
     onChange={onChange}
+    language={language}
   />
 );
 
-export const SeatsSelector = ({ value, onChange, t }) => (
+export const SeatsSelector = ({ value, onChange, t, language }) => (
   <ImageSelector
     label={t.numberOfSeats}
     options={[2, 4, 5, 7, 8].map(num => ({ value: num, icon: <Users size={24} />, label: num.toString() }))}
     value={value}
     onChange={onChange}
+    language={language}
   />
 );
 
-export const DrivetrainSelector = ({ value, onChange, t }) => (
+export const DrivetrainSelector = ({ value, onChange, t, language }) => (
   <ImageSelector
     label={t.drivetrain}
     options={['FWD', 'RWD', 'AWD'].map(type => ({ value: type, icon: <Compass size={24} />, label: t[type.toLowerCase()] }))}
     value={value}
     onChange={onChange}
+    language={language}
   />
 );
 
-export const ConditionSelector = ({ value, onChange, t }) => (
+export const ConditionSelector = ({ value, onChange, t, language }) => (
   <ImageSelector
     label={t.condition}
     options={['New', 'Used'].map(condition => ({ value: condition, icon: <CheckCircle size={24} />, label: t[condition.toLowerCase()] }))}
     value={value}
     onChange={onChange}
+    language={language}
   />
 );
 

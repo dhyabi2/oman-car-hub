@@ -136,6 +136,7 @@ const AddCar = ({ language, t }) => {
               onMakeChange={(value) => handleInputChange('make', value)}
               onModelChange={(value) => handleInputChange('model', value)}
               t={t}
+              language={language}
               modelRef={modelRef}
             />
             <YearSelector
@@ -157,36 +158,43 @@ const AddCar = ({ language, t }) => {
               value={formData.transmission}
               onChange={(value) => handleInputChange('transmission', value)}
               t={t}
+              language={language}
             />
             <FuelTypeSelector
               value={formData.fuel_type}
               onChange={(value) => handleInputChange('fuel_type', value)}
               t={t}
+              language={language}
             />
             <ColorSelector
               value={formData.color}
               onChange={(value) => handleInputChange('color', value)}
               t={t}
+              language={language}
             />
             <DoorsSelector
               value={formData.number_of_doors}
               onChange={(value) => handleInputChange('number_of_doors', value)}
               t={t}
+              language={language}
             />
             <SeatsSelector
               value={formData.number_of_seats}
               onChange={(value) => handleInputChange('number_of_seats', value)}
               t={t}
+              language={language}
             />
             <DrivetrainSelector
               value={formData.drivetrain}
               onChange={(value) => handleInputChange('drivetrain', value)}
               t={t}
+              language={language}
             />
             <ConditionSelector
               value={formData.condition}
               onChange={(value) => handleInputChange('condition', value)}
               t={t}
+              language={language}
             />
           </FormSection>
         );
@@ -196,6 +204,7 @@ const AddCar = ({ language, t }) => {
             formData={formData}
             handleInputChange={handleInputChange}
             t={t}
+            language={language}
           />
         );
       case 4:
@@ -204,6 +213,7 @@ const AddCar = ({ language, t }) => {
             formData={formData}
             handleInputChange={handleInputChange}
             t={t}
+            language={language}
           />
         );
       case 5:
@@ -213,6 +223,7 @@ const AddCar = ({ language, t }) => {
             handlePhotoUpload={(files) => handleInputChange('photos', files)}
             t={t}
             maxPhotos={15}
+            language={language}
           />
         );
       default:
