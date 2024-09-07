@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navItems } from '../nav-items';
-import { Menu, Palette, Globe, Heart, Trophy } from 'lucide-react';
+import { Menu, Palette, Globe, Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -62,11 +62,6 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
             <Heart className="h-4 w-4" />
           </Button>
         </Link>
-        <Link to="/leaderboard">
-          <Button variant="ghost" size="icon" className="text-current">
-            <Trophy className="h-4 w-4" />
-          </Button>
-        </Link>
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="ghost" size="icon" className="text-current">
@@ -85,7 +80,7 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
           </SheetTrigger>
           <SheetContent side="left" className={`w-[300px] sm:w-[400px] ${getHeaderClass()}`}>
             <nav className="flex flex-col space-y-6 mt-8">
-              {navItems.map((item) => (
+              {navItems.filter(item => item.title !== 'Leaderboard').map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
