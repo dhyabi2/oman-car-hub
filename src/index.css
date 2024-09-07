@@ -68,73 +68,73 @@
   }
 
   .desert-sands {
-    --background: 43 100% 95%;
+    --background: 43 30% 95%;
     --foreground: 30 20% 20%;
     --primary: 35 80% 50%;
-    --secondary: 40 60% 70%;
+    --secondary: 40 30% 90%;
   }
 
   .oasis-breeze {
-    --background: 180 50% 95%;
+    --background: 180 20% 95%;
     --foreground: 200 80% 20%;
     --primary: 190 80% 40%;
-    --secondary: 150 50% 60%;
+    --secondary: 150 20% 90%;
   }
 
   .spice-market {
-    --background: 20 80% 95%;
+    --background: 20 20% 95%;
     --foreground: 0 80% 20%;
     --primary: 10 80% 50%;
-    --secondary: 30 70% 60%;
+    --secondary: 30 30% 90%;
   }
 
   .modern-minimalist {
     --background: 0 0% 98%;
     --foreground: 0 0% 10%;
     --primary: 0 0% 20%;
-    --secondary: 0 0% 80%;
+    --secondary: 0 0% 90%;
   }
 
   .coastal-calm {
-    --background: 200 30% 95%;
+    --background: 200 20% 95%;
     --foreground: 210 50% 20%;
     --primary: 200 60% 50%;
-    --secondary: 40 30% 70%;
+    --secondary: 40 20% 90%;
   }
 
   .arabian-nights {
-    --background: 270 30% 15%;
-    --foreground: 45 80% 80%;
+    --background: 270 20% 95%;
+    --foreground: 45 80% 20%;
     --primary: 300 60% 50%;
-    --secondary: 45 70% 50%;
+    --secondary: 45 30% 90%;
   }
 
   .bedouin-chic {
     --background: 30 20% 95%;
     --foreground: 20 80% 20%;
     --primary: 20 60% 40%;
-    --secondary: 30 40% 60%;
+    --secondary: 30 20% 90%;
   }
 
   .tech-futurism {
-    --background: 220 20% 10%;
-    --foreground: 180 100% 90%;
+    --background: 220 20% 95%;
+    --foreground: 180 100% 20%;
     --primary: 180 100% 50%;
-    --secondary: 300 100% 50%;
+    --secondary: 300 20% 90%;
   }
 
   .frankincense-trail {
     --background: 120 20% 95%;
     --foreground: 30 80% 20%;
     --primary: 150 40% 40%;
-    --secondary: 30 30% 60%;
+    --secondary: 30 20% 90%;
   }
 
   .royal-opulence {
-    --background: 220 50% 15%;
-    --foreground: 45 80% 80%;
+    --background: 220 20% 95%;
+    --foreground: 45 80% 20%;
     --primary: 220 80% 50%;
-    --secondary: 45 70% 50%;
+    --secondary: 45 30% 90%;
   }
 
   .national-day {
