@@ -23,9 +23,16 @@ This endpoint is used to validate the source key before tracking referrals.
 
 ### Endpoint: `/api/generate-source-key`
 
-This endpoint generates a new source key based on the user's IP address.
+This endpoint generates a new source key based on the user's IP address provided by the frontend.
 
-#### Method: GET
+#### Method: POST
+
+#### Request Body:
+```json
+{
+  "ip": "string"
+}
+```
 
 #### Response:
 - 200 OK: Returns a new or existing source key
@@ -75,12 +82,14 @@ const generateSourceKey = (ip) => {
 };
 
 // Endpoint to generate a new source key based on IP
-router.get('/generate-source-key', async (req, res) => {
-  try {
-    const response = await fetch('https://api.ipify.org?format=json');
-    const data = await response.json();
-    const ip = data.ip;
+router.post('/generate-source-key', (req, res) => {
+  const { ip } = req.body;
 
+  if (!ip) {
+    return res.status(400).json({ error: 'IP address is required' });
+  }
+
+  try {
     // Check if IP already has a source key
     for (const [key, value] of Object.entries(sourceKeys)) {
       if (value === ip) {
@@ -108,14 +117,25 @@ To use these endpoints:
    app.use('/api', extraEndpoints);
    ```
 
-2. When a user first accesses the app, call the `/api/generate-source-key` endpoint to get a source key based on their IP:
+2. In your frontend, first fetch the IP address, then call the `/api/generate-source-key` endpoint:
    ```javascript
-   fetch('/api/generate-source-key')
+   fetch('https://api.ipify.org?format=json')
+     .then(response => response.json())
+     .then(data => {
+       const ip = data.ip;
+       return fetch('/api/generate-source-key', {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({ ip }),
+       });
+     })
      .then(response => response.json())
      .then(data => {
        localStorage.setItem('sourceKey', data.sourceKey);
      })
-     .catch(error => console.error('Error fetching source key:', error));
+     .catch(error => console.error('Error fetching IP or generating source key:', error));
    ```
 
 3. When tracking referrals, first call `/api/check-source-key` to validate the source key before proceeding with the referral tracking logic.
