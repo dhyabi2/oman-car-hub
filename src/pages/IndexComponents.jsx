@@ -118,9 +118,7 @@ export const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selec
                 onClick={() => handleBrandSelect(brand)}
               >
                 <img src={brand.logo} alt={`${brand.brand} logo`} className="w-10 h-10 object-contain" />
-                <span className={`text-xs font-semibold text-center line-clamp-1 ${brand.brand.length > 10 ? 'text-[10px]' : ''}`}>
-                  {brand.brand}
-                </span>
+                <span className="text-xs font-semibold text-center line-clamp-1">{brand.brand}</span>
                 <span className="text-xs text-gray-500">Est. {brand.founded}</span>
               </Button>
             </motion.div>
