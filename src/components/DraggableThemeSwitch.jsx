@@ -55,7 +55,7 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
   const getThemeLabel = (theme) => {
     if (!theme) return '';
     const label = t[theme] || theme;
-    return label.charAt(0).toUpperCase() + label.slice(1).replace(/-/g, ' ');
+    return `${label.charAt(0).toUpperCase() + label.slice(1).replace(/-/g, ' ')} ${t.theme || 'Theme'}`;
   };
 
   const currentThemeObject = themes.find(theme => theme.name === lastThemeRef.current) || themes[0];
