@@ -180,3 +180,8 @@
 .rtl button, .rtl input, .rtl select, .rtl textarea {
   font-size: 1rem;
 }
+
+/* Ensure labels are visible in light theme */
+.light label {
+  @apply text-gray-700;
+}
