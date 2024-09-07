@@ -1,6 +1,6 @@
 export const translations = {
   en: {
-    appName: "Oman Auto Mart",
+    appName: "Oman Auto Art Mart",
     home: "Home",
     addCar: "Add Car",
     carsList: "Cars List",
@@ -18,7 +18,7 @@ export const translations = {
     brand: "Brand",
     model: "Model",
     viewDetails: "View Details",
-    listingMessage: "List your car on Oman Auto Mart and reach thousands of potential buyers!",
+    listingMessage: "List your car on Oman Auto Art Mart and reach thousands of potential buyers!",
     totalListings: "Total Listings",
     activeSellers: "Active Sellers",
     averagePrice: "Average Price",
@@ -78,7 +78,7 @@ export const translations = {
     currency: "OMR"
   },
   ar: {
-    appName: "سوق عُمان للسيارات",
+    appName: "سوق عُمان لفن السيارات",
     home: "الرئيسية",
     addCar: "إضافة سيارة",
     carsList: "قائمة السيارات",
@@ -90,13 +90,13 @@ export const translations = {
     selectedCar: "السيارة المختارة",
     viewCars: "عرض السيارات",
     latestCar: "آخر سيارة مضافة",
-    sellYourCar: "هل أنت مستعدّ لبيع سيارتك؟",
+    sellYourCar: "هل أنت مستعد لبيع سيارتك؟",
     listYourCar: "أضِف سيارتك الآن",
     searchBrands: "البحث عن الماركات...",
     brand: "الماركة",
     model: "الموديل",
     viewDetails: "عرض التفاصيل",
-    listingMessage: "أضِف سيارتك في سوق عُمان للسيارات وصِل إلى آلاف المشترين المحتملين!",
+    listingMessage: "أضِف سيارتك في سوق عُمان لفن السيارات وصِل إلى آلاف المشترين المحتملين!",
     totalListings: "إجمالي القوائم",
     activeSellers: "البائعون النشطون",
     averagePrice: "متوسط السعر",
