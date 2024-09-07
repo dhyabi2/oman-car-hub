@@ -8,6 +8,7 @@ import { MakeModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelType
 import { FormSection, ListingDetails, AdditionalInformation, PhotoUpload } from './AddCarComponents';
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Check, Loader2 } from 'lucide-react';
+import AnimatedArrow from '../components/AnimatedArrow';
 
 const AddCar = ({ language, t }) => {
   const navigate = useNavigate();
@@ -148,6 +149,7 @@ const AddCar = ({ language, t }) => {
               onChange={(value) => handleInputChange('mileage', value)}
               t={t}
             />
+            <AnimatedArrow />
           </FormSection>
         );
       case 2:
@@ -188,23 +190,30 @@ const AddCar = ({ language, t }) => {
               onChange={(value) => handleInputChange('condition', value)}
               t={t}
             />
+            <AnimatedArrow />
           </FormSection>
         );
       case 3:
         return (
-          <ListingDetails
-            formData={formData}
-            handleInputChange={handleInputChange}
-            t={t}
-          />
+          <>
+            <ListingDetails
+              formData={formData}
+              handleInputChange={handleInputChange}
+              t={t}
+            />
+            <AnimatedArrow />
+          </>
         );
       case 4:
         return (
-          <AdditionalInformation
-            formData={formData}
-            handleInputChange={handleInputChange}
-            t={t}
-          />
+          <>
+            <AdditionalInformation
+              formData={formData}
+              handleInputChange={handleInputChange}
+              t={t}
+            />
+            <AnimatedArrow />
+          </>
         );
       case 5:
         return (
