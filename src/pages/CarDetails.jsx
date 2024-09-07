@@ -11,6 +11,8 @@ import { toast } from "sonner";
 import { addReferralToUrl } from '../utils/referral';
 import { trackReferralWithIP } from '../utils/referralTracking';
 
+const API_BASE_URL = 'https://oman-car-hub.replit.app';
+
 const CarDetails = ({ language, t }) => {
   const { id } = useParams();
   const location = useLocation();
@@ -29,9 +31,35 @@ const CarDetails = ({ language, t }) => {
 
     // Track referral when the page loads
     if (referralCode) {
-      trackReferralWithIP(referralCode);
+      trackReferralWithIPAndCode(referralCode);
     }
   }, [id, location]);
+
+  const trackReferralWithIPAndCode = async (referralCode) => {
+    try {
+      // Fetch the public IP
+      const ipResponse = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipResponse.json();
+      const ip = ipData.ip;
+
+      // Generate source key and track referral
+      const response = await fetch(`${API_BASE_URL}/api/generate-source-key`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ip, referralKey: referralCode }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate source key and track referral');
+      }
+
+      console.log('Referral tracked successfully');
+    } catch (error) {
+      console.error('Error tracking referral:', error);
+    }
+  };
 
   if (!carDetails) {
     return <div className="container mx-auto px-4 py-8 text-center">{t.loading}</div>;
