@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { getReferralKey } from '../utils/referral';
-import { Trophy, Edit2, Save } from 'lucide-react';
+import { Trophy, Edit2, Save, Users } from 'lucide-react';
 
 const API_BASE_URL = 'https://oman-car-hub.replit.app';
 
@@ -13,11 +13,13 @@ const Leaderboard = ({ language, t }) => {
   const [leaderboard, setLeaderboard] = useState([]);
   const [userName, setUserName] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [currentlyApplied, setCurrentlyApplied] = useState([]);
   const referralKey = getReferralKey();
 
   useEffect(() => {
     fetchLeaderboard();
     fetchUserName();
+    fetchCurrentlyApplied();
   }, []);
 
   const fetchLeaderboard = async () => {
@@ -41,9 +43,25 @@ const Leaderboard = ({ language, t }) => {
       if (response.ok) {
         const data = await response.json();
         setUserName(data.name || '');
+        setIsEditing(data.name === 'Anonymous' || data.name === '');
       }
     } catch (error) {
       console.error('Error fetching user name:', error);
+    }
+  };
+
+  const fetchCurrentlyApplied = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/currently-applied`);
+      if (response.ok) {
+        const data = await response.json();
+        setCurrentlyApplied(data);
+      } else {
+        toast.error(t.failedToFetchCurrentlyApplied);
+      }
+    } catch (error) {
+      console.error('Error fetching currently applied:', error);
+      toast.error(t.failedToFetchCurrentlyApplied);
     }
   };
 
@@ -59,7 +77,8 @@ const Leaderboard = ({ language, t }) => {
       if (response.ok) {
         toast.success(t.userNameUpdated);
         setIsEditing(false);
-        fetchLeaderboard(); // Refresh leaderboard to show updated name
+        fetchLeaderboard();
+        fetchCurrentlyApplied();
       } else {
         toast.error(t.failedToUpdateUserName);
       }
@@ -92,7 +111,7 @@ const Leaderboard = ({ language, t }) => {
                 className="mr-2"
               />
               {isEditing ? (
-                <Button onClick={handleUpdateUserName}>
+                <Button onClick={handleUpdateUserName} disabled={!userName.trim()}>
                   <Save className="mr-2 h-4 w-4" /> {t.save}
                 </Button>
               ) : (
@@ -116,6 +135,35 @@ const Leaderboard = ({ language, t }) => {
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{entry.name}</TableCell>
                   <TableCell>{entry.count}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold flex items-center">
+            <Users className="mr-2" />
+            {t.currentlyApplied}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t.rank}</TableHead>
+                <TableHead>{t.name}</TableHead>
+                <TableHead>{t.points}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {currentlyApplied.map((entry, index) => (
+                <TableRow key={entry.referralKey}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{entry.name}</TableCell>
+                  <TableCell>{entry.points}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
