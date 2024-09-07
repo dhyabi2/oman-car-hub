@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
-import { Car, DollarSign, Users, BarChart, Award, Zap, Clock, Eye, Search, Sparkles, PlusCircle } from 'lucide-react';
+import { Car, Users, BarChart, Award, Zap, Clock, Eye, Search, Sparkles, PlusCircle, Coins } from 'lucide-react';
 
 const useAutoSlide = (length, interval = 3000) => {
   const [index, setIndex] = useState(0);
@@ -38,7 +38,7 @@ export const QuickStats = ({ stats, t }) => {
     switch (key) {
       case 'totalListings': return <Car />;
       case 'activeSellers': return <Users />;
-      case 'averagePrice': return <DollarSign />;
+      case 'averagePrice': return <Coins />;
       case 'mostPopularBrand': return <Award />;
       case 'mostExpensiveCar': return <Zap />;
       case 'newestListing': return <Clock />;
@@ -230,7 +230,7 @@ export const SellYourCar = ({ navigate, t }) => (
     <Card className="bg-primary text-primary-foreground">
       <CardContent className="p-8 text-center">
         <h2 className="text-3xl font-bold mb-4 flex items-center justify-center">
-          <DollarSign className="mr-2" /> {t.sellYourCar}
+          <Coins className="mr-2" /> {t.sellYourCar}
         </h2>
         <p className="text-xl mb-6">{t.listingMessage}</p>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
