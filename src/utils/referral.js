@@ -28,14 +28,29 @@ export const addReferralToUrl = (url) => {
 export const trackReferral = async (referralKey, sourceKey) => {
   const API_BASE_URL = 'https://oman-car-hub.replit.app';
   try {
-    const response = await fetch(`${API_BASE_URL}/api/track-referral`, {
+    // First, check if the source key is valid
+    const checkResponse = await fetch(`${API_BASE_URL}/api/check-source-key`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ sourceKey }),
+    });
+
+    if (!checkResponse.ok) {
+      throw new Error('Invalid source key');
+    }
+
+    // If the source key is valid, proceed with tracking the referral
+    const trackResponse = await fetch(`${API_BASE_URL}/api/track-referral`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ referralKey, sourceKey }),
     });
-    if (!response.ok) {
+
+    if (!trackResponse.ok) {
       throw new Error('Failed to track referral');
     }
   } catch (error) {
