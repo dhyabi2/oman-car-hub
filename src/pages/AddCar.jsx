@@ -231,6 +231,8 @@ const AddCar = ({ language, t }) => {
     }
   };
 
+  const isRTL = language === 'ar';
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Card>
@@ -254,27 +256,43 @@ const AddCar = ({ language, t }) => {
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: isRTL ? -50 : 50 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
+              exit={{ opacity: 0, x: isRTL ? 50 : -50 }}
               transition={{ duration: 0.3 }}
             >
               {renderStepContent()}
             </motion.div>
           </AnimatePresence>
         </CardContent>
-        <CardFooter className="flex justify-between">
+        <CardFooter className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} justify-between`}>
           {step > 1 && (
             <Button onClick={handlePrevious} variant="outline" disabled={isSubmitting}>
-              <ChevronLeft className="mr-2 h-4 w-4" /> {t.previous}
+              {isRTL ? (
+                <>
+                  {t.previous} <ChevronRight className="ml-2 h-4 w-4" />
+                </>
+              ) : (
+                <>
+                  <ChevronLeft className="mr-2 h-4 w-4" /> {t.previous}
+                </>
+              )}
             </Button>
           )}
           {step < 5 ? (
-            <Button onClick={handleNext} className="ml-auto" disabled={isSubmitting}>
-              {t.next} <ChevronRight className="ml-2 h-4 w-4" />
+            <Button onClick={handleNext} className={isRTL ? 'mr-auto' : 'ml-auto'} disabled={isSubmitting}>
+              {isRTL ? (
+                <>
+                  <ChevronLeft className="mr-2 h-4 w-4" /> {t.next}
+                </>
+              ) : (
+                <>
+                  {t.next} <ChevronRight className="ml-2 h-4 w-4" />
+                </>
+              )}
             </Button>
           ) : (
-            <Button onClick={handleSubmit} className="ml-auto" disabled={isSubmitting}>
+            <Button onClick={handleSubmit} className={isRTL ? 'mr-auto' : 'ml-auto'} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
