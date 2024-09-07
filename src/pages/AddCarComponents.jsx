@@ -1,25 +1,25 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { locations } from '../utils/carData';
+import { carMakes, carModels, locations } from '../utils/carData';
 
-export const FormSection = forwardRef(({ title, children }, ref) => (
-  <div ref={ref}>
+export const FormSection = ({ title, children }) => (
+  <div>
     <h3 className="text-lg font-semibold mb-4">{title}</h3>
     <div className="space-y-4">{children}</div>
   </div>
-));
+);
 
-export const ListingDetails = forwardRef(({ formData, handleInputChange, t }, ref) => {
+export const ListingDetails = ({ formData, handleInputChange, t }) => {
   const handlePhoneChange = (e) => {
     const value = e.target.value.replace(/\D/g, '').slice(0, 8);
     handleInputChange('contact_phone', value);
   };
 
   return (
-    <FormSection title={t.listingDetails} ref={ref}>
+    <FormSection title={t.listingDetails}>
       <div>
         <Label htmlFor="price">{t.price} (OMR)</Label>
         <Input
@@ -27,7 +27,6 @@ export const ListingDetails = forwardRef(({ formData, handleInputChange, t }, re
           type="number"
           value={formData.price}
           onChange={(e) => handleInputChange('price', Number(e.target.value))}
-          placeholder={t.enterPrice}
         />
       </div>
       <div>
@@ -57,35 +56,33 @@ export const ListingDetails = forwardRef(({ formData, handleInputChange, t }, re
       </div>
     </FormSection>
   );
-});
+};
 
-export const AdditionalInformation = forwardRef(({ formData, handleInputChange, t }, ref) => (
-  <FormSection title={t.additionalInformation} ref={ref}>
+export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
+  <FormSection title={t.additionalInformation}>
     <div>
-      <Label htmlFor="description">{t.description} ({t.optional})</Label>
+      <Label htmlFor="description">{t.description}</Label>
       <Textarea
         id="description"
         value={formData.description}
         onChange={(e) => handleInputChange('description', e.target.value)}
         rows={4}
-        placeholder={t.descriptionPlaceholder}
       />
     </div>
     <div>
-      <Label htmlFor="additional_features">{t.additionalFeatures} ({t.optional})</Label>
+      <Label htmlFor="additional_features">{t.additionalFeatures}</Label>
       <Textarea
         id="additional_features"
         value={formData.additional_features}
         onChange={(e) => handleInputChange('additional_features', e.target.value)}
         rows={4}
-        placeholder={t.additionalFeaturesPlaceholder}
       />
     </div>
   </FormSection>
-));
+);
 
-export const PhotoUpload = forwardRef(({ photos, handlePhotoUpload, t, maxPhotos }, ref) => (
-  <FormSection title={t.photos} ref={ref}>
+export const PhotoUpload = ({ photos, handlePhotoUpload, t, maxPhotos }) => (
+  <FormSection title={t.photos}>
     <div>
       <Label htmlFor="photos">{t.uploadPhotos} (Max {maxPhotos})</Label>
       <Input
@@ -117,7 +114,7 @@ export const PhotoUpload = forwardRef(({ photos, handlePhotoUpload, t, maxPhotos
       </div>
     )}
   </FormSection>
-));
+);
 
 export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => (
   <>
