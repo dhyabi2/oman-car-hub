@@ -8,6 +8,7 @@ import { getCarById } from '../utils/indexedDB';
 import ImageGallery from '../components/ImageGallery';
 import { Car, DollarSign, MapPin, Phone, Info, Calendar, Gauge, Zap, Droplet, Palette, DoorOpen, Users, Compass, Award, Key, MessageCircle, Share2 } from 'lucide-react';
 import { toast } from "sonner";
+import { addReferralToUrl } from '../utils/referral';
 
 const CarDetails = ({ language, t }) => {
   const { id } = useParams();
@@ -46,7 +47,7 @@ const CarDetails = ({ language, t }) => {
   ];
 
   const handleShare = () => {
-    const shareUrl = window.location.href;
+    const shareUrl = addReferralToUrl(window.location.href);
     navigator.clipboard.writeText(shareUrl)
       .then(() => {
         toast.success(t.linkCopied || 'Link copied to clipboard!');

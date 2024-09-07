@@ -8,6 +8,7 @@ import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye, Phone, Mess
 import { carMakes, carModels, fuelTypes, transmissionTypes } from '../utils/carData';
 import { translations } from '../utils/translations';
 import { toast } from "sonner";
+import { addReferralToUrl } from '../utils/referral';
 
 const getTranslation = (language, key, fallback = key) => {
   return translations[language]?.[key] || fallback;
@@ -65,7 +66,7 @@ export const NoCarsList = ({ language }) => (
 
 export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavorite }) => {
   const handleShare = () => {
-    const shareUrl = `${window.location.origin}/car/${car.id}`;
+    const shareUrl = addReferralToUrl(`${window.location.origin}/car/${car.id}`);
     navigator.clipboard.writeText(shareUrl)
       .then(() => {
         toast.success(getTranslation(language, 'linkCopied', 'Link copied to clipboard!'));
