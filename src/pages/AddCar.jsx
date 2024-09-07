@@ -224,11 +224,11 @@ const AddCar = ({ language, t }) => {
     <div className="container mx-auto px-4 py-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">{t.addCarForSale}</CardTitle>
+          <CardTitle className="text-xl font-semibold">{t.addCarForSale}</CardTitle>
         </CardHeader>
         <CardContent>
-          <h3 className="text-xl font-semibold mb-6">{t.addCarFormTitle}</h3>
-          <div className="mb-8">
+          <h3 className="text-lg font-medium mb-4">{t.addCarFormTitle}</h3>
+          <div className="mb-6">
             <div className="flex justify-between items-center">
               {[1, 2, 3, 4, 5].map((s) => (
                 <div
