@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { toast } from "sonner";
 import { addCar } from '../utils/indexedDB';
 import { MakeModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelTypeSelector, TransmissionSelector, DoorsSelector, SeatsSelector, DrivetrainSelector, ConditionSelector } from '../components/CarFormFields';
 import { FormSection, ListingDetails, AdditionalInformation, PhotoUpload } from './AddCarComponents';
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 
 const AddCar = ({ language, t }) => {
   const navigate = useNavigate();
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     make: '', model: '', year: new Date().getFullYear(), mileage: 0,
     transmission: '', fuel_type: '', engine_size: 1500, color: '',
@@ -20,6 +23,65 @@ const AddCar = ({ language, t }) => {
 
   const handleInputChange = (name, value) => {
     setFormData(prevState => ({ ...prevState, [name]: value }));
+  };
+
+  const validateStep = () => {
+    switch (step) {
+      case 1:
+        return formData.make && formData.model && formData.year && formData.mileage;
+      case 2:
+        return formData.transmission && formData.fuel_type && formData.color;
+      case 3:
+        return formData.price && formData.location && formData.contact_phone;
+      case 4:
+        return formData.description && formData.additional_features;
+      case 5:
+        return formData.photos.length > 0;
+      default:
+        return true;
+    }
+  };
+
+  const handleNext = () => {
+    if (validateStep()) {
+      setStep(prevStep => prevStep + 1);
+    } else {
+      toast.error(t.pleaseAllRequiredFields);
+    }
+  };
+
+  const handlePrevious = () => {
+    setStep(prevStep => prevStep - 1);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    try {
+      const photosPromises = formData.photos.map(photo => 
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(photo);
+        })
+      );
+      const photoBase64Strings = await Promise.all(photosPromises);
+
+      const carData = {
+        ...formData,
+        photos: photoBase64Strings,
+        listing_expiration_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      };
+
+      await addCar(carData);
+      toast.success(t.carListingAddedSuccess);
+      navigate('/cars-list');
+    } catch (error) {
+      console.error('Error adding car:', error);
+      toast.error(t.failedToAddCarListing);
+    }
   };
 
   const validateForm = () => {
@@ -39,36 +101,91 @@ const AddCar = ({ language, t }) => {
     return true;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-    try {
-      // Convert photos to base64 strings
-      const photosPromises = formData.photos.map(photo => 
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(photo);
-        })
-      );
-      const photoBase64Strings = await Promise.all(photosPromises);
-
-      // Prepare the car data object
-      const carData = {
-        ...formData,
-        photos: photoBase64Strings,
-        listing_expiration_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
-      };
-
-      // Send the car data to the API
-      await addCar(carData);
-      toast.success(t.carListingAddedSuccess);
-      navigate('/cars-list');
-    } catch (error) {
-      console.error('Error adding car:', error);
-      toast.error(t.failedToAddCarListing);
+  const renderStepContent = () => {
+    switch (step) {
+      case 1:
+        return (
+          <FormSection title={t.basicInformation}>
+            <MakeModelSelect
+              make={formData.make}
+              model={formData.model}
+              onMakeChange={(value) => handleInputChange('make', value)}
+              onModelChange={(value) => handleInputChange('model', value)}
+              t={t}
+            />
+            <MileageInput
+              value={formData.mileage}
+              onChange={(value) => handleInputChange('mileage', value)}
+              t={t}
+            />
+          </FormSection>
+        );
+      case 2:
+        return (
+          <FormSection title={t.vehicleDetails}>
+            <TransmissionSelector
+              value={formData.transmission}
+              onChange={(value) => handleInputChange('transmission', value)}
+              t={t}
+            />
+            <FuelTypeSelector
+              value={formData.fuel_type}
+              onChange={(value) => handleInputChange('fuel_type', value)}
+              t={t}
+            />
+            <ColorSelector
+              value={formData.color}
+              onChange={(value) => handleInputChange('color', value)}
+              t={t}
+            />
+            <DoorsSelector
+              value={formData.number_of_doors}
+              onChange={(value) => handleInputChange('number_of_doors', value)}
+              t={t}
+            />
+            <SeatsSelector
+              value={formData.number_of_seats}
+              onChange={(value) => handleInputChange('number_of_seats', value)}
+              t={t}
+            />
+            <DrivetrainSelector
+              value={formData.drivetrain}
+              onChange={(value) => handleInputChange('drivetrain', value)}
+              t={t}
+            />
+            <ConditionSelector
+              value={formData.condition}
+              onChange={(value) => handleInputChange('condition', value)}
+              t={t}
+            />
+          </FormSection>
+        );
+      case 3:
+        return (
+          <ListingDetails
+            formData={formData}
+            handleInputChange={handleInputChange}
+            t={t}
+          />
+        );
+      case 4:
+        return (
+          <AdditionalInformation
+            formData={formData}
+            handleInputChange={handleInputChange}
+            t={t}
+          />
+        );
+      case 5:
+        return (
+          <PhotoUpload
+            photos={formData.photos}
+            handlePhotoUpload={(files) => handleInputChange('photos', files)}
+            t={t}
+          />
+        );
+      default:
+        return null;
     }
   };
 
@@ -79,81 +196,46 @@ const AddCar = ({ language, t }) => {
           <CardTitle>{t.addCarForSale}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <FormSection title={t.basicInformation}>
-              <MakeModelSelect
-                make={formData.make}
-                model={formData.model}
-                onMakeChange={(value) => handleInputChange('make', value)}
-                onModelChange={(value) => handleInputChange('model', value)}
-                t={t}
-              />
-              <MileageInput
-                value={formData.mileage}
-                onChange={(value) => handleInputChange('mileage', value)}
-                t={t}
-              />
-            </FormSection>
-
-            <FormSection title={t.vehicleDetails}>
-              <TransmissionSelector
-                value={formData.transmission}
-                onChange={(value) => handleInputChange('transmission', value)}
-                t={t}
-              />
-              <FuelTypeSelector
-                value={formData.fuel_type}
-                onChange={(value) => handleInputChange('fuel_type', value)}
-                t={t}
-              />
-              <ColorSelector
-                value={formData.color}
-                onChange={(value) => handleInputChange('color', value)}
-                t={t}
-              />
-              <DoorsSelector
-                value={formData.number_of_doors}
-                onChange={(value) => handleInputChange('number_of_doors', value)}
-                t={t}
-              />
-              <SeatsSelector
-                value={formData.number_of_seats}
-                onChange={(value) => handleInputChange('number_of_seats', value)}
-                t={t}
-              />
-              <DrivetrainSelector
-                value={formData.drivetrain}
-                onChange={(value) => handleInputChange('drivetrain', value)}
-                t={t}
-              />
-              <ConditionSelector
-                value={formData.condition}
-                onChange={(value) => handleInputChange('condition', value)}
-                t={t}
-              />
-            </FormSection>
-
-            <ListingDetails
-              formData={formData}
-              handleInputChange={handleInputChange}
-              t={t}
-            />
-
-            <AdditionalInformation
-              formData={formData}
-              handleInputChange={handleInputChange}
-              t={t}
-            />
-
-            <PhotoUpload
-              photos={formData.photos}
-              handlePhotoUpload={(files) => handleInputChange('photos', files)}
-              t={t}
-            />
-
-            <Button type="submit" className="w-full">{t.submitListing}</Button>
-          </form>
+          <div className="mb-8">
+            <div className="flex justify-between items-center">
+              {[1, 2, 3, 4, 5].map((s) => (
+                <div
+                  key={s}
+                  className={`w-1/5 h-2 ${
+                    s <= step ? 'bg-primary' : 'bg-gray-200'
+                  } transition-all duration-300`}
+                />
+              ))}
+            </div>
+          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.3 }}
+            >
+              {renderStepContent()}
+            </motion.div>
+          </AnimatePresence>
         </CardContent>
+        <CardFooter className="flex justify-between">
+          {step > 1 && (
+            <Button onClick={handlePrevious} variant="outline">
+              <ChevronLeft className="mr-2 h-4 w-4" /> {t.previous}
+            </Button>
+          )}
+          {step < 5 ? (
+            <Button onClick={handleNext} className="ml-auto">
+              {t.next} <ChevronRight className="ml-2 h-4 w-4" />
+            </Button>
+          ) : (
+            <Button onClick={handleSubmit} className="ml-auto">
+              {t.submitListing} <Check className="ml-2 h-4 w-4" />
+            </Button>
+          )}
+        </CardFooter>
       </Card>
     </div>
   );

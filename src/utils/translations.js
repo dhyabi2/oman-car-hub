@@ -113,6 +113,9 @@ export const translations = {
     noFavoriteCars: "You haven't added any cars to your favorites yet.",
     whatsappButton: "WhatsApp",
     callButton: "Call",
+    noStatsAvailable: "No statistics available",
+    previous: "Previous",
+    next: "Next",
   },
   ar: {
     appName: "سوق عمان للسيارات",
@@ -228,5 +231,8 @@ export const translations = {
     noFavoriteCars: "لم تقم بإضافة أي سيارات إلى المفضلة بعد.",
     whatsappButton: "واتساب",
     callButton: "اتصال",
+    noStatsAvailable: "لا توجد إحصائيات متاحة",
+    previous: "السابق",
+    next: "التالي",
   },
 };

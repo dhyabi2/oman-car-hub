@@ -24,14 +24,14 @@ const fadeInUp = {
 };
 
 export const QuickStats = ({ stats, t }) => {
-  const statEntries = Object.entries(stats).filter(([key]) => key !== 'latestCar');
-  const currentIndex = useAutoSlide(statEntries.length);
+  const statEntries = Object.entries(stats || {}).filter(([key]) => key !== 'latestCar');
+  const currentIndex = useAutoSlide(statEntries.length || 1);
 
   const formatStatValue = (key, value) => {
     if (key === 'averagePrice') {
-      return `${value.toLocaleString()} ${t.currency}`;
+      return `${value?.toLocaleString() || 0} ${t.currency}`;
     }
-    return value;
+    return value || 0;
   };
 
   const getIconForStat = (key) => {
@@ -46,6 +46,21 @@ export const QuickStats = ({ stats, t }) => {
       default: return <BarChart />;
     }
   };
+
+  if (statEntries.length === 0) {
+    return (
+      <div className="relative h-24 mb-8 overflow-hidden">
+        <Card className="w-full max-w-sm">
+          <CardContent className="p-4 text-center">
+            <h3 className="text-lg font-semibold flex items-center justify-center">
+              <BarChart className="mr-2" />
+              <span className="ml-2">{t.noStatsAvailable}</span>
+            </h3>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="relative h-24 mb-8 overflow-hidden">
