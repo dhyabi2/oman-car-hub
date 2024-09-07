@@ -6,19 +6,14 @@ import { motion } from "framer-motion";
 import { carMakes, carModels } from '../utils/carData';
 import { getAllCars, toggleFavoriteCar, isFavoriteCar } from '../utils/indexedDB';
 import { NoCarsList, CarCard, FiltersCard } from './CarsListComponents';
-import { translations } from '../utils/translations';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
-const getTranslation = (language, key, fallback = key) => {
-  return translations[language]?.[key] || fallback;
-};
-
-const CarsList = ({ language = 'en' }) => {
+const CarsList = ({ language = 'en', t }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const initialMake = searchParams.get('make') || getTranslation(language, 'allMakes', 'All Makes');
-  const initialModel = searchParams.get('model') || getTranslation(language, 'allModels', 'All Models');
+  const initialMake = searchParams.get('make') || t.allMakes;
+  const initialModel = searchParams.get('model') || t.allModels;
 
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
@@ -54,11 +49,10 @@ const CarsList = ({ language = 'en' }) => {
         ...prev,
         maxPrice,
         maxMileage,
-        make: getTranslation(language, 'allMakes', 'All Makes'),
-        model: getTranslation(language, 'allModels', 'All Models'),
+        make: t.allMakes,
+        model: t.allModels,
       }));
 
-      // Fetch favorite status for each car
       const favoritesStatus = {};
       for (const car of allCars) {
         favoritesStatus[car.id] = await isFavoriteCar(car.id);
@@ -66,12 +60,12 @@ const CarsList = ({ language = 'en' }) => {
       setFavorites(favoritesStatus);
     };
     fetchCars();
-  }, [language]);
+  }, [t]);
 
   useEffect(() => {
     const filtered = cars.filter(car => 
-      (filters.make === getTranslation(language, 'allMakes', 'All Makes') || car.make === filters.make) &&
-      (filters.model === getTranslation(language, 'allModels', 'All Models') || car.model === filters.model) &&
+      (filters.make === t.allMakes || car.make === filters.make) &&
+      (filters.model === t.allModels || car.model === filters.model) &&
       car.year >= filters.minYear &&
       car.year <= filters.maxYear &&
       car.price >= filters.minPrice &&
@@ -88,13 +82,13 @@ const CarsList = ({ language = 'en' }) => {
       (filters.drivetrain === 'all' || car.drivetrain === filters.drivetrain)
     );
     setFilteredCars(filtered);
-  }, [filters, cars, language]);
+  }, [filters, cars, t]);
 
   const handleFilterChange = (name, value) => {
     setFilters(prev => {
       const newFilters = { ...prev, [name]: value };
       if (name === 'make') {
-        newFilters.model = getTranslation(language, 'allModels', 'All Models');
+        newFilters.model = t.allModels;
       }
       return newFilters;
     });
@@ -118,18 +112,18 @@ const CarsList = ({ language = 'en' }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">{getTranslation(language, 'carsList', 'Cars List')}</h1>
+      <h1 className="text-3xl font-bold mb-6">{t.carsList}</h1>
       
       <Collapsible open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
         <CollapsibleTrigger asChild>
           <Button variant="outline" className="mb-4 w-full">
             {isFiltersOpen ? (
               <>
-                {getTranslation(language, 'hideFilters', 'Hide Filters')} <ChevronUp className="ml-2" />
+                {t.hideFilters} <ChevronUp className="ml-2" />
               </>
             ) : (
               <>
-                {getTranslation(language, 'showFilters', 'Show Filters')} <ChevronDown className="ml-2" />
+                {t.showFilters} <ChevronDown className="ml-2" />
               </>
             )}
           </Button>
@@ -137,11 +131,11 @@ const CarsList = ({ language = 'en' }) => {
         <CollapsibleContent>
           <FiltersCard
             filters={filters}
-            carMakes={[getTranslation(language, 'allMakes', 'All Makes'), ...carMakes]}
-            carModels={filters.make === getTranslation(language, 'allMakes', 'All Makes') ? [getTranslation(language, 'allModels', 'All Models')] : [getTranslation(language, 'allModels', 'All Models'), ...(carModels[filters.make] || [])]}
+            carMakes={[t.allMakes, ...carMakes]}
+            carModels={filters.make === t.allMakes ? [t.allModels] : [t.allModels, ...(carModels[filters.make] || [])]}
             maxPriceInData={Math.max(...cars.map(car => car.price), 100000)}
             onFilterChange={handleFilterChange}
-            language={language}
+            t={t}
           />
         </CollapsibleContent>
       </Collapsible>
@@ -163,7 +157,7 @@ const CarsList = ({ language = 'en' }) => {
               <CarCard 
                 car={car} 
                 onViewDetails={handleViewDetails}
-                language={language}
+                t={t}
                 isFavorite={favorites[car.id]}
                 onToggleFavorite={handleToggleFavorite}
               />
@@ -171,7 +165,7 @@ const CarsList = ({ language = 'en' }) => {
           ))}
         </motion.div>
       ) : (
-        <NoCarsList language={language} />
+        <NoCarsList t={t} />
       )}
     </div>
   );

@@ -6,33 +6,28 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye, Phone, MessageCircle, Heart, MapPin } from 'lucide-react';
 import { carMakes, carModels, fuelTypes, transmissionTypes } from '../utils/carData';
-import { translations } from '../utils/translations';
 
-const getTranslation = (language, key, fallback = key) => {
-  return translations[language]?.[key] || fallback;
-};
-
-const FilterSelect = ({ label, value, options, onChange }) => (
+const FilterSelect = ({ label, value, options, onChange, t }) => (
   <div>
-    <Label htmlFor={label}>{label}</Label>
+    <Label htmlFor={label}>{t[label.toLowerCase()] || label}</Label>
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger>
-        <SelectValue placeholder={`Select ${label.toLowerCase()}`} />
+        <SelectValue placeholder={t.select + ' ' + (t[label.toLowerCase()] || label)} />
       </SelectTrigger>
       <SelectContent>
         {options.map((option) => (
-          <SelectItem key={option} value={option}>{option}</SelectItem>
+          <SelectItem key={option} value={option}>{t[option.toLowerCase()] || option}</SelectItem>
         ))}
       </SelectContent>
     </Select>
   </div>
 );
 
-const RangeFilter = ({ label, min, max, value, onChange, unit, icon: Icon }) => (
+const RangeFilter = ({ label, min, max, value, onChange, unit, icon: Icon, t }) => (
   <div>
     <Label className="flex items-center">
       {Icon && <Icon className="mr-2" />}
-      {label} ({unit})
+      {t[label.toLowerCase()] || label} ({unit})
     </Label>
     <div className="flex items-center space-x-2">
       <Input
@@ -41,7 +36,7 @@ const RangeFilter = ({ label, min, max, value, onChange, unit, icon: Icon }) => 
         onChange={(e) => onChange([parseInt(e.target.value), value[1]])}
         className="w-20"
       />
-      <span>to</span>
+      <span>{t.to}</span>
       <Input
         type="number"
         value={value[1]}
@@ -52,17 +47,17 @@ const RangeFilter = ({ label, min, max, value, onChange, unit, icon: Icon }) => 
   </div>
 );
 
-export const NoCarsList = ({ language }) => (
+export const NoCarsList = ({ t }) => (
   <div className="text-center py-10">
     <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center">
       <AlertCircle className="mr-2" />
-      {getTranslation(language, 'noCarsFound', 'No Cars Found')}
+      {t.noCarsFound}
     </h2>
-    <p>{getTranslation(language, 'tryDifferentFilters', 'Try adjusting your filters or search criteria')}</p>
+    <p>{t.tryDifferentFilters}</p>
   </div>
 );
 
-export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavorite }) => (
+export const CarCard = ({ car, onViewDetails, t, isFavorite, onToggleFavorite }) => (
   <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
     <div className="relative pb-[56.25%]">
       <img
@@ -80,55 +75,57 @@ export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavo
       </Button>
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
         <h2 className="text-2xl font-bold text-white mb-1">{car.year} {car.make} {car.model}</h2>
-        <p className="text-3xl font-bold text-yellow-400">{car.price} {getTranslation(language, 'currency', 'OMR')}</p>
+        <p className="text-3xl font-bold text-yellow-400">{car.price} {t.currency}</p>
       </div>
     </div>
     <CardContent className="p-4">
       <div className="grid grid-cols-2 gap-2 mb-4 text-sm">
-        <p className="flex items-center"><Car className="mr-1 text-blue-500" /> {car.mileage} km</p>
-        <p className="flex items-center"><Sliders className="mr-1 text-green-500" /> {car.transmission}</p>
-        <p className="flex items-center"><Fuel className="mr-1 text-red-500" /> {car.fuel_type}</p>
+        <p className="flex items-center"><Car className="mr-1 text-blue-500" /> {car.mileage} {t.km}</p>
+        <p className="flex items-center"><Sliders className="mr-1 text-green-500" /> {t[car.transmission.toLowerCase()]}</p>
+        <p className="flex items-center"><Fuel className="mr-1 text-red-500" /> {t[car.fuel_type.toLowerCase()]}</p>
         <p className="flex items-center"><Calendar className="mr-1 text-purple-500" /> {car.year}</p>
-        <p className="flex items-center col-span-2"><MapPin className="mr-1 text-indigo-500" /> {car.location}</p>
+        <p className="flex items-center col-span-2"><MapPin className="mr-1 text-indigo-500" /> {t[car.location.toLowerCase()] || car.location}</p>
       </div>
       <div className="flex flex-col space-y-2">
         <Button className="w-full bg-green-500 hover:bg-green-600 text-white" onClick={() => window.open(`https://wa.me/${car.contact_phone}`, '_blank')}>
           <MessageCircle className="mr-2" />
-          {getTranslation(language, 'whatsappButton', 'WhatsApp')}
+          {t.whatsappButton}
         </Button>
         <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white" onClick={() => window.open(`tel:${car.contact_phone}`)}>
           <Phone className="mr-2" />
-          {getTranslation(language, 'callButton', 'Call')}
+          {t.callButton}
         </Button>
         <Button className="w-full" onClick={() => onViewDetails(car.id)}>
           <Eye className="mr-2" />
-          {getTranslation(language, 'viewDetails', 'View Details')}
+          {t.viewDetails}
         </Button>
       </div>
     </CardContent>
   </Card>
 );
 
-export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language }) => (
+export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, t }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     <FilterSelect
-      label={getTranslation(language, 'make', 'Make')}
+      label={t.make}
       value={filters.make}
-      options={[getTranslation(language, 'allMakes', 'All Makes'), ...carMakes]}
+      options={[t.allMakes, ...carMakes]}
       onChange={(value) => onFilterChange('make', value)}
+      t={t}
     />
     <FilterSelect
-      label={getTranslation(language, 'model', 'Model')}
+      label={t.model}
       value={filters.model}
       options={
-        filters.make === getTranslation(language, 'allMakes', 'All Makes')
-          ? [getTranslation(language, 'allModels', 'All Models')]
-          : [getTranslation(language, 'allModels', 'All Models'), ...(carModels[filters.make] || [])]
+        filters.make === t.allMakes
+          ? [t.allModels]
+          : [t.allModels, ...(carModels[filters.make] || [])]
       }
       onChange={(value) => onFilterChange('model', value)}
+      t={t}
     />
     <RangeFilter
-      label={getTranslation(language, 'yearRange', 'Year Range')}
+      label={t.yearRange}
       min={1990}
       max={new Date().getFullYear()}
       value={[filters.minYear, filters.maxYear]}
@@ -136,11 +133,12 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language 
         onFilterChange('minYear', min);
         onFilterChange('maxYear', max);
       }}
-      unit="year"
+      unit={t.year}
       icon={Calendar}
+      t={t}
     />
     <RangeFilter
-      label={getTranslation(language, 'priceRange', 'Price Range')}
+      label={t.priceRange}
       min={0}
       max={maxPriceInData}
       value={[filters.minPrice, filters.maxPrice]}
@@ -148,20 +146,23 @@ export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language 
         onFilterChange('minPrice', min);
         onFilterChange('maxPrice', max);
       }}
-      unit="OMR"
+      unit={t.currency}
       icon={DollarSign}
+      t={t}
     />
     <FilterSelect
-      label={getTranslation(language, 'transmission', 'Transmission')}
+      label={t.transmission}
       value={filters.transmission}
       options={['all', ...transmissionTypes]}
       onChange={(value) => onFilterChange('transmission', value)}
+      t={t}
     />
     <FilterSelect
-      label={getTranslation(language, 'fuelType', 'Fuel Type')}
+      label={t.fuelType}
       value={filters.fuelType}
       options={['all', ...fuelTypes]}
       onChange={(value) => onFilterChange('fuelType', value)}
+      t={t}
     />
   </div>
 );
