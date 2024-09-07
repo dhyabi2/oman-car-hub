@@ -47,8 +47,10 @@ const FAQ = ({ language }) => {
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger>{faq.question}</AccordionTrigger>
-                <AccordionContent>
+                <AccordionTrigger className={language === 'ar' ? 'text-right text-lg font-bold' : 'font-bold'}>
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className={language === 'ar' ? 'text-right' : ''}>
                   {faq.answer}
                   {index === faqData.length - 1 && (
                     <Button
@@ -65,8 +67,8 @@ const FAQ = ({ language }) => {
           </Accordion>
           
           <div className="mt-8">
-            <h3 className="text-lg font-semibold mb-2 flex items-center">
-              <HelpCircle className="mr-2" />
+            <h3 className={`text-lg font-semibold mb-2 flex items-center ${language === 'ar' ? 'justify-end' : ''}`}>
+              <HelpCircle className={language === 'ar' ? 'ml-2' : 'mr-2'} />
               {language === 'ar' ? 'هل لديك المزيد من الأسئلة؟' : 'Have more questions?'}
             </h3>
             <Textarea
@@ -74,11 +76,23 @@ const FAQ = ({ language }) => {
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
               className="mb-4"
+              dir={language === 'ar' ? 'rtl' : 'ltr'}
             />
-            <Button onClick={handleFeedbackSubmit} className="flex items-center">
-              <Send className="mr-2" />
-              {language === 'ar' ? 'إرسال الملاحظات' : 'Submit Feedback'}
-            </Button>
+            <div className={`flex ${language === 'ar' ? 'justify-end' : ''}`}>
+              <Button onClick={handleFeedbackSubmit} className="flex items-center">
+                {language === 'ar' ? (
+                  <>
+                    إرسال الملاحظات
+                    <Send className="ml-2" />
+                  </>
+                ) : (
+                  <>
+                    <Send className="mr-2" />
+                    Submit Feedback
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
