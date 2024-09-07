@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -13,6 +13,7 @@ const AddCar = ({ language, t }) => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const modelRef = useRef(null);
   const [formData, setFormData] = useState(() => {
     const savedData = localStorage.getItem('addCarFormData');
     return savedData ? JSON.parse(savedData) : {
@@ -31,6 +32,9 @@ const AddCar = ({ language, t }) => {
 
   const handleInputChange = (name, value) => {
     setFormData(prevState => ({ ...prevState, [name]: value }));
+    if (name === 'make' && modelRef.current) {
+      modelRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const validateStep = () => {
@@ -132,6 +136,7 @@ const AddCar = ({ language, t }) => {
               onMakeChange={(value) => handleInputChange('make', value)}
               onModelChange={(value) => handleInputChange('model', value)}
               t={t}
+              modelRef={modelRef}
             />
             <YearSelector
               value={formData.year}
