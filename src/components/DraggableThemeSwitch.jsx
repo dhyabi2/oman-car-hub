@@ -36,7 +36,7 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
     isDraggingRef.current = true;
 
     const themeIndex = Math.round((newDragX / 100) * (themes.length - 1));
-    const newTheme = themes[themeIndex].name;
+    const newTheme = themes[themeIndex]?.name || currentTheme;
     if (newTheme !== lastThemeRef.current) {
       onThemeChange(newTheme);
       lastThemeRef.current = newTheme;
@@ -46,7 +46,7 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
   const handleDragEnd = () => {
     if (isDraggingRef.current) {
       const themeIndex = Math.round((dragX / 100) * (themes.length - 1));
-      const newTheme = themes[themeIndex].name;
+      const newTheme = themes[themeIndex]?.name || currentTheme;
       setTheme(newTheme);
       isDraggingRef.current = false;
     }
@@ -57,6 +57,8 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
     const label = t[theme] || theme;
     return label.charAt(0).toUpperCase() + label.slice(1).replace(/-/g, ' ');
   };
+
+  const currentThemeObject = themes.find(theme => theme.name === lastThemeRef.current) || themes[0];
 
   return (
     <div className="p-4">
@@ -76,7 +78,7 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
         <div className="flex items-center justify-center">
           <span className="mr-2">{getThemeLabel(lastThemeRef.current)}</span>
           <div className="flex">
-            {themes.find(theme => theme.name === lastThemeRef.current)?.colors.map((color, index) => (
+            {currentThemeObject.colors.map((color, index) => (
               <div
                 key={index}
                 className="w-4 h-4 border border-gray-300"
