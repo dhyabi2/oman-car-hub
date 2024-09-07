@@ -69,7 +69,12 @@ export const translations = {
     invalidPhoneNumber: "Invalid phone number",
     tooManyPhotos: "Too many photos",
     carListingAddedSuccess: "Car listing added successfully",
-    failedToAddCarListing: "Failed to add car listing"
+    failedToAddCarListing: "Failed to add car listing",
+    favoriteCars: "Favorite Cars",
+    noFavoriteCars: "No Favorite Cars Yet",
+    addSomeFavorites: "Start adding some cars to your favorites!",
+    remove: "Remove",
+    currency: "OMR"
   },
   ar: {
     appName: "سوق عمان للسيارات",
@@ -141,6 +146,11 @@ export const translations = {
     invalidPhoneNumber: "رقم الهاتف غير صالح",
     tooManyPhotos: "عدد الصور كثير جدًا",
     carListingAddedSuccess: "تمت إضافة قائمة السيارة بنجاح",
-    failedToAddCarListing: "فشل في إضافة قائمة السيارة"
+    failedToAddCarListing: "فشل في إضافة قائمة السيارة",
+    favoriteCars: "السيارات المفضلة",
+    noFavoriteCars: "لا توجد سيارات مفضلة حتى الآن",
+    addSomeFavorites: "ابدأ بإضافة بعض السيارات إلى مفضلتك!",
+    remove: "إزالة",
+    currency: "ر.ع"
   }
 };

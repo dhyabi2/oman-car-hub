@@ -55,7 +55,11 @@ const Favorite = ({ language, t }) => {
           ))}
         </div>
       ) : (
-        <p className="text-center text-xl">{t.noFavoriteCars}</p>
+        <div className="text-center py-16">
+          <Heart className="mx-auto h-16 w-16 text-gray-400 mb-4" />
+          <p className="text-2xl font-semibold text-gray-600 mb-2">{t.noFavoriteCars}</p>
+          <p className="text-gray-500">{t.addSomeFavorites}</p>
+        </div>
       )}
     </div>
   );
