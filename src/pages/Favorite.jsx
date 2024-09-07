@@ -36,7 +36,6 @@ const Favorite = ({ language, t }) => {
         .catch((error) => console.log('Error sharing', error));
     } else {
       console.log('Web Share API not supported');
-      // Fallback behavior (e.g., copy to clipboard)
       const shareText = `${car.year} ${car.make} ${car.model} - ${car.price} ${t.currency} - ${window.location.origin}/car/${car.id}`;
       navigator.clipboard.writeText(shareText)
         .then(() => alert('Link copied to clipboard!'))
@@ -69,14 +68,14 @@ const Favorite = ({ language, t }) => {
                   <div className="flex space-x-2">
                     <Button
                       size="icon"
-                      variant="outline"
+                      className="bg-green-500 hover:bg-green-600 text-white"
                       onClick={() => window.open(`https://wa.me/968${car.contact_phone}`, '_blank')}
                     >
                       <MessageCircle className="h-4 w-4" />
                     </Button>
                     <Button
                       size="icon"
-                      variant="outline"
+                      className="bg-blue-500 hover:bg-blue-600 text-white"
                       onClick={() => window.open(`tel:${car.contact_phone}`, '_blank')}
                     >
                       <Phone className="h-4 w-4" />

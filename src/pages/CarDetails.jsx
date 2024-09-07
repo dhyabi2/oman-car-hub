@@ -54,7 +54,6 @@ const CarDetails = ({ language, t }) => {
         .catch((error) => console.log('Error sharing', error));
     } else {
       console.log('Web Share API not supported');
-      // Fallback behavior (e.g., copy to clipboard)
       const shareText = `${carDetails.year} ${carDetails.make} ${carDetails.model} - ${carDetails.price} ${t.currency} - ${window.location.href}`;
       navigator.clipboard.writeText(shareText)
         .then(() => alert('Link copied to clipboard!'))
@@ -145,7 +144,7 @@ const CarDetails = ({ language, t }) => {
             </Button>
             <Button
               size="icon"
-              className="bg-purple-500 hover:bg-purple-600 text-white"
+              variant="outline"
               onClick={handleShare}
             >
               <Share2 className="h-5 w-5" />
