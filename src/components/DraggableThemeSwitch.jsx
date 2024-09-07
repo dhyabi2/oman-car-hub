@@ -12,6 +12,7 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
   const [dragX, setDragX] = useState(0);
   const containerRef = useRef(null);
   const isDraggingRef = useRef(false);
+  const lastThemeRef = useRef(currentTheme);
 
   useEffect(() => {
     const currentIndex = themes.indexOf(currentTheme);
@@ -23,13 +24,21 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
     const newDragX = (info.point.x / containerWidth) * 100;
     setDragX(Math.max(0, Math.min(newDragX, 100)));
     isDraggingRef.current = true;
+
+    // Update theme locally without making API call
+    const themeIndex = Math.round((newDragX / 100) * (themes.length - 1));
+    const newTheme = themes[themeIndex];
+    if (newTheme !== lastThemeRef.current) {
+      onThemeChange(newTheme);
+      lastThemeRef.current = newTheme;
+    }
   };
 
   const handleDragEnd = () => {
     if (isDraggingRef.current) {
       const themeIndex = Math.round((dragX / 100) * (themes.length - 1));
       const newTheme = themes[themeIndex];
-      onThemeChange(newTheme);
+      // Only make API call when drag is completed
       setTheme(newTheme);
       isDraggingRef.current = false;
     }
@@ -56,7 +65,7 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
         />
       </div>
       <div className="mt-2 text-center">
-        {getThemeLabel(currentTheme)}
+        {getThemeLabel(lastThemeRef.current)}
       </div>
     </div>
   );
