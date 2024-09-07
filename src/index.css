@@ -193,3 +193,8 @@
 .light label {
   @apply text-gray-700;
 }
+
+/* Animated Text Styles */
+.animated-text span {
+  display: inline-block;
+}
