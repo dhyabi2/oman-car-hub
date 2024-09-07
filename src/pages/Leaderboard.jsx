@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { getReferralKey } from '../utils/referral';
-import { Trophy, Edit2, Save, Users, Eye, EyeOff } from 'lucide-react';
+import { Trophy, Edit2, Save, Users } from 'lucide-react';
 
 const API_BASE_URL = 'https://oman-car-hub.replit.app';
 
@@ -14,7 +14,6 @@ const Leaderboard = ({ language, t }) => {
   const [userName, setUserName] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [currentlyApplied, setCurrentlyApplied] = useState([]);
-  const [showReferralKey, setShowReferralKey] = useState(false);
   const referralKey = getReferralKey();
 
   useEffect(() => {
@@ -89,10 +88,6 @@ const Leaderboard = ({ language, t }) => {
     }
   };
 
-  const toggleReferralKeyVisibility = () => {
-    setShowReferralKey(!showReferralKey);
-  };
-
   return (
     <div className="container mx-auto px-4 py-8">
       <Card>
@@ -123,20 +118,6 @@ const Leaderboard = ({ language, t }) => {
                   <Edit2 className="mr-2 h-4 w-4" /> {t.edit}
                 </Button>
               )}
-            </div>
-            <div className="mt-2 flex items-center">
-              <span className="mr-2">{t.referralKey}:</span>
-              <span className="font-mono">
-                {showReferralKey ? referralKey : '••••••••-••••-••••-••••-••••••••••••'}
-              </span>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleReferralKeyVisibility}
-                className="ml-2"
-              >
-                {showReferralKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </Button>
             </div>
           </div>
           <Table>
