@@ -138,11 +138,11 @@
   }
 
   .national-day {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
-    --primary: 0 100% 50%;
-    --secondary: 120 100% 25%;
-    --accent: 0 0% 0%;
+    --background: 0 0% 96%;
+    --foreground: 0 0% 20%;
+    --primary: 0 60% 50%;
+    --secondary: 120 30% 40%;
+    --accent: 0 0% 30%;
   }
 }
  
