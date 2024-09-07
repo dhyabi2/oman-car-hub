@@ -154,7 +154,7 @@ export const translations = {
     "tech-futurism": "مستقبل تقني",
     "frankincense-trail": "أرض اللُبان",
     "royal-opulence": "فخامة ملكية",
-    "national-day": "العي الوطني",
+    "national-day": "العيد الوطني",
     addCarForSale: "أضِف سيارتك للبيع",
     addCarFormTitle: "نموذج إضافة السيارة",
     basicInformation: "المعلومات الأساسية",
