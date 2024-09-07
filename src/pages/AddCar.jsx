@@ -42,7 +42,7 @@ const AddCar = ({ language, t }) => {
       case 3:
         return formData.price && formData.location && formData.contact_phone;
       case 4:
-        return true; // Description and additional features are optional
+        return true; // Description and additional features are now optional
       case 5:
         return formData.photos.length > 0 && formData.photos.length <= 15;
       default:
@@ -199,6 +199,8 @@ const AddCar = ({ language, t }) => {
             formData={formData}
             handleInputChange={handleInputChange}
             t={t}
+            descriptionPlaceholder={`${t.optional}: ${t.wouldYouLikeToProvideMoreInfo}`}
+            additionalFeaturesPlaceholder={`${t.optional}: ${t.listAdditionalFeatures}`}
           />
         );
       case 5:

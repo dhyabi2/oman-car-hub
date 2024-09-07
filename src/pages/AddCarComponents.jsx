@@ -67,7 +67,6 @@ export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
         value={formData.description}
         onChange={(e) => handleInputChange('description', e.target.value)}
         rows={4}
-        placeholder={`${t.optional}: ${t.wouldYouLikeToProvideMoreInfo}`}
       />
     </div>
     <div>
@@ -77,7 +76,6 @@ export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
         value={formData.additional_features}
         onChange={(e) => handleInputChange('additional_features', e.target.value)}
         rows={4}
-        placeholder={`${t.optional}: ${t.listAdditionalFeatures}`}
       />
     </div>
   </FormSection>
