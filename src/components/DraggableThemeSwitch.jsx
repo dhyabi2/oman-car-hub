@@ -3,9 +3,19 @@ import { motion } from 'framer-motion';
 import { setTheme } from '../utils/indexedDB';
 
 const themes = [
-  'light', 'dark', 'desert-sands', 'oasis-breeze', 'spice-market',
-  'modern-minimalist', 'coastal-calm', 'arabian-nights', 'bedouin-chic',
-  'tech-futurism', 'frankincense-trail', 'royal-opulence', 'national-day'
+  { name: 'light', colors: ['#ffffff', '#000000', '#e5e7eb'] },
+  { name: 'dark', colors: ['#1f2937', '#ffffff', '#374151'] },
+  { name: 'desert-sands', colors: ['#fef3c7', '#92400e', '#fbbf24'] },
+  { name: 'oasis-breeze', colors: ['#e0f2fe', '#0369a1', '#7dd3fc'] },
+  { name: 'spice-market', colors: ['#fef2f2', '#991b1b', '#fecaca'] },
+  { name: 'modern-minimalist', colors: ['#f9fafb', '#111827', '#e5e7eb'] },
+  { name: 'coastal-calm', colors: ['#ecfeff', '#164e63', '#67e8f9'] },
+  { name: 'arabian-nights', colors: ['#581c87', '#faf5ff', '#c084fc'] },
+  { name: 'bedouin-chic', colors: ['#fffbeb', '#92400e', '#fcd34d'] },
+  { name: 'tech-futurism', colors: ['#030712', '#e0f2fe', '#3b82f6'] },
+  { name: 'frankincense-trail', colors: ['#f0fdf4', '#166534', '#86efac'] },
+  { name: 'royal-opulence', colors: ['#312e81', '#fef3c7', '#fbbf24'] },
+  { name: 'national-day', colors: ['#f9fafb', '#dc2626', '#16a34a'] }
 ];
 
 const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
@@ -15,7 +25,7 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
   const lastThemeRef = useRef(currentTheme);
 
   useEffect(() => {
-    const currentIndex = themes.indexOf(currentTheme);
+    const currentIndex = themes.findIndex(theme => theme.name === currentTheme);
     setDragX((currentIndex / (themes.length - 1)) * 100);
   }, [currentTheme]);
 
@@ -25,9 +35,8 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
     setDragX(Math.max(0, Math.min(newDragX, 100)));
     isDraggingRef.current = true;
 
-    // Update theme locally without making API call
     const themeIndex = Math.round((newDragX / 100) * (themes.length - 1));
-    const newTheme = themes[themeIndex];
+    const newTheme = themes[themeIndex].name;
     if (newTheme !== lastThemeRef.current) {
       onThemeChange(newTheme);
       lastThemeRef.current = newTheme;
@@ -37,8 +46,7 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
   const handleDragEnd = () => {
     if (isDraggingRef.current) {
       const themeIndex = Math.round((dragX / 100) * (themes.length - 1));
-      const newTheme = themes[themeIndex];
-      // Only make API call when drag is completed
+      const newTheme = themes[themeIndex].name;
       setTheme(newTheme);
       isDraggingRef.current = false;
     }
@@ -65,7 +73,18 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
         />
       </div>
       <div className="mt-2 text-center">
-        {getThemeLabel(lastThemeRef.current)}
+        <div className="flex items-center justify-center">
+          <span className="mr-2">{getThemeLabel(lastThemeRef.current)}</span>
+          <div className="flex">
+            {themes.find(theme => theme.name === lastThemeRef.current)?.colors.map((color, index) => (
+              <div
+                key={index}
+                className="w-4 h-4 border border-gray-300"
+                style={{ backgroundColor: color }}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
