@@ -26,6 +26,7 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
   };
 
   const getThemeLabel = (theme) => {
+    if (!theme) return '';
     const label = t[theme] || theme;
     return label.charAt(0).toUpperCase() + label.slice(1).replace(/-/g, ' ');
   };
