@@ -14,7 +14,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import DraggableThemeSwitch from './DraggableThemeSwitch';
-import AnimatedText from './AnimatedText';
 
 const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,9 +52,7 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
 
   return (
     <nav className={`p-4 flex justify-between items-center ${getHeaderClass()}`}>
-      <Link to="/" className="text-xl font-bold">
-        <AnimatedText text={t.appName} className="text-2xl font-bold" />
-      </Link>
+      <Link to="/" className="text-xl font-bold">{t.appName}</Link>
       <div className="flex items-center space-x-4">
         <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
           <Globe className="h-4 w-4" />
