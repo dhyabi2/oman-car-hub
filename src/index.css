@@ -143,6 +143,10 @@
     --primary: 0 60% 50%;
     --secondary: 120 30% 40%;
     --accent: 0 0% 30%;
+    --nav-bg: 0 70% 95%;
+    --nav-text: 0 80% 20%;
+    --header-bg: 0 60% 97%;
+    --header-text: 0 80% 20%;
   }
 }
  
@@ -192,4 +196,14 @@
 /* Ensure labels are visible in light theme */
 .light label {
   @apply text-gray-700;
+}
+
+.national-day nav {
+  background-color: hsl(var(--nav-bg));
+  color: hsl(var(--nav-text));
+}
+
+.national-day .app-header {
+  background-color: hsl(var(--header-bg));
+  color: hsl(var(--header-text));
 }

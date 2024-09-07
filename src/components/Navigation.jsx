@@ -45,6 +45,8 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
         return 'bg-green-100 text-green-900';
       case 'royal-opulence':
         return 'bg-indigo-900 text-yellow-300';
+      case 'national-day':
+        return 'app-header';
       default:
         return 'bg-gray-800 text-white';
     }
