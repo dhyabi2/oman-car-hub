@@ -131,7 +131,6 @@ const AddCar = ({ language, t }) => {
       case 1:
         return (
           <FormSection title={t.basicInformation}>
-            <AnimatedArrow />
             <MakeModelSelect
               make={formData.make}
               model={formData.model}
@@ -150,12 +149,12 @@ const AddCar = ({ language, t }) => {
               onChange={(value) => handleInputChange('mileage', value)}
               t={t}
             />
+            <AnimatedArrow />
           </FormSection>
         );
       case 2:
         return (
           <FormSection title={t.vehicleDetails}>
-            <AnimatedArrow />
             <TransmissionSelector
               value={formData.transmission}
               onChange={(value) => handleInputChange('transmission', value)}
@@ -191,28 +190,29 @@ const AddCar = ({ language, t }) => {
               onChange={(value) => handleInputChange('condition', value)}
               t={t}
             />
+            <AnimatedArrow />
           </FormSection>
         );
       case 3:
         return (
           <>
-            <AnimatedArrow />
             <ListingDetails
               formData={formData}
               handleInputChange={handleInputChange}
               t={t}
             />
+            <AnimatedArrow />
           </>
         );
       case 4:
         return (
           <>
-            <AnimatedArrow />
             <AdditionalInformation
               formData={formData}
               handleInputChange={handleInputChange}
               t={t}
             />
+            <AnimatedArrow />
           </>
         );
       case 5:
