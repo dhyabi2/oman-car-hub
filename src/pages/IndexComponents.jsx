@@ -39,7 +39,7 @@ export const QuickStats = ({ stats, t }) => {
       case 'totalListings': return <Car />;
       case 'activeSellers': return <Users />;
       case 'averagePrice': return <Coins />;
-      case 'mostPopularCar': return <Award />;
+      case 'mostPopularBrand': return <Award />;
       case 'mostExpensiveCar': return <Zap />;
       case 'newestListing': return <Clock />;
       case 'currentViewers': return <Eye />;
