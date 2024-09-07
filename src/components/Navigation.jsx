@@ -45,26 +45,28 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
         return 'bg-green-100 text-green-900';
       case 'royal-opulence':
         return 'bg-indigo-900 text-yellow-300';
+      case 'national-day':
+        return 'bg-[hsl(var(--nav-background))] text-[hsl(var(--nav-foreground))]';
       default:
         return 'bg-gray-800 text-white';
     }
   };
 
   return (
-    <nav className={`p-4 flex justify-between items-center ${getHeaderClass()}`}>
+    <nav className={`p-4 flex justify-between items-center ${getHeaderClass()} ${currentTheme}`}>
       <Link to="/" className="text-xl font-bold">{t.appName}</Link>
       <div className="flex items-center space-x-4">
-        <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
+        <Button variant="ghost" size="icon" className="text-current nav-button" onClick={toggleLanguage}>
           <Globe className="h-4 w-4" />
         </Button>
         <Link to="/favorite">
-          <Button variant="ghost" size="icon" className="text-current">
+          <Button variant="ghost" size="icon" className="text-current nav-button">
             <Heart className="h-4 w-4" />
           </Button>
         </Link>
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-current">
+            <Button variant="ghost" size="icon" className="text-current nav-button">
               <Palette className="h-4 w-4" />
             </Button>
           </PopoverTrigger>
@@ -74,7 +76,7 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
         </Popover>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-current">
+            <Button variant="ghost" size="icon" className="text-current nav-button">
               <Menu className="h-6 w-6" />
             </Button>
           </SheetTrigger>
