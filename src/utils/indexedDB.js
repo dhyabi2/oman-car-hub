@@ -21,43 +21,7 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
     return response.json();
   } catch (error) {
     console.error('API request failed:', error);
-    // If it's a network error, try to use local storage as fallback
-    if (error.message === 'Failed to fetch') {
-      return useLocalStorageFallback(endpoint, method, body);
-    }
     throw new Error(`API request failed: ${error.message}`);
-  }
-}
-
-function useLocalStorageFallback(endpoint, method, body) {
-  const key = `fallback_${endpoint}`;
-  if (method === 'GET') {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : null;
-  } else if (method === 'POST' || method === 'PUT') {
-    const existingData = localStorage.getItem(key);
-    const dataArray = existingData ? JSON.parse(existingData) : [];
-    if (body.id) {
-      const index = dataArray.findIndex(item => item.id === body.id);
-      if (index !== -1) {
-        dataArray[index] = body;
-      } else {
-        dataArray.push(body);
-      }
-    } else {
-      body.id = Date.now(); // Generate a temporary ID
-      dataArray.push(body);
-    }
-    localStorage.setItem(key, JSON.stringify(dataArray));
-    return body;
-  } else if (method === 'DELETE') {
-    const existingData = localStorage.getItem(key);
-    if (existingData) {
-      const dataArray = JSON.parse(existingData);
-      const updatedArray = dataArray.filter(item => item.id !== body.id);
-      localStorage.setItem(key, JSON.stringify(updatedArray));
-    }
-    return { success: true };
   }
 }
 
@@ -87,18 +51,12 @@ export async function getLanguage() {
     return result.value;
   } catch (error) {
     console.error('Failed to get language:', error);
-    return localStorage.getItem('language') || 'en';
+    return 'en'; // Default to English if there's an error
   }
 }
 
 export async function setLanguage(language) {
-  try {
-    await apiRequest('/api/settings/language', 'PUT', { value: language });
-    localStorage.setItem('language', language);
-  } catch (error) {
-    console.error('Failed to set language:', error);
-    localStorage.setItem('language', language);
-  }
+  return apiRequest('/api/settings/language', 'PUT', { value: language });
 }
 
 export async function getTheme() {
@@ -107,40 +65,20 @@ export async function getTheme() {
     return result.value;
   } catch (error) {
     console.error('Failed to get theme:', error);
-    return localStorage.getItem('theme') || 'light';
+    return 'light'; // Default to light theme if there's an error
   }
 }
 
 export async function setTheme(theme) {
-  try {
-    await apiRequest('/api/settings/theme', 'PUT', { value: theme });
-    localStorage.setItem('theme', theme);
-  } catch (error) {
-    console.error('Failed to set theme:', error);
-    localStorage.setItem('theme', theme);
-  }
+  return apiRequest('/api/settings/theme', 'PUT', { value: theme });
 }
 
 export async function incrementCurrentViewers() {
-  try {
-    return await apiRequest('/api/stats/incrementViewers', 'POST');
-  } catch (error) {
-    console.error('Failed to increment viewers:', error);
-    const currentViewers = parseInt(localStorage.getItem('currentViewers') || '0');
-    localStorage.setItem('currentViewers', (currentViewers + 1).toString());
-    return { currentViewers: currentViewers + 1 };
-  }
+  return apiRequest('/api/stats/incrementViewers', 'POST');
 }
 
 export async function decrementCurrentViewers() {
-  try {
-    return await apiRequest('/api/stats/decrementViewers', 'POST');
-  } catch (error) {
-    console.error('Failed to decrement viewers:', error);
-    const currentViewers = Math.max(0, parseInt(localStorage.getItem('currentViewers') || '0') - 1);
-    localStorage.setItem('currentViewers', currentViewers.toString());
-    return { currentViewers };
-  }
+  return apiRequest('/api/stats/decrementViewers', 'POST');
 }
 
 export async function getCurrentViewers() {
@@ -149,7 +87,7 @@ export async function getCurrentViewers() {
     return result.currentViewers;
   } catch (error) {
     console.error('Failed to get current viewers:', error);
-    return parseInt(localStorage.getItem('currentViewers') || '0');
+    return 0; // Default to 0 if there's an error
   }
 }
 
@@ -159,13 +97,13 @@ export async function getCarStatistics() {
   } catch (error) {
     console.error('Failed to get car statistics:', error);
     return {
-      totalListings: parseInt(localStorage.getItem('totalListings') || '0'),
-      activeSellers: parseInt(localStorage.getItem('activeSellers') || '0'),
-      averagePrice: parseInt(localStorage.getItem('averagePrice') || '0'),
-      mostPopularBrand: localStorage.getItem('mostPopularBrand') || '',
-      mostExpensiveCar: localStorage.getItem('mostExpensiveCar') || '',
-      newestListing: localStorage.getItem('newestListing') || '',
-      currentViewers: parseInt(localStorage.getItem('currentViewers') || '0')
+      totalListings: 0,
+      activeSellers: 0,
+      averagePrice: 0,
+      mostPopularBrand: '',
+      mostExpensiveCar: '',
+      newestListing: '',
+      currentViewers: 0
     };
   }
 }
@@ -176,16 +114,7 @@ export async function toggleFavoriteCar(carId) {
     return result.isFavorite;
   } catch (error) {
     console.error('Failed to toggle favorite car:', error);
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    const isFavorite = favorites.includes(carId);
-    if (isFavorite) {
-      const updatedFavorites = favorites.filter(id => id !== carId);
-      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-    } else {
-      favorites.push(carId);
-      localStorage.setItem('favorites', JSON.stringify(favorites));
-    }
-    return !isFavorite;
+    return false;
   }
 }
 
@@ -194,22 +123,12 @@ export async function getFavoriteCars() {
     return await apiRequest('/api/favorites');
   } catch (error) {
     console.error('Failed to get favorite cars:', error);
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    const cars = JSON.parse(localStorage.getItem('fallback_/api/cars') || '[]');
-    return cars.filter(car => favorites.includes(car.id));
+    return [];
   }
 }
 
 export async function removeFavoriteCar(carId) {
-  try {
-    return await apiRequest(`/api/favorites/${carId}`, 'DELETE');
-  } catch (error) {
-    console.error('Failed to remove favorite car:', error);
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    const updatedFavorites = favorites.filter(id => id !== carId);
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-    return { success: true };
-  }
+  return apiRequest(`/api/favorites/${carId}`, 'DELETE');
 }
 
 export async function isFavoriteCar(carId) {
@@ -218,7 +137,6 @@ export async function isFavoriteCar(carId) {
     return result.isFavorite;
   } catch (error) {
     console.error('Failed to check if car is favorite:', error);
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    return favorites.includes(carId);
+    return false;
   }
 }
