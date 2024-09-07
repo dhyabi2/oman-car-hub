@@ -2,10 +2,10 @@ import React from 'react';
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-const ImageSelector = ({ label, options, value, onChange, disabled = false }) => (
+const ImageSelector = ({ label, options, value, onChange, disabled = false, columns = 3 }) => (
   <div>
     <Label>{label}</Label>
-    <div className="grid grid-cols-3 gap-2 mt-2">
+    <div className={`grid grid-cols-${columns} gap-2 mt-2`}>
       {options.map((option) => (
         <Button
           key={option.value}

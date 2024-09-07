@@ -1,29 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import ImageSelector from './ImageSelector';
-import { Car, Fuel, Palette, Settings, Users, Compass, CheckCircle, Calendar } from 'lucide-react';
+import { Car, Fuel, Palette, Settings, Users, Compass, CheckCircle, Calendar, Search } from 'lucide-react';
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { carBrands, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 
-export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => (
-  <>
-    <ImageSelector
-      label={t.make}
-      options={carBrands.map(brand => ({ value: brand.brand, icon: <img src={brand.logo} alt={brand.brand} className="w-6 h-6 object-contain" />, label: brand.brand }))}
-      value={make}
-      onChange={onMakeChange}
-    />
-    <ImageSelector
-      label={t.model}
-      options={(make ? carModels[make] : []).map(model => ({ value: model, icon: <Car size={24} />, label: model }))}
-      value={model}
-      onChange={onModelChange}
-      disabled={!make}
-    />
-  </>
-);
+export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const filteredBrands = carBrands.filter(brand => 
+    brand.brand.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <>
+      <div className="mb-4">
+        <Label htmlFor="brandSearch">{t.searchBrands}</Label>
+        <div className="relative">
+          <Input
+            id="brandSearch"
+            type="text"
+            placeholder={t.searchBrands}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        </div>
+      </div>
+      <ScrollArea className="h-60 mb-4">
+        <ImageSelector
+          label={t.make}
+          options={filteredBrands.map(brand => ({ value: brand.brand, icon: <img src={brand.logo} alt={brand.brand} className="w-6 h-6 object-contain" />, label: brand.brand }))}
+          value={make}
+          onChange={onMakeChange}
+          columns={2}
+        />
+      </ScrollArea>
+      <ImageSelector
+        label={t.model}
+        options={(make ? carModels[make] : []).map(model => ({ value: model, icon: <Car size={24} />, label: model }))}
+        value={model}
+        onChange={onModelChange}
+        disabled={!make}
+      />
+    </>
+  );
+};
 
 export const MileageInput = ({ value, onChange, t }) => (
   <div>
