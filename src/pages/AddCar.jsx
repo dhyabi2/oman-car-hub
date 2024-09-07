@@ -224,7 +224,7 @@ const AddCar = ({ language, t }) => {
     <div className="container mx-auto px-4 py-8">
       <Card>
         <CardHeader>
-          <CardTitle>{t.addCarForSale}</CardTitle>
+          <CardTitle className="text-2xl font-bold">{t.addCarForSale}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="mb-8">
