@@ -1,50 +1,27 @@
 const API_BASE_URL = 'https://oman-car-hub.replit.app';
 
-export const trackReferralWithIP = async (referralKey) => {
+export const trackReferralWithIP = async (referralCode) => {
   try {
     // Fetch the public IP
     const ipResponse = await fetch('https://api.ipify.org?format=json');
     const ipData = await ipResponse.json();
     const ip = ipData.ip;
 
-    // Generate source key
-    const sourceKeyResponse = await fetch(`${API_BASE_URL}/api/generate-source-key`, {
+    // Generate source key and track referral
+    const response = await fetch(`${API_BASE_URL}/api/generate-source-key`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ip }),
-    });
-    const sourceKeyData = await sourceKeyResponse.json();
-    const sourceKey = sourceKeyData.sourceKey;
-
-    // Check source key
-    const checkResponse = await fetch(`${API_BASE_URL}/api/check-source-key`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ sourceKey }),
+      body: JSON.stringify({ ip, referralCode }),
     });
 
-    if (!checkResponse.ok) {
-      throw new Error('Invalid source key');
+    if (!response.ok) {
+      throw new Error('Failed to generate source key and track referral');
     }
 
-    // Track referral
-    const trackResponse = await fetch(`${API_BASE_URL}/api/track-referral`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ referralKey, sourceKey }),
-    });
-
-    if (!trackResponse.ok) {
-      throw new Error('Failed to track referral');
-    }
-
-    console.log('Referral tracked successfully');
+    const data = await response.json();
+    console.log('Referral tracked successfully', data);
   } catch (error) {
     console.error('Error tracking referral:', error);
   }

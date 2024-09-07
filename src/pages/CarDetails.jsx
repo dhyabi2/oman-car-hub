@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -13,6 +13,7 @@ import { trackReferralWithIP } from '../utils/referralTracking';
 
 const CarDetails = ({ language, t }) => {
   const { id } = useParams();
+  const location = useLocation();
   const [carDetails, setCarDetails] = useState(null);
 
   useEffect(() => {
@@ -22,9 +23,15 @@ const CarDetails = ({ language, t }) => {
     };
     fetchCarDetails();
 
+    // Extract referral code from URL
+    const searchParams = new URLSearchParams(location.search);
+    const referralCode = searchParams.get('ref');
+
     // Track referral when the page loads
-    trackReferralWithIP();
-  }, [id]);
+    if (referralCode) {
+      trackReferralWithIP(referralCode);
+    }
+  }, [id, location]);
 
   if (!carDetails) {
     return <div className="container mx-auto px-4 py-8 text-center">{t.loading}</div>;
