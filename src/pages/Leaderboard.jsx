@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { getReferralKey } from '../utils/referral';
 import { Trophy, Edit2, Save, Users } from 'lucide-react';
+import { trackReferralWithIP } from '../utils/referralTracking';
 
 const API_BASE_URL = 'https://oman-car-hub.replit.app';
 
@@ -20,6 +21,7 @@ const Leaderboard = ({ language, t }) => {
     fetchLeaderboard();
     fetchUserName();
     fetchCurrentlyApplied();
+    trackReferralWithIP(referralKey);
   }, []);
 
   const fetchLeaderboard = async () => {
