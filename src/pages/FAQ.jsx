@@ -6,7 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { HelpCircle, Send, MessageCircle } from 'lucide-react';
 
-const FAQ = ({ language }) => {
+const API_BASE_URL = 'https://oman-car-hub.replit.app';
+
+const FAQ = ({ language, t }) => {
   const [feedback, setFeedback] = useState('');
 
   const faqData = [
@@ -28,10 +30,26 @@ const FAQ = ({ language }) => {
     }
   ];
 
-  const handleFeedbackSubmit = () => {
-    console.log("Feedback submitted:", feedback);
-    toast.success(language === 'ar' ? 'شكرًا على ملاحظاتك!' : 'Thank you for your feedback!');
-    setFeedback('');
+  const handleFeedbackSubmit = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/submit-feedback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ feedback, language }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit feedback');
+      }
+
+      toast.success(language === 'ar' ? 'شكرًا على ملاحظاتك!' : 'Thank you for your feedback!');
+      setFeedback('');
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      toast.error(language === 'ar' ? 'فشل في إرسال الملاحظات' : 'Failed to submit feedback');
+    }
   };
 
   return (
