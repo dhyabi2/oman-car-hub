@@ -1,38 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navItems } from '../nav-items';
-import { Menu, Globe, Heart } from 'lucide-react';
+import { Menu, Sun, Moon, Palette, Globe, Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import DraggableThemeSwitch from './DraggableThemeSwitch';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const themes = [
-  { name: 'light', value: 'light' },
-  { name: 'dark', value: 'dark' },
-  { name: 'desertSands', value: 'desert-sands' },
-  { name: 'oasisBreeze', value: 'oasis-breeze' },
-  { name: 'spiceMarket', value: 'spice-market' },
-  { name: 'modernMinimalist', value: 'modern-minimalist' },
-  { name: 'coastalCalm', value: 'coastal-calm' },
-  { name: 'arabianNights', value: 'arabian-nights' },
-  { name: 'bedouinChic', value: 'bedouin-chic' },
-  { name: 'techFuturism', value: 'tech-futurism' },
-  { name: 'frankincenseTrail', value: 'frankincense-trail' },
-  { name: 'royalOpulence', value: 'royal-opulence' },
+  { name: 'light', value: 'light', icon: <Sun className="h-4 w-4" /> },
+  { name: 'dark', value: 'dark', icon: <Moon className="h-4 w-4" /> },
+  { name: 'desertSands', value: 'desert-sands', icon: <Palette className="h-4 w-4" /> },
+  { name: 'oasisBreeze', value: 'oasis-breeze', icon: <Palette className="h-4 w-4" /> },
+  { name: 'spiceMarket', value: 'spice-market', icon: <Palette className="h-4 w-4" /> },
+  { name: 'modernMinimalist', value: 'modern-minimalist', icon: <Palette className="h-4 w-4" /> },
+  { name: 'coastalCalm', value: 'coastal-calm', icon: <Palette className="h-4 w-4" /> },
+  { name: 'arabianNights', value: 'arabian-nights', icon: <Palette className="h-4 w-4" /> },
+  { name: 'bedouinChic', value: 'bedouin-chic', icon: <Palette className="h-4 w-4" /> },
+  { name: 'techFuturism', value: 'tech-futurism', icon: <Palette className="h-4 w-4" /> },
+  { name: 'frankincenseTrail', value: 'frankincense-trail', icon: <Palette className="h-4 w-4" /> },
+  { name: 'royalOpulence', value: 'royal-opulence', icon: <Palette className="h-4 w-4" /> },
 ];
 
 const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const [currentThemeIndex, setCurrentThemeIndex] = useState(themes.findIndex(theme => theme.value === currentTheme));
 
-  useEffect(() => {
-    setCurrentThemeIndex(themes.findIndex(theme => theme.value === currentTheme));
-  }, [currentTheme]);
+  const currentThemeIcon = themes.find(theme => theme.value === currentTheme)?.icon || <Palette className="h-4 w-4" />;
 
   const getHeaderClass = () => {
     switch (currentTheme) {
@@ -65,11 +67,6 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
     }
   };
 
-  const handleThemeChange = (newIndex) => {
-    setCurrentThemeIndex(newIndex);
-    onThemeChange(themes[newIndex].value);
-  };
-
   return (
     <nav className={`p-4 flex justify-between items-center ${getHeaderClass()}`}>
       <Link to="/" className="text-xl font-bold">{t.appName}</Link>
@@ -82,12 +79,23 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
             <Heart className="h-4 w-4" />
           </Button>
         </Link>
-        <DraggableThemeSwitch
-          themes={themes}
-          currentIndex={currentThemeIndex}
-          onChange={handleThemeChange}
-          t={t}
-        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="text-current">
+              {currentThemeIcon}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {themes.map((theme) => (
+              <DropdownMenuItem key={theme.value} onSelect={() => onThemeChange(theme.value)}>
+                <div className="flex items-center">
+                  {theme.icon}
+                  <span className="ml-2">{t[theme.name]}</span>
+                </div>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="text-current">
