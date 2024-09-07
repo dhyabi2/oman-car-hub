@@ -132,7 +132,7 @@ export const translations = {
     "arabian-nights": "ليالي عربية",
     "bedouin-chic": "أناقة بدوية",
     "tech-futurism": "مستقبل تقني",
-    "frankincense-trail": "درب اللبان",
+    "frankincense-trail": "أرض اللبان",
     "royal-opulence": "فخامة ملكية",
     addCarForSale: "أضف سيارتك للبيع",
     addCarFormTitle: "نموذج إضافة السيارة",
