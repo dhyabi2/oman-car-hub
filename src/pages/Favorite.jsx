@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getFavoriteCars, removeFavoriteCar } from '../utils/indexedDB';
-import { Heart, Trash2, Eye, Phone, MessageCircle } from 'lucide-react';
+import { Heart, Trash2, Eye, Phone, MessageCircle, Share2 } from 'lucide-react';
 
 const Favorite = ({ language, t }) => {
   const [favoriteCars, setFavoriteCars] = useState([]);
@@ -24,6 +24,24 @@ const Favorite = ({ language, t }) => {
 
   const handleViewDetails = (carId) => {
     navigate(`/car/${carId}`);
+  };
+
+  const handleShare = (car) => {
+    if (navigator.share) {
+      navigator.share({
+        title: `${car.year} ${car.make} ${car.model}`,
+        text: `Check out this ${car.year} ${car.make} ${car.model} for ${car.price} ${t.currency}`,
+        url: `${window.location.origin}/car/${car.id}`
+      }).then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
+    } else {
+      console.log('Web Share API not supported');
+      // Fallback behavior (e.g., copy to clipboard)
+      const shareText = `${car.year} ${car.make} ${car.model} - ${car.price} ${t.currency} - ${window.location.origin}/car/${car.id}`;
+      navigator.clipboard.writeText(shareText)
+        .then(() => alert('Link copied to clipboard!'))
+        .catch(err => console.error('Could not copy text: ', err));
+    }
   };
 
   return (
@@ -62,6 +80,13 @@ const Favorite = ({ language, t }) => {
                       onClick={() => window.open(`tel:${car.contact_phone}`, '_blank')}
                     >
                       <Phone className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={() => handleShare(car)}
+                    >
+                      <Share2 className="h-4 w-4" />
                     </Button>
                     <Button
                       size="icon"

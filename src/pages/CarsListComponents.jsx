@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye, Phone, MessageCircle, Heart, MapPin } from 'lucide-react';
+import { AlertCircle, DollarSign, Calendar, Car, Fuel, Sliders, Eye, Phone, MessageCircle, Heart, MapPin, Share2 } from 'lucide-react';
 import { carMakes, carModels, fuelTypes, transmissionTypes } from '../utils/carData';
 import { translations } from '../utils/translations';
 
@@ -62,61 +62,87 @@ export const NoCarsList = ({ language }) => (
   </div>
 );
 
-export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavorite }) => (
-  <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-    <div className="relative pb-[56.25%]">
-      <img
-        src={car.photos[0]}
-        alt={`${car.make} ${car.model}`}
-        className="absolute top-0 left-0 w-full h-full object-cover"
-      />
-      <Button
-        variant="ghost"
-        size="icon"
-        className={`absolute top-2 right-2 bg-white bg-opacity-70 hover:bg-opacity-100 ${isFavorite ? 'text-red-500' : 'text-gray-500'}`}
-        onClick={() => onToggleFavorite(car.id)}
-      >
-        <Heart className={`h-6 w-6 ${isFavorite ? 'fill-current' : ''}`} />
-      </Button>
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-        <h2 className="text-2xl font-bold text-white mb-1">{car.year} {car.make} {car.model}</h2>
-        <p className="text-3xl font-bold text-yellow-400">{car.price} {getTranslation(language, 'currency', 'OMR')}</p>
-      </div>
-    </div>
-    <CardContent className="p-4">
-      <div className="grid grid-cols-2 gap-2 mb-4 text-sm">
-        <p className="flex items-center"><Car className="mr-1 text-blue-500" /> {car.mileage} km</p>
-        <p className="flex items-center"><Sliders className="mr-1 text-green-500" /> {car.transmission}</p>
-        <p className="flex items-center"><Fuel className="mr-1 text-red-500" /> {car.fuel_type}</p>
-        <p className="flex items-center"><Calendar className="mr-1 text-purple-500" /> {car.year}</p>
-        <p className="flex items-center col-span-2"><MapPin className="mr-1 text-indigo-500" /> {car.location}</p>
-      </div>
-      <div className="flex justify-between items-center">
-        <Button className="flex-1 mr-2" onClick={() => onViewDetails(car.id)}>
-          <Eye className="mr-2" />
-          {getTranslation(language, 'viewDetails', 'View Details')}
+export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavorite }) => {
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: `${car.year} ${car.make} ${car.model}`,
+        text: `Check out this ${car.year} ${car.make} ${car.model} for ${car.price} ${getTranslation(language, 'currency', 'OMR')}`,
+        url: window.location.href
+      }).then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
+    } else {
+      console.log('Web Share API not supported');
+      // Fallback behavior (e.g., copy to clipboard)
+      const shareText = `${car.year} ${car.make} ${car.model} - ${car.price} ${getTranslation(language, 'currency', 'OMR')} - ${window.location.href}`;
+      navigator.clipboard.writeText(shareText)
+        .then(() => alert('Link copied to clipboard!'))
+        .catch(err => console.error('Could not copy text: ', err));
+    }
+  };
+
+  return (
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <div className="relative pb-[56.25%]">
+        <img
+          src={car.photos[0]}
+          alt={`${car.make} ${car.model}`}
+          className="absolute top-0 left-0 w-full h-full object-cover"
+        />
+        <Button
+          variant="ghost"
+          size="icon"
+          className={`absolute top-2 right-2 bg-white bg-opacity-70 hover:bg-opacity-100 ${isFavorite ? 'text-red-500' : 'text-gray-500'}`}
+          onClick={() => onToggleFavorite(car.id)}
+        >
+          <Heart className={`h-6 w-6 ${isFavorite ? 'fill-current' : ''}`} />
         </Button>
-        <div className="flex">
-          <Button
-            size="icon"
-            variant="outline"
-            className="mr-2"
-            onClick={() => window.open(`https://wa.me/968${car.contact_phone}`, '_blank')}
-          >
-            <MessageCircle className="h-4 w-4" />
-          </Button>
-          <Button
-            size="icon"
-            variant="outline"
-            onClick={() => window.open(`tel:${car.contact_phone}`)}
-          >
-            <Phone className="h-4 w-4" />
-          </Button>
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+          <h2 className="text-2xl font-bold text-white mb-1">{car.year} {car.make} {car.model}</h2>
+          <p className="text-3xl font-bold text-yellow-400">{car.price} {getTranslation(language, 'currency', 'OMR')}</p>
         </div>
       </div>
-    </CardContent>
-  </Card>
-);
+      <CardContent className="p-4">
+        <div className="grid grid-cols-2 gap-2 mb-4 text-sm">
+          <p className="flex items-center"><Car className="mr-1 text-blue-500" /> {car.mileage} km</p>
+          <p className="flex items-center"><Sliders className="mr-1 text-green-500" /> {car.transmission}</p>
+          <p className="flex items-center"><Fuel className="mr-1 text-red-500" /> {car.fuel_type}</p>
+          <p className="flex items-center"><Calendar className="mr-1 text-purple-500" /> {car.year}</p>
+          <p className="flex items-center col-span-2"><MapPin className="mr-1 text-indigo-500" /> {car.location}</p>
+        </div>
+        <div className="flex justify-between items-center">
+          <Button className="flex-1 mr-2" onClick={() => onViewDetails(car.id)}>
+            <Eye className="mr-2" />
+            {getTranslation(language, 'viewDetails', 'View Details')}
+          </Button>
+          <div className="flex space-x-2">
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={() => window.open(`https://wa.me/968${car.contact_phone}`, '_blank')}
+            >
+              <MessageCircle className="h-4 w-4" />
+            </Button>
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={() => window.open(`tel:${car.contact_phone}`)}
+            >
+              <Phone className="h-4 w-4" />
+            </Button>
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={handleShare}
+            >
+              <Share2 className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
 export const FiltersCard = ({ filters, maxPriceInData, onFilterChange, language }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

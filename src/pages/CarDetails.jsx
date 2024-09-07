@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getCarById } from '../utils/indexedDB';
 import ImageGallery from '../components/ImageGallery';
-import { Car, DollarSign, MapPin, Phone, Info, Calendar, Gauge, Zap, Droplet, Palette, DoorOpen, Users, Compass, Award, Key, MessageCircle } from 'lucide-react';
+import { Car, DollarSign, MapPin, Phone, Info, Calendar, Gauge, Zap, Droplet, Palette, DoorOpen, Users, Compass, Award, Key, MessageCircle, Share2 } from 'lucide-react';
 
 const CarDetails = ({ language, t }) => {
   const { id } = useParams();
@@ -43,6 +43,24 @@ const CarDetails = ({ language, t }) => {
     { icon: <Info className="w-5 h-5" />, label: t.sellerType, value: t[carDetails.seller_type.toLowerCase()] },
     { icon: <Calendar className="w-5 h-5" />, label: t.listingExpirationDate, value: carDetails.listing_expiration_date },
   ];
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: `${carDetails.year} ${carDetails.make} ${carDetails.model}`,
+        text: `Check out this ${carDetails.year} ${carDetails.make} ${carDetails.model} for ${carDetails.price} ${t.currency}`,
+        url: window.location.href
+      }).then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
+    } else {
+      console.log('Web Share API not supported');
+      // Fallback behavior (e.g., copy to clipboard)
+      const shareText = `${carDetails.year} ${carDetails.make} ${carDetails.model} - ${carDetails.price} ${t.currency} - ${window.location.href}`;
+      navigator.clipboard.writeText(shareText)
+        .then(() => alert('Link copied to clipboard!'))
+        .catch(err => console.error('Could not copy text: ', err));
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -124,6 +142,13 @@ const CarDetails = ({ language, t }) => {
               onClick={() => window.open(`tel:${carDetails.contact_phone}`, '_blank')}
             >
               <Phone className="h-5 w-5" />
+            </Button>
+            <Button
+              size="icon"
+              className="bg-purple-500 hover:bg-purple-600 text-white"
+              onClick={handleShare}
+            >
+              <Share2 className="h-5 w-5" />
             </Button>
           </div>
         </CardContent>
