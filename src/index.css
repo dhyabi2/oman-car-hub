@@ -143,19 +143,6 @@
     --primary: 0 60% 50%;
     --secondary: 120 30% 40%;
     --accent: 0 0% 30%;
-    --card: 0 60% 97%;
-    --card-foreground: 0 0% 20%;
-    --popover: 0 60% 97%;
-    --popover-foreground: 0 0% 20%;
-    --muted: 0 60% 90%;
-    --muted-foreground: 0 0% 40%;
-    --destructive: 0 100% 40%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 0 60% 80%;
-    --input: 0 60% 80%;
-    --ring: 0 60% 50%;
-    --nav-background: 0 60% 95%;
-    --nav-foreground: 0 0% 20%;
   }
 }
  
@@ -205,23 +192,4 @@
 /* Ensure labels are visible in light theme */
 .light label {
   @apply text-gray-700;
-}
-
-/* National Day theme specific styles */
-.national-day nav {
-  background-color: hsl(var(--nav-background));
-  color: hsl(var(--nav-foreground));
-}
-
-.national-day .app-header {
-  background-color: hsl(var(--nav-background));
-  color: hsl(var(--nav-foreground));
-}
-
-.national-day .nav-button {
-  color: hsl(var(--nav-foreground));
-}
-
-.national-day .nav-button:hover {
-  background-color: hsl(var(--primary) / 0.1);
 }
