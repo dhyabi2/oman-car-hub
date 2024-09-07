@@ -66,10 +66,19 @@ const FAQ = ({ language }) => {
             ))}
           </Accordion>
           
-          <div className="mt-8">
+          <div className={`mt-8 ${language === 'ar' ? 'text-right' : ''}`}>
             <h3 className={`text-lg font-semibold mb-2 flex items-center ${language === 'ar' ? 'justify-end' : ''}`}>
-              <HelpCircle className={language === 'ar' ? 'ml-2' : 'mr-2'} />
-              {language === 'ar' ? 'هل لديك المزيد من الأسئلة؟' : 'Have more questions?'}
+              {language === 'ar' ? (
+                <>
+                  هل لديك المزيد من الأسئلة؟
+                  <HelpCircle className="ml-2" />
+                </>
+              ) : (
+                <>
+                  <HelpCircle className="mr-2" />
+                  Have more questions?
+                </>
+              )}
             </h3>
             <Textarea
               placeholder={language === 'ar' ? 'اكتب ملاحظاتك أو سؤالك هنا...' : 'Type your feedback or question here...'}
@@ -78,12 +87,12 @@ const FAQ = ({ language }) => {
               className="mb-4"
               dir={language === 'ar' ? 'rtl' : 'ltr'}
             />
-            <div className={`flex ${language === 'ar' ? 'justify-end' : ''}`}>
+            <div className={`flex ${language === 'ar' ? 'justify-start' : 'justify-end'}`}>
               <Button onClick={handleFeedbackSubmit} className="flex items-center">
                 {language === 'ar' ? (
                   <>
                     إرسال الملاحظات
-                    <Send className="ml-2" />
+                    <Send className="mr-2" />
                   </>
                 ) : (
                   <>
