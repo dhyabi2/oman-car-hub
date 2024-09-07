@@ -4,33 +4,36 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { translations } from '../utils/translations';
 import { HelpCircle, Send, MessageCircle } from 'lucide-react';
 
-const FAQ = ({ language, t }) => {
+const FAQ = ({ language = 'en' }) => {
   const [feedback, setFeedback] = useState('');
+
+  const t = (key) => translations[language][key] || key;
 
   const faqData = [
     {
-      question: t.howToListCar,
-      answer: t.listCarAnswer
+      question: t('howToListCar'),
+      answer: t('listCarAnswer')
     },
     {
-      question: t.isListingFree,
-      answer: t.listingFreeAnswer
+      question: t('isListingFree'),
+      answer: t('listingFreeAnswer')
     },
     {
-      question: t.howToContactSeller,
-      answer: t.contactSellerAnswer
+      question: t('howToContactSeller'),
+      answer: t('contactSellerAnswer')
     },
     {
-      question: t.howToContactDeveloper,
-      answer: t.contactDeveloperAnswer
+      question: t('howToContactDeveloper'),
+      answer: t('contactDeveloperAnswer')
     }
   ];
 
   const handleFeedbackSubmit = () => {
     console.log("Feedback submitted:", feedback);
-    toast.success(t.feedbackThankYou);
+    toast.success(t('feedbackThankYou'));
     setFeedback('');
   };
 
@@ -40,7 +43,7 @@ const FAQ = ({ language, t }) => {
         <CardHeader>
           <CardTitle className="flex items-center">
             <HelpCircle className="mr-2" />
-            {t.frequentlyAskedQuestions}
+            {t('frequentlyAskedQuestions')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -56,7 +59,7 @@ const FAQ = ({ language, t }) => {
                       onClick={() => window.open("https://wa.me/96896672579", "_blank")}
                     >
                       <MessageCircle className="mr-2" />
-                      {t.contactViaWhatsApp}
+                      {t('contactViaWhatsApp')}
                     </Button>
                   )}
                 </AccordionContent>
@@ -67,17 +70,17 @@ const FAQ = ({ language, t }) => {
           <div className="mt-8">
             <h3 className="text-lg font-semibold mb-2 flex items-center">
               <HelpCircle className="mr-2" />
-              {t.haveMoreQuestions}
+              {t('haveMoreQuestions')}
             </h3>
             <Textarea
-              placeholder={t.typeFeedbackOrQuestion}
+              placeholder={t('typeFeedbackOrQuestion')}
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
               className="mb-4"
             />
             <Button onClick={handleFeedbackSubmit} className="flex items-center">
               <Send className="mr-2" />
-              {t.submitFeedback}
+              {t('submitFeedback')}
             </Button>
           </div>
         </CardContent>
