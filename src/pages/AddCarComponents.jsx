@@ -61,23 +61,23 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => {
 export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
   <FormSection title={t.additionalInformation}>
     <div>
-      <Label htmlFor="description">{t.description} ({t.optional})</Label>
+      <Label htmlFor="description">{t.description}</Label>
       <Textarea
         id="description"
         value={formData.description}
         onChange={(e) => handleInputChange('description', e.target.value)}
         rows={4}
-        placeholder={t.descriptionPlaceholder}
+        placeholder={`${t.optional}: ${t.wouldYouLikeToProvideMoreInfo}`}
       />
     </div>
     <div>
-      <Label htmlFor="additional_features">{t.additionalFeatures} ({t.optional})</Label>
+      <Label htmlFor="additional_features">{t.additionalFeatures}</Label>
       <Textarea
         id="additional_features"
         value={formData.additional_features}
         onChange={(e) => handleInputChange('additional_features', e.target.value)}
         rows={4}
-        placeholder={t.additionalFeaturesPlaceholder}
+        placeholder={`${t.optional}: ${t.listAdditionalFeatures}`}
       />
     </div>
   </FormSection>
