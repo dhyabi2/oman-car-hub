@@ -4,13 +4,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { translations } from '../utils/translations';
 import { HelpCircle, Send, MessageCircle } from 'lucide-react';
 
-const FAQ = ({ language = 'en' }) => {
+const FAQ = ({ language, t }) => {
   const [feedback, setFeedback] = useState('');
-
-  const t = (key) => translations[language][key] || key;
 
   const faqData = [
     {
