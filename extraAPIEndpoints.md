@@ -19,14 +19,35 @@ This endpoint is used to validate the source key before tracking referrals.
 - 200 OK: If the source key is valid
 - 400 Bad Request: If the source key is invalid or missing
 
+## Generate Source Key
+
+### Endpoint: `/api/generate-source-key`
+
+This endpoint generates a new source key based on the user's IP address.
+
+#### Method: GET
+
+#### Response:
+- 200 OK: Returns a new or existing source key
+- 400 Bad Request: If there's an error generating the source key
+
 #### Implementation:
 
 ```javascript
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 
-// In-memory storage for valid source keys (replace with database in production)
-const validSourceKeys = new Set();
+const sourceKeysFile = path.join(__dirname, 'sourceKeys.json');
+
+// Ensure the sourceKeys.json file exists
+if (!fs.existsSync(sourceKeysFile)) {
+  fs.writeFileSync(sourceKeysFile, JSON.stringify({}));
+}
+
+// Load source keys from file
+let sourceKeys = JSON.parse(fs.readFileSync(sourceKeysFile, 'utf8'));
 
 // Middleware to check if a source key is valid
 const isValidSourceKey = (req, res, next) => {
@@ -34,7 +55,7 @@ const isValidSourceKey = (req, res, next) => {
   if (!sourceKey) {
     return res.status(400).json({ error: 'Source key is required' });
   }
-  if (!validSourceKeys.has(sourceKey)) {
+  if (!sourceKeys[sourceKey]) {
     return res.status(400).json({ error: 'Invalid source key' });
   }
   next();
@@ -45,17 +66,35 @@ router.post('/check-source-key', isValidSourceKey, (req, res) => {
   res.status(200).json({ message: 'Valid source key' });
 });
 
-// Helper function to generate and store a new valid source key
-const generateSourceKey = () => {
+// Helper function to generate a new source key
+const generateSourceKey = (ip) => {
   const newSourceKey = Math.random().toString(36).substring(2, 15);
-  validSourceKeys.add(newSourceKey);
+  sourceKeys[newSourceKey] = ip;
+  fs.writeFileSync(sourceKeysFile, JSON.stringify(sourceKeys, null, 2));
   return newSourceKey;
 };
 
-// Endpoint to generate a new source key (for demonstration purposes)
-router.get('/generate-source-key', (req, res) => {
-  const newSourceKey = generateSourceKey();
-  res.status(200).json({ sourceKey: newSourceKey });
+// Endpoint to generate a new source key based on IP
+router.get('/generate-source-key', async (req, res) => {
+  try {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
+    const ip = data.ip;
+
+    // Check if IP already has a source key
+    for (const [key, value] of Object.entries(sourceKeys)) {
+      if (value === ip) {
+        return res.status(200).json({ sourceKey: key });
+      }
+    }
+
+    // Generate new source key if IP is not found
+    const newSourceKey = generateSourceKey(ip);
+    res.status(200).json({ sourceKey: newSourceKey });
+  } catch (error) {
+    console.error('Error generating source key:', error);
+    res.status(400).json({ error: 'Failed to generate source key' });
+  }
 });
 
 module.exports = router;
@@ -69,10 +108,16 @@ To use these endpoints:
    app.use('/api', extraEndpoints);
    ```
 
-2. When a user first accesses the app, generate a source key for them using the `/api/generate-source-key` endpoint.
+2. When a user first accesses the app, call the `/api/generate-source-key` endpoint to get a source key based on their IP:
+   ```javascript
+   fetch('/api/generate-source-key')
+     .then(response => response.json())
+     .then(data => {
+       localStorage.setItem('sourceKey', data.sourceKey);
+     })
+     .catch(error => console.error('Error fetching source key:', error));
+   ```
 
-3. Store this source key in the user's local storage or as a cookie.
+3. When tracking referrals, first call `/api/check-source-key` to validate the source key before proceeding with the referral tracking logic.
 
-4. When tracking referrals, first call `/api/check-source-key` to validate the source key before proceeding with the referral tracking logic.
-
-Note: In a production environment, you should replace the in-memory storage with a database solution for storing valid source keys. Also, implement proper security measures such as rate limiting and user authentication for generating source keys.
+Note: In a production environment, consider using a database instead of a JSON file for storing source keys. Also, implement proper security measures such as rate limiting and encryption for the source keys.
