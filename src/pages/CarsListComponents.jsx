@@ -92,7 +92,7 @@ export const CarCard = ({ car, onViewDetails, language, isFavorite, onToggleFavo
         <p className="flex items-center col-span-2"><MapPin className="mr-1 text-indigo-500" /> {car.location}</p>
       </div>
       <div className="flex flex-col space-y-2">
-        <Button className="w-full bg-green-500 hover:bg-green-600 text-white" onClick={() => window.open(`https://wa.me/${car.contact_phone}`, '_blank')}>
+        <Button className="w-full bg-green-500 hover:bg-green-600 text-white" onClick={() => window.open(`https://wa.me/968${car.contact_phone}`, '_blank')}>
           <MessageCircle className="mr-2" />
           {getTranslation(language, 'whatsappButton', 'WhatsApp')}
         </Button>
