@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import ImageSelector from './ImageSelector';
-import { Car, Fuel, Palette, Settings, Users, Compass, CheckCircle } from 'lucide-react';
+import { Car, Fuel, Palette, Settings, Users, Compass, CheckCircle, Calendar } from 'lucide-react';
 
 import { carBrands, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 
@@ -75,7 +75,7 @@ export const ColorSelector = ({ value, onChange, t }) => (
     label={t.color}
     options={colors.map(color => ({ 
       value: color, 
-      icon: color === 'Other' ? <Palette size={24} /> : <Palette size={24} color={color.toLowerCase()} />, 
+      icon: <Car size={24} fill={color.toLowerCase() === 'other' ? 'none' : color.toLowerCase()} />, 
       label: t[color.toLowerCase()] || color
     }))}
     value={value}
@@ -104,7 +104,7 @@ export const TransmissionSelector = ({ value, onChange, t }) => (
 export const DoorsSelector = ({ value, onChange, t }) => (
   <ImageSelector
     label={t.numberOfDoors}
-    options={[2, 3, 4, 5].map(num => ({ value: num, icon: null, label: num.toString() }))}
+    options={[2, 3, 4, 5].map(num => ({ value: num, icon: <Car size={24} />, label: num.toString() }))}
     value={value}
     onChange={onChange}
   />
@@ -122,7 +122,7 @@ export const SeatsSelector = ({ value, onChange, t }) => (
 export const DrivetrainSelector = ({ value, onChange, t }) => (
   <ImageSelector
     label={t.drivetrain}
-    options={['FWD', 'RWD', 'AWD', '4WD'].map(type => ({ value: type, icon: <Compass size={24} />, label: t[type.toLowerCase()] }))}
+    options={['FWD', 'RWD', 'AWD'].map(type => ({ value: type, icon: <Compass size={24} />, label: t[type.toLowerCase()] }))}
     value={value}
     onChange={onChange}
   />
@@ -135,4 +135,26 @@ export const ConditionSelector = ({ value, onChange, t }) => (
     value={value}
     onChange={onChange}
   />
+);
+
+export const YearSelector = ({ value, onChange, t }) => (
+  <div>
+    <Label htmlFor="year">{t.year}</Label>
+    <div className="flex items-center space-x-2">
+      <Slider
+        id="year"
+        min={1990}
+        max={new Date().getFullYear()}
+        step={1}
+        value={[value]}
+        onValueChange={(newValue) => onChange(newValue[0])}
+      />
+      <Input
+        type="number"
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="w-24"
+      />
+    </div>
+  </div>
 );

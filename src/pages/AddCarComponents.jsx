@@ -81,16 +81,24 @@ export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
   </FormSection>
 );
 
-export const PhotoUpload = ({ photos, handlePhotoUpload, t }) => (
+export const PhotoUpload = ({ photos, handlePhotoUpload, t, maxPhotos }) => (
   <FormSection title={t.photos}>
     <div>
-      <Label htmlFor="photos">{t.uploadPhotos}</Label>
+      <Label htmlFor="photos">{t.uploadPhotos} (Max {maxPhotos})</Label>
       <Input
         id="photos"
         type="file"
         accept="image/*"
         multiple
-        onChange={(e) => handlePhotoUpload(Array.from(e.target.files))}
+        onChange={(e) => {
+          const selectedFiles = Array.from(e.target.files);
+          const totalPhotos = photos.length + selectedFiles.length;
+          if (totalPhotos <= maxPhotos) {
+            handlePhotoUpload([...photos, ...selectedFiles]);
+          } else {
+            alert(`You can only upload a maximum of ${maxPhotos} photos.`);
+          }
+        }}
       />
     </div>
     {photos.length > 0 && (

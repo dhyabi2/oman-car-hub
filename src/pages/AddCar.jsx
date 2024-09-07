@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { toast } from "sonner";
 import { addCar } from '../utils/indexedDB';
-import { MakeModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelTypeSelector, TransmissionSelector, DoorsSelector, SeatsSelector, DrivetrainSelector, ConditionSelector } from '../components/CarFormFields';
+import { MakeModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelTypeSelector, TransmissionSelector, DoorsSelector, SeatsSelector, DrivetrainSelector, ConditionSelector, YearSelector } from '../components/CarFormFields';
 import { FormSection, ListingDetails, AdditionalInformation, PhotoUpload } from './AddCarComponents';
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
@@ -12,14 +12,21 @@ import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 const AddCar = ({ language, t }) => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    make: '', model: '', year: new Date().getFullYear(), mileage: 0,
-    transmission: '', fuel_type: '', engine_size: 1500, color: '',
-    number_of_doors: 4, number_of_seats: 5, drivetrain: 'FWD',
-    condition: 'Used', price: 10000, vin: '', location: '',
-    seller_type: 'Private', description: '', photos: [],
-    contact_phone: '', listing_expiration_date: null, additional_features: '',
+  const [formData, setFormData] = useState(() => {
+    const savedData = localStorage.getItem('addCarFormData');
+    return savedData ? JSON.parse(savedData) : {
+      make: '', model: '', year: new Date().getFullYear(), mileage: 0,
+      transmission: '', fuel_type: '', engine_size: 1500, color: '',
+      number_of_doors: 4, number_of_seats: 5, drivetrain: 'FWD',
+      condition: 'Used', price: 10000, vin: '', location: '',
+      seller_type: 'Private', description: '', photos: [],
+      contact_phone: '', listing_expiration_date: null, additional_features: '',
+    };
   });
+
+  useEffect(() => {
+    localStorage.setItem('addCarFormData', JSON.stringify(formData));
+  }, [formData]);
 
   const handleInputChange = (name, value) => {
     setFormData(prevState => ({ ...prevState, [name]: value }));
@@ -36,7 +43,7 @@ const AddCar = ({ language, t }) => {
       case 4:
         return formData.description && formData.additional_features;
       case 5:
-        return formData.photos.length > 0;
+        return formData.photos.length > 0 && formData.photos.length <= 15;
       default:
         return true;
     }
@@ -77,6 +84,7 @@ const AddCar = ({ language, t }) => {
 
       await addCar(carData);
       toast.success(t.carListingAddedSuccess);
+      localStorage.removeItem('addCarFormData');
       navigate('/cars-list');
     } catch (error) {
       console.error('Error adding car:', error);
@@ -98,6 +106,11 @@ const AddCar = ({ language, t }) => {
       return false;
     }
 
+    if (formData.photos.length > 15) {
+      toast.error(t.tooManyPhotos);
+      return false;
+    }
+
     return true;
   };
 
@@ -111,6 +124,11 @@ const AddCar = ({ language, t }) => {
               model={formData.model}
               onMakeChange={(value) => handleInputChange('make', value)}
               onModelChange={(value) => handleInputChange('model', value)}
+              t={t}
+            />
+            <YearSelector
+              value={formData.year}
+              onChange={(value) => handleInputChange('year', value)}
               t={t}
             />
             <MileageInput
@@ -182,6 +200,7 @@ const AddCar = ({ language, t }) => {
             photos={formData.photos}
             handlePhotoUpload={(files) => handleInputChange('photos', files)}
             t={t}
+            maxPhotos={15}
           />
         );
       default:

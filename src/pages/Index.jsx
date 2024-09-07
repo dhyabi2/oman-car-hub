@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { carBrands } from '../utils/carData';
 import { getCarStatistics } from '../utils/indexedDB';
@@ -20,6 +20,7 @@ const Index = ({ language, t }) => {
     totalValue: 0
   });
   const navigate = useNavigate();
+  const modelSelectorRef = useRef(null);
 
   useEffect(() => {
     const filtered = carBrands.filter(brand => 
@@ -40,6 +41,9 @@ const Index = ({ language, t }) => {
   const handleBrandSelect = (brand) => {
     setSelectedBrand(brand);
     setSelectedModel(null);
+    if (modelSelectorRef.current) {
+      modelSelectorRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleModelSelect = (model) => {
@@ -69,14 +73,16 @@ const Index = ({ language, t }) => {
           handleBrandSelect={handleBrandSelect}
           t={t}
         />
-        {selectedBrand && (
-          <ModelSelector
-            selectedBrand={selectedBrand}
-            selectedModel={selectedModel}
-            handleModelSelect={handleModelSelect}
-            t={t}
-          />
-        )}
+        <div ref={modelSelectorRef}>
+          {selectedBrand && (
+            <ModelSelector
+              selectedBrand={selectedBrand}
+              selectedModel={selectedModel}
+              handleModelSelect={handleModelSelect}
+              t={t}
+            />
+          )}
+        </div>
         {selectedBrand && selectedModel && (
           <SelectedCar
             selectedBrand={selectedBrand}

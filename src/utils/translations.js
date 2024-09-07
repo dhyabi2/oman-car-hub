@@ -116,6 +116,10 @@ export const translations = {
     noStatsAvailable: "No statistics available",
     previous: "Previous",
     next: "Next",
+    tooManyPhotos: "You can only upload a maximum of 15 photos.",
+    fwd: "Front-Wheel Drive",
+    rwd: "Rear-Wheel Drive",
+    awd: "All-Wheel Drive",
   },
   ar: {
     appName: "سوق عمان للسيارات",
@@ -234,5 +238,9 @@ export const translations = {
     noStatsAvailable: "لا توجد إحصائيات متاحة",
     previous: "السابق",
     next: "التالي",
+    tooManyPhotos: "يمكنك تحميل 15 صورة كحد أقصى.",
+    fwd: "دفع أمامي",
+    rwd: "دفع خلفي",
+    awd: "دفع رباعي",
   },
 };
