@@ -18,7 +18,7 @@ const themes = [
   { name: 'national-day', colors: ['#f9fafb', '#dc2626', '#16a34a'] }
 ];
 
-const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
+const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t, language }) => {
   const [dragX, setDragX] = useState(0);
   const containerRef = useRef(null);
   const isDraggingRef = useRef(false);
@@ -55,7 +55,9 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
   const getThemeLabel = (theme) => {
     if (!theme) return '';
     const label = t[theme] || theme;
-    return `${label.charAt(0).toUpperCase() + label.slice(1).replace(/-/g, ' ')} ${t.theme}`;
+    const themeWord = language === 'ar' ? 'ثيم' : 'Theme';
+    const formattedLabel = label.charAt(0).toUpperCase() + label.slice(1).replace(/-/g, ' ');
+    return language === 'ar' ? `${themeWord} ${formattedLabel}` : `${formattedLabel} ${themeWord}`;
   };
 
   const currentThemeObject = themes.find(theme => theme.name === lastThemeRef.current) || themes[0];
