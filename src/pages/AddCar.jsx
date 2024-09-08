@@ -1,3 +1,5 @@
+// Latest modification: Removed "Car Listing Form" label
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -240,7 +242,6 @@ const AddCar = ({ language, t }) => {
           <CardTitle className="text-xl font-semibold">{t.addCarForSale}</CardTitle>
         </CardHeader>
         <CardContent>
-          <h4 className="text-lg font-medium mb-4">{t.addCarFormTitle}</h4>
           <div className="mb-6">
             <div className="flex justify-between items-center">
               {[1, 2, 3, 4, 5].map((s) => (
