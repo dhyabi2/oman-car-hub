@@ -1,5 +1,3 @@
-// Latest modification: Added comment line for latest modification
-
 import React, { useState } from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -7,10 +5,11 @@ import { Slider } from "@/components/ui/slider";
 import ImageSelector from './ImageSelector';
 import { Car, Fuel, Palette, Settings, Users, Compass, CheckCircle, Calendar, Search } from 'lucide-react';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import { carBrands, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
 
-export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t, language }) => {
+export const MakeSelect = ({ make, onMakeChange, t, language }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const filteredBrands = carBrands.filter(brand => 
     brand.brand.toLowerCase().includes(searchTerm.toLowerCase())
@@ -42,17 +41,25 @@ export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t, l
           language={language}
         />
       </ScrollArea>
-      <ImageSelector
-        label={t.model}
-        options={(make ? carModels[make] : []).map(model => ({ value: model, icon: <Car size={24} />, label: model }))}
-        value={model}
-        onChange={onModelChange}
-        disabled={!make}
-        language={language}
-      />
     </>
   );
 };
+
+export const ModelSelect = ({ make, model, onModelChange, t, language }) => (
+  <div>
+    <Label htmlFor="model">{t.model}</Label>
+    <Select value={model} onValueChange={onModelChange}>
+      <SelectTrigger>
+        <SelectValue placeholder={t.selectModel} />
+      </SelectTrigger>
+      <SelectContent>
+        {make && carModels[make]?.map((modelOption) => (
+          <SelectItem key={modelOption} value={modelOption}>{modelOption}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
+);
 
 export const MileageInput = ({ value, onChange, t }) => (
   <div>
