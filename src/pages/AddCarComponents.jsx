@@ -1,3 +1,5 @@
+// Latest modification: Added comment line for latest modification
+
 import React from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -116,7 +118,8 @@ export const PhotoUpload = ({ photos, handlePhotoUpload, t, maxPhotos }) => (
   </FormSection>
 );
 
-export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => (
+export const MakeModelSelect = ({ make, model, on
+MakeChange, onModelChange, t }) => (
   <>
     <div>
       <Label htmlFor="make">{t.make}</Label>
