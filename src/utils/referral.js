@@ -1,3 +1,5 @@
+// Latest modification: Added comment line for latest modification
+
 import { v4 as uuidv4 } from 'uuid';
 
 export const getReferralKey = () => {
