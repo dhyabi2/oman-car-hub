@@ -6,6 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { HelpCircle, Send, MessageCircle } from 'lucide-react';
 
+// Latest modification: Updated to use the new feedback API
+
 const API_BASE_URL = 'https://oman-car-hub.replit.app';
 
 const FAQ = ({ language, t }) => {

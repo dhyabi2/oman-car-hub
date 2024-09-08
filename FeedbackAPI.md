@@ -1,5 +1,7 @@
 # Feedback API Documentation
 
+// Latest modification: Added API endpoint for submitting feedback
+
 ## Setup
 
 Ensure you have the following dependencies installed:
