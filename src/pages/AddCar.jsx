@@ -1,5 +1,3 @@
-// Latest modification: Removed "Car Listing Form" label
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -131,7 +129,7 @@ const AddCar = ({ language, t }) => {
     switch (step) {
       case 1:
         return (
-          <FormSection title={t.basicInformation}>
+          <FormSection>
             <MakeModelSelect
               make={formData.make}
               model={formData.model}
