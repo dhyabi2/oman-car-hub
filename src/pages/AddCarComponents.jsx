@@ -1,4 +1,4 @@
-// Latest modification: Added comment line for latest modification
+// Latest modification: Fixed syntax error in MakeModelSelect component
 
 import React from 'react';
 import { Label } from "@/components/ui/label";
@@ -118,8 +118,7 @@ export const PhotoUpload = ({ photos, handlePhotoUpload, t, maxPhotos }) => (
   </FormSection>
 );
 
-export const MakeModelSelect = ({ make, model, on
-MakeChange, onModelChange, t }) => (
+export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => (
   <>
     <div>
       <Label htmlFor="make">{t.make}</Label>
