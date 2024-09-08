@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { toast } from "sonner";
 import { addCar } from '../utils/indexedDB';
 import { MakeSelect, ModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelTypeSelector, TransmissionSelector, DoorsSelector, SeatsSelector, DrivetrainSelector, ConditionSelector, YearSelector } from '../components/CarFormFields';
 import { FormSection, ListingDetails, AdditionalInformation, PhotoUpload } from './AddCarComponents';
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Check, Loader2 } from 'lucide-react';
+import { StepIndicator, NavigationButtons, AddCarCard } from '../components/AddCarComponents';
 
-const AddCar = ({ language, t }) => {
+const AddCar = ({ language }) => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,7 +49,7 @@ const AddCar = ({ language, t }) => {
       setStep(prevStep => prevStep + 1);
       window.scrollTo(0, 0);
     } else {
-      toast.error(t.pleaseAllRequiredFields);
+      toast.error("Please fill all required fields");
     }
   };
 
@@ -83,12 +81,12 @@ const AddCar = ({ language, t }) => {
       };
 
       await addCar(carData);
-      toast.success(t.carListingAddedSuccess);
+      toast.success("Car listing added successfully");
       localStorage.removeItem('addCarFormData');
       navigate('/cars-list');
     } catch (error) {
       console.error('Error adding car:', error);
-      toast.error(t.failedToAddCarListing);
+      toast.error("Failed to add car listing");
     } finally {
       setIsSubmitting(false);
     }
@@ -99,17 +97,17 @@ const AddCar = ({ language, t }) => {
     const emptyFields = requiredFields.filter(field => !formData[field]);
     
     if (emptyFields.length > 0) {
-      toast.error(`${t.pleaseAllRequiredFields}: ${emptyFields.map(field => t[field]).join(', ')}`);
+      toast.error(`Please fill all required fields: ${emptyFields.join(', ')}`);
       return false;
     }
 
     if (!/^\d{8}$/.test(formData.contact_phone)) {
-      toast.error(t.invalidPhoneNumber);
+      toast.error("Invalid phone number");
       return false;
     }
 
     if (formData.photos.length > 15) {
-      toast.error(t.tooManyPhotos);
+      toast.error("Too many photos (maximum 15)");
       return false;
     }
 
@@ -120,61 +118,54 @@ const AddCar = ({ language, t }) => {
     switch (step) {
       case 1:
         return (
-          <FormSection title={t.selectBrand}>
+          <FormSection title="Select Brand">
             <MakeSelect
               make={formData.make}
               onMakeChange={(value) => handleInputChange('make', value)}
-              t={t}
               language={language}
             />
           </FormSection>
         );
       case 2:
         return (
-          <FormSection title={t.selectModel}>
+          <FormSection title="Select Model">
             <ModelSelect
               make={formData.make}
               model={formData.model}
               onModelChange={(value) => handleInputChange('model', value)}
-              t={t}
               language={language}
             />
           </FormSection>
         );
       case 3:
         return (
-          <FormSection title={t.basicInformation}>
+          <FormSection title="Basic Information">
             <YearSelector
               value={formData.year}
               onChange={(value) => handleInputChange('year', value)}
-              t={t}
             />
             <MileageInput
               value={formData.mileage}
               onChange={(value) => handleInputChange('mileage', value)}
-              t={t}
             />
           </FormSection>
         );
       case 4:
         return (
-          <FormSection title={t.vehicleDetails}>
+          <FormSection title="Vehicle Details">
             <TransmissionSelector
               value={formData.transmission}
               onChange={(value) => handleInputChange('transmission', value)}
-              t={t}
               language={language}
             />
             <FuelTypeSelector
               value={formData.fuel_type}
               onChange={(value) => handleInputChange('fuel_type', value)}
-              t={t}
               language={language}
             />
             <ColorSelector
               value={formData.color}
               onChange={(value) => handleInputChange('color', value)}
-              t={t}
               language={language}
             />
           </FormSection>
@@ -184,7 +175,6 @@ const AddCar = ({ language, t }) => {
           <ListingDetails
             formData={formData}
             handleInputChange={handleInputChange}
-            t={t}
             language={language}
           />
         );
@@ -193,7 +183,6 @@ const AddCar = ({ language, t }) => {
           <AdditionalInformation
             formData={formData}
             handleInputChange={handleInputChange}
-            t={t}
             language={language}
           />
         );
@@ -202,7 +191,6 @@ const AddCar = ({ language, t }) => {
           <PhotoUpload
             photos={formData.photos}
             handlePhotoUpload={(files) => handleInputChange('photos', files)}
-            t={t}
             maxPhotos={15}
             language={language}
           />
@@ -216,77 +204,29 @@ const AddCar = ({ language, t }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold">{t.addCarForSale}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-6">
-            <div className="flex justify-between items-center">
-              {[1, 2, 3, 4, 5, 6, 7].map((s) => (
-                <div
-                  key={s}
-                  className={`w-1/7 h-2 ${
-                    s <= step ? 'bg-primary' : 'bg-gray-200'
-                  } transition-all duration-300`}
-                />
-              ))}
-            </div>
-          </div>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={step}
-              initial={{ opacity: 0, x: isRTL ? -50 : 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: isRTL ? 50 : -50 }}
-              transition={{ duration: 0.3 }}
-            >
-              {renderStepContent()}
-            </motion.div>
-          </AnimatePresence>
-        </CardContent>
-        <CardFooter className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} justify-between`}>
-          {step > 1 && (
-            <Button onClick={handlePrevious} variant="outline" disabled={isSubmitting}>
-              {isRTL ? (
-                <>
-                  {t.previous} <ChevronRight className="ml-2 h-4 w-4" />
-                </>
-              ) : (
-                <>
-                  <ChevronLeft className="mr-2 h-4 w-4" /> {t.previous}
-                </>
-              )}
-            </Button>
-          )}
-          {step < 7 ? (
-            <Button onClick={handleNext} className={isRTL ? 'mr-auto' : 'ml-auto'} disabled={isSubmitting}>
-              {isRTL ? (
-                <>
-                  <ChevronLeft className="mr-2 h-4 w-4" /> {t.next}
-                </>
-              ) : (
-                <>
-                  {t.next} <ChevronRight className="ml-2 h-4 w-4" />
-                </>
-              )}
-            </Button>
-          ) : (
-            <Button onClick={handleSubmit} className={isRTL ? 'mr-auto' : 'ml-auto'} disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t.submitting}
-                </>
-              ) : (
-                <>
-                  {t.submitListing} <Check className="ml-2 h-4 w-4" />
-                </>
-              )}
-            </Button>
-          )}
-        </CardFooter>
-      </Card>
+      <AddCarCard title="Add Car for Sale">
+        <StepIndicator currentStep={step} totalSteps={7} />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step}
+            initial={{ opacity: 0, x: isRTL ? -50 : 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: isRTL ? 50 : -50 }}
+            transition={{ duration: 0.3 }}
+          >
+            {renderStepContent()}
+          </motion.div>
+        </AnimatePresence>
+        <NavigationButtons
+          step={step}
+          totalSteps={7}
+          handlePrevious={handlePrevious}
+          handleNext={handleNext}
+          handleSubmit={handleSubmit}
+          isSubmitting={isSubmitting}
+          language={language}
+        />
+      </AddCarCard>
     </div>
   );
 };
