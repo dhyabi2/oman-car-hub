@@ -1,27 +1,19 @@
-const CACHE_NAME = 'oman-auto-mart-v1';
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-512x512.png',
-  '/src/main.jsx',
-  '/src/App.jsx',
-  '/src/index.css'
-];
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.4.1/workbox-sw.js');
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache))
-  );
-});
+workbox.routing.registerRoute(
+  ({request}) => request.destination === 'image',
+  new workbox.strategies.CacheFirst()
+);
 
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => response || fetch(event.request))
-  );
-});
+workbox.routing.registerRoute(
+  ({request}) => request.destination === 'script' || request.destination === 'style',
+  new workbox.strategies.StaleWhileRevalidate()
+);
+
+workbox.routing.registerRoute(
+  ({url}) => url.pathname.startsWith('/api/'),
+  new workbox.strategies.NetworkFirst()
+);
 
 self.addEventListener('sync', (event) => {
   if (event.tag === 'sync-cars') {
@@ -47,10 +39,25 @@ self.addEventListener('push', (event) => {
   );
 });
 
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow('https://omanautomart.com')
+  );
+});
+
 async function syncCars() {
-  // Implement car data synchronization logic here
+  const cache = await caches.open('car-listings');
+  const cachedRequests = await cache.keys();
+  const responses = await Promise.all(cachedRequests.map(request => fetch(request)));
+  await Promise.all(responses.map(response => cache.put(response.url, response)));
 }
 
 async function updateCarListings() {
-  // Implement periodic car listings update logic here
+  const response = await fetch('/api/cars');
+  const cars = await response.json();
+  const cache = await caches.open('car-listings');
+  await cache.put('/api/cars', new Response(JSON.stringify(cars)));
 }
+
+workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);

@@ -8,14 +8,36 @@
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "lang": "en",
+  "dir": "ltr",
+  "orientation": "any",
+  "scope": "/",
   "icons": [
     {
       "src": "/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512x512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
+  "screenshots": [
+    {
+      "src": "/screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshot2.png",
+      "sizes": "1280x720",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["auto", "shopping"],
   "related_applications": [
     {
       "platform": "play",
@@ -66,6 +88,30 @@
     {
       "protocol": "web+car",
       "url": "/car?id=%s"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Add New Car",
+      "short_name": "Add Car",
+      "description": "Quickly add a new car listing",
+      "url": "/add-car",
+      "icons": [{ "src": "/add-car-icon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "View Favorites",
+      "short_name": "Favorites",
+      "description": "View your favorite car listings",
+      "url": "/favorite",
+      "icons": [{ "src": "/favorites-icon.png", "sizes": "192x192" }]
+    }
+  ],
+  "widgets": [
+    {
+      "name": "Latest Cars",
+      "tag": "latest-cars",
+      "description": "Display the latest car listings",
+      "ms_ac_template": "widgets/latest-cars.json"
     }
   ]
 }
