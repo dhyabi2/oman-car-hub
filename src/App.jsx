@@ -1,4 +1,4 @@
-// Latest modification: Added comment line for latest modification
+// Latest modification: Added PWA features and offline support
 
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,6 +17,7 @@ import CarDetails from "./pages/CarDetails";
 import Favorite from "./pages/Favorite";
 import FAQ from "./pages/FAQ";
 import Leaderboard from "./pages/Leaderboard";
+import OfflineNotification from "./components/OfflineNotification";
 
 const queryClient = new QueryClient();
 const API_BASE_URL = 'https://oman-car-hub.replit.app';
@@ -25,11 +26,25 @@ const AppContent = () => {
   const [theme, setThemeState] = useState('light');
   const [language, setLanguageState] = useState('ar');
   const [userId, setUserId] = useState(null);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const location = useLocation();
 
   useEffect(() => {
     document.body.className = theme;
   }, [theme]);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchUserIdAndSettings = async () => {
@@ -110,6 +125,7 @@ const AppContent = () => {
   return (
     <div className={`app ${theme} ${language === 'ar' ? 'rtl' : 'ltr'}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <Navigation currentTheme={theme} onThemeChange={changeTheme} language={language} toggleLanguage={toggleLanguage} t={t} />
+      {isOffline && <OfflineNotification t={t} />}
       <Routes>
         <Route path="/" element={<Index language={language} t={t} />} />
         <Route path="/add-car" element={<AddCar language={language} t={t} />} />

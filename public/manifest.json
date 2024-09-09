@@ -1,0 +1,70 @@
+{
+  "name": "Oman Auto Mart",
+  "short_name": "Auto Mart",
+  "description": "Buy and sell cars in Oman",
+  "id": "com.omanautomart.app",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.omanautomart.app",
+      "id": "com.omanautomart.app"
+    }
+  ],
+  "prefer_related_applications": false,
+  "scope": "/",
+  "scope_extensions": [
+    {
+      "origin": "https://omanautomart.com"
+    }
+  ],
+  "lang": "en",
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "launch_handler": {
+    "client_mode": "auto"
+  },
+  "display_override": ["window-controls-overlay"],
+  "edge_side_panel": {},
+  "file_handlers": [
+    {
+      "action": "/open-file",
+      "accept": {
+        "application/pdf": [".pdf"]
+      }
+    }
+  ],
+  "handle_links": "preferred",
+  "share_target": {
+    "action": "/share-target",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "images",
+          "accept": ["image/*"]
+        }
+      ]
+    }
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+omanautomart",
+      "url": "/protocol-handler?url=%s"
+    }
+  ]
+}
