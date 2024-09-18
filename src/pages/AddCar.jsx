@@ -5,9 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { toast } from "sonner";
 import { addCar } from '../utils/indexedDB';
 import { MakeModelSelect, MileageInput, PriceRangeInput, ColorSelector, FuelTypeSelector, TransmissionSelector, DoorsSelector, SeatsSelector, DrivetrainSelector, ConditionSelector, YearSelector } from '../components/CarFormFields';
-import { FormSection, ListingDetails, AdditionalInformation, PhotoUpload } from './AddCarComponents';
+import { FormSection, ListingDetails, PhotoUpload } from './AddCarComponents';
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Check, Loader2 } from 'lucide-react';
+import AdditionalInformationForm from './AdditionalInformationForm';
 
 const AddCar = ({ language, t }) => {
   const navigate = useNavigate();
@@ -209,7 +210,7 @@ const AddCar = ({ language, t }) => {
         );
       case 4:
         return (
-          <AdditionalInformation
+          <AdditionalInformationForm
             formData={formData}
             handleInputChange={handleInputChange}
             t={t}
