@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, PlusCircle, List, HelpCircle, Heart } from 'lucide-react';
+import { Home, PlusCircle, List, Heart, HelpCircle } from 'lucide-react';
 
 const BottomNavigation = ({ t }) => {
   const location = useLocation();
@@ -21,12 +21,12 @@ const BottomNavigation = ({ t }) => {
           <Link
             key={item.to}
             to={item.to}
-            className={`flex flex-col items-center justify-center w-full h-full ${
+            className={`flex items-center justify-center w-full h-full ${
               location.pathname === item.to ? 'text-primary' : 'text-muted-foreground'
             }`}
+            aria-label={item.label}
           >
-            <Icon className="h-5 w-5 mb-1" />
-            <span className="text-xs">{item.label}</span>
+            <Icon className="h-6 w-6" />
           </Link>
         );
       })}
