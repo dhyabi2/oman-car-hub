@@ -1,11 +1,8 @@
-// Latest modification: Fixed syntax error in MakeModelSelect component
-
 import React from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { carMakes, carModels, locations } from '../utils/carData';
+import { locations } from '../utils/carData';
 
 export const FormSection = ({ title, children }) => (
   <div>
@@ -45,7 +42,7 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => {
         </Select>
       </div>
       <div>
-        <Label htmlFor="contact_phone">{t.contactPhone}</Label>
+        <Label htmlFor="contact_phone">{t.mobileNumber}</Label>
         <Input
           id="contact_phone"
           type="tel"
@@ -59,29 +56,6 @@ export const ListingDetails = ({ formData, handleInputChange, t }) => {
     </FormSection>
   );
 };
-
-export const AdditionalInformation = ({ formData, handleInputChange, t }) => (
-  <FormSection title={t.additionalInformation}>
-    <div>
-      <Label htmlFor="description">{t.description}</Label>
-      <Textarea
-        id="description"
-        value={formData.description}
-        onChange={(e) => handleInputChange('description', e.target.value)}
-        rows={4}
-      />
-    </div>
-    <div>
-      <Label htmlFor="additional_features">{t.additionalFeatures}</Label>
-      <Textarea
-        id="additional_features"
-        value={formData.additional_features}
-        onChange={(e) => handleInputChange('additional_features', e.target.value)}
-        rows={4}
-      />
-    </div>
-  </FormSection>
-);
 
 export const PhotoUpload = ({ photos, handlePhotoUpload, t, maxPhotos }) => (
   <FormSection title={t.photos}>
@@ -116,35 +90,4 @@ export const PhotoUpload = ({ photos, handlePhotoUpload, t, maxPhotos }) => (
       </div>
     )}
   </FormSection>
-);
-
-export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t }) => (
-  <>
-    <div>
-      <Label htmlFor="make">{t.make}</Label>
-      <Select value={make} onValueChange={onMakeChange}>
-        <SelectTrigger>
-          <SelectValue placeholder={t.selectMake} />
-        </SelectTrigger>
-        <SelectContent>
-          {carMakes.map((brand) => (
-            <SelectItem key={brand} value={brand}>{brand}</SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-    <div>
-      <Label htmlFor="model">{t.model}</Label>
-      <Select value={model} onValueChange={onModelChange} disabled={!make}>
-        <SelectTrigger>
-          <SelectValue placeholder={t.selectModel} />
-        </SelectTrigger>
-        <SelectContent>
-          {make && carModels[make]?.map((model) => (
-            <SelectItem key={model} value={model}>{model}</SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-  </>
 );

@@ -95,7 +95,8 @@ export const translations = {
     automatic: "Automatic",
     manual: "Manual",
     "semi-automatic": "Semi-Auto",
-    // New translations for the leaderboard page
+    mobileNumber: "Mobile Number",
+    phoneNumberPlaceholder: "Enter 8-digit mobile number",
     todaysLeaderboard: "Today's Leaderboard",
     yourReferralInfo: "Your Referral Information",
     referralKey: "Referral Key",
@@ -250,7 +251,8 @@ export const translations = {
     automatic: "أوتوماتيكي",
     manual: "يدوي",
     "semi-automatic": "نصف أوتوماتيكي",
-    // New translations for the leaderboard page in Arabic
+    mobileNumber: "رقم الهاتف المحمول",
+    phoneNumberPlaceholder: "أدخل رقم الهاتف المحمول المكون من 8 أرقام",
     todaysLeaderboard: "لوحة الصدارة اليوم",
     yourReferralInfo: "معلومات الإحالة الخاصة بك",
     referralKey: "مفتاح الإحالة",

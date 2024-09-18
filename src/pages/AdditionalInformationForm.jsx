@@ -6,7 +6,7 @@ const AdditionalInformationForm = ({ formData, handleInputChange, t, language })
   return (
     <div className={`space-y-4 ${language === 'ar' ? 'rtl' : 'ltr'}`}>
       <div>
-        <Label htmlFor="description">{t.description} ({t.optional})</Label>
+        <Label htmlFor="description">{t.description}</Label>
         <Textarea
           id="description"
           value={formData.description}
@@ -15,7 +15,7 @@ const AdditionalInformationForm = ({ formData, handleInputChange, t, language })
         />
       </div>
       <div>
-        <Label htmlFor="additional_features">{t.additionalFeatures} ({t.optional})</Label>
+        <Label htmlFor="additional_features">{t.additionalFeatures}</Label>
         <Textarea
           id="additional_features"
           value={formData.additional_features}
