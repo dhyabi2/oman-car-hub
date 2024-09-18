@@ -1,4 +1,4 @@
-// Latest modification: Added null checks and default values for options in MakeModelSelect
+// Latest modification: Changed transmission and fuel type selectors to display 2 items per row
 
 import React, { useState } from 'react';
 import { Label } from "@/components/ui/label";
@@ -119,6 +119,7 @@ export const FuelTypeSelector = ({ value, onChange, t, language }) => (
     options={fuelTypes.map(type => ({ value: type, icon: <Fuel size={24} />, label: t[type.toLowerCase()] }))}
     value={value}
     onChange={onChange}
+    columns={2}
     language={language}
   />
 );
@@ -129,6 +130,7 @@ export const TransmissionSelector = ({ value, onChange, t, language }) => (
     options={transmissionTypes.map(type => ({ value: type, icon: <Settings size={24} />, label: t[type.toLowerCase()] }))}
     value={value}
     onChange={onChange}
+    columns={2}
     language={language}
   />
 );
