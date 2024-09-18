@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import ImageSelector from './ImageSelector';
-import { Car, Fuel, Palette, Settings, Users, Compass, CheckCircle, Calendar, Search } from 'lucide-react';
+import { Car, Fuel, Settings, Users, Compass, CheckCircle, Calendar, Search } from 'lucide-react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { carBrands, carModels, colors, fuelTypes, transmissionTypes } from '../utils/carData';
@@ -104,7 +104,7 @@ export const ColorSelector = ({ value, onChange, t, language }) => (
     label={t.color}
     options={colors.map(color => ({ 
       value: color, 
-      icon: <Car size={24} fill={color.toLowerCase() === 'other' ? 'none' : color.toLowerCase()} stroke={color.toLowerCase() === 'other' ? 'currentColor' : color.toLowerCase()} />, 
+      icon: <Car size={24} fill={color.toLowerCase() === 'other' ? 'none' : color.toLowerCase()} stroke={color.toLowerCase() === 'other' ? 'currentColor' : 'none'} />, 
       label: t[color.toLowerCase()] || color
     }))}
     value={value}
