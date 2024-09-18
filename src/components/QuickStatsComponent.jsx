@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
-import { Car, Users, BarChart, Award, Zap, Clock, Eye, Coins } from 'lucide-react';
+import { BarChart, Eye } from 'lucide-react';
+import { useAutoSlide } from '../pages/IndexComponents';
 
 export const QuickStats = ({ stats, t }) => {
   const statEntries = Object.entries(stats || {}).filter(([key]) => key !== 'latestCar');
@@ -16,12 +17,6 @@ export const QuickStats = ({ stats, t }) => {
 
   const getIconForStat = (key) => {
     switch (key) {
-      case 'totalListings': return <Car />;
-      case 'activeSellers': return <Users />;
-      case 'averagePrice': return <Coins />;
-      case 'mostPopularBrand': return <Award />;
-      case 'mostExpensiveCar': return <Zap />;
-      case 'newestListing': return <Clock />;
       case 'currentViewers': return <Eye />;
       default: return <BarChart />;
     }

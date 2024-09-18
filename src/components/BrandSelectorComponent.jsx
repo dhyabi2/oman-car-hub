@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import { Car, Search } from 'lucide-react';
+import { fadeInUp } from '../pages/IndexComponents';
 
 export const BrandSelector = ({ searchTerm, setSearchTerm, filteredBrands, selectedBrand, handleBrandSelect, t, language }) => {
   const getBrandTranslation = (brand) => {

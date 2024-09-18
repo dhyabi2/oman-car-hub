@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from "framer-motion";
-import { Car, Users, BarChart, Award, Zap, Clock, Eye, Search, Sparkles, PlusCircle, Coins } from "lucide-react";
+import React from 'react';
 import { QuickStats } from "../components/QuickStatsComponent";
 import { BrandSelector } from "../components/BrandSelectorComponent";
 import { ModelSelector } from "../components/ModelSelectorComponent";
 import { SelectedCar } from "../components/SelectedCarComponent";
 import { LatestCar } from "../components/LatestCarComponent";
 import { SellYourCar } from "../components/SellYourCarComponent";
+import { useState, useEffect } from 'react';
 
-const useAutoSlide = (length, interval = 3000) => {
+export const useAutoSlide = (length, interval = 3000) => {
   const [index, setIndex] = useState(0);
   useEffect(() => {
     const timer = setInterval(() => {
@@ -19,7 +18,7 @@ const useAutoSlide = (length, interval = 3000) => {
   return index;
 };
 
-const fadeInUp = {
+export const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.5 }
@@ -31,7 +30,5 @@ export {
   ModelSelector, 
   SelectedCar, 
   LatestCar, 
-  SellYourCar, 
-  useAutoSlide, 
-  fadeInUp 
+  SellYourCar
 };
