@@ -8,6 +8,7 @@ import { incrementCurrentViewers, decrementCurrentViewers } from "./utils/indexe
 import { translations } from "./utils/translations";
 import { trackReferral } from "./utils/referral";
 import Navigation from "./components/Navigation";
+import BottomNavigation from "./components/BottomNavigation";
 import Index from "./pages/Index";
 import AddCar from "./pages/AddCar";
 import CarsList from "./pages/CarsList";
@@ -124,15 +125,18 @@ const AppContent = () => {
     <div className={`app ${theme} ${language === 'ar' ? 'rtl' : 'ltr'}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <Navigation currentTheme={theme} onThemeChange={changeTheme} language={language} toggleLanguage={toggleLanguage} t={t} />
       {isOffline && <OfflineNotification t={t} />}
-      <Routes>
-        <Route path="/" element={<Index language={language} t={t} />} />
-        <Route path="/add-car" element={<AddCar language={language} t={t} />} />
-        <Route path="/cars-list" element={<CarsList language={language} t={t} />} />
-        <Route path="/car/:id" element={<CarDetails language={language} t={t} />} />
-        <Route path="/favorite" element={<Favorite language={language} t={t} />} />
-        <Route path="/faq" element={<FAQ language={language} t={t} />} />
-        <Route path="/leaderboard" element={<Leaderboard language={language} t={t} />} />
-      </Routes>
+      <div className="pb-16"> {/* Add padding to the bottom to account for the fixed navigation */}
+        <Routes>
+          <Route path="/" element={<Index language={language} t={t} />} />
+          <Route path="/add-car" element={<AddCar language={language} t={t} />} />
+          <Route path="/cars-list" element={<CarsList language={language} t={t} />} />
+          <Route path="/car/:id" element={<CarDetails language={language} t={t} />} />
+          <Route path="/favorite" element={<Favorite language={language} t={t} />} />
+          <Route path="/faq" element={<FAQ language={language} t={t} />} />
+          <Route path="/leaderboard" element={<Leaderboard language={language} t={t} />} />
+        </Routes>
+      </div>
+      <BottomNavigation t={t} />
     </div>
   );
 };
