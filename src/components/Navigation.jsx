@@ -1,4 +1,4 @@
-// Latest modification: Added comment line for latest modification
+// Latest modification: Made the top header fixed
 
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -53,7 +53,7 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
   };
 
   return (
-    <nav className={`p-4 flex justify-between items-center ${getHeaderClass()}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 p-4 flex justify-between items-center ${getHeaderClass()}`}>
       <Link to="/" className="text-xl font-bold">{t.appName}</Link>
       <div className="flex items-center space-x-4">
         <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
