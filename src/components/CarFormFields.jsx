@@ -1,4 +1,4 @@
-// Latest modification: Added comment line for latest modification
+// Latest modification: Added null checks and default values for options in MakeModelSelect
 
 import React, { useState } from 'react';
 import { Label } from "@/components/ui/label";
@@ -35,7 +35,7 @@ export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t, l
       <ScrollArea className="h-60 mb-4">
         <ImageSelector
           label={t.make}
-          options={filteredBrands.map(brand => ({ value: brand.brand, icon: <img src={brand.logo} alt={brand.brand} className="w-6 h-6 object-contain" />, label: brand.brand }))}
+          options={(filteredBrands || []).map(brand => ({ value: brand.brand, icon: <img src={brand.logo} alt={brand.brand} className="w-6 h-6 object-contain" />, label: brand.brand }))}
           value={make}
           onChange={onMakeChange}
           columns={2}
@@ -44,7 +44,7 @@ export const MakeModelSelect = ({ make, model, onMakeChange, onModelChange, t, l
       </ScrollArea>
       <ImageSelector
         label={t.model}
-        options={(make ? carModels[make] : []).map(model => ({ value: model, icon: <Car size={24} />, label: model }))}
+        options={(make && carModels[make] ? carModels[make] : []).map(model => ({ value: model, icon: <Car size={24} />, label: model }))}
         value={model}
         onChange={onModelChange}
         disabled={!make}
