@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Input } from "@/components/ui/input";
-import { motion, AnimatePresence } from "framer-motion";
-import { Car, Users, BarChart, Award, Zap, Clock, Eye, Search, Sparkles, PlusCircle, Coins } from 'lucide-react';
-import { QuickStats } from './QuickStatsComponent';
-import { BrandSelector } from './BrandSelectorComponent';
-import { ModelSelector } from './ModelSelectorComponent';
-import { SelectedCar } from './SelectedCarComponent';
-import { LatestCar } from './LatestCarComponent';
-import { SellYourCar } from './SellYourCarComponent';
+import { motion } from "framer-motion";
+import { Car, Users, BarChart, Award, Zap, Clock, Eye, Search, Sparkles, PlusCircle, Coins } from "lucide-react";
+import { QuickStats } from "../components/QuickStatsComponent";
+import { BrandSelector } from "../components/BrandSelectorComponent";
+import { ModelSelector } from "../components/ModelSelectorComponent";
+import { SelectedCar } from "../components/SelectedCarComponent";
+import { LatestCar } from "../components/LatestCarComponent";
+import { SellYourCar } from "../components/SellYourCarComponent";
 
 const useAutoSlide = (length, interval = 3000) => {
   const [index, setIndex] = useState(0);
@@ -29,4 +25,13 @@ const fadeInUp = {
   transition: { duration: 0.5 }
 };
 
-export { QuickStats, BrandSelector, ModelSelector, SelectedCar, LatestCar, SellYourCar, useAutoSlide, fadeInUp };
+export { 
+  QuickStats, 
+  BrandSelector, 
+  ModelSelector, 
+  SelectedCar, 
+  LatestCar, 
+  SellYourCar, 
+  useAutoSlide, 
+  fadeInUp 
+};
