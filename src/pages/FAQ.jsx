@@ -6,8 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { HelpCircle, Send, MessageCircle } from 'lucide-react';
 
-// Latest modification: Updated to use the new feedback API
-
 const API_BASE_URL = 'https://oman-car-hub.replit.app';
 
 const FAQ = ({ language, t }) => {
@@ -54,6 +52,12 @@ const FAQ = ({ language, t }) => {
     }
   };
 
+  const handleWhatsAppClick = () => {
+    const phoneNumber = '96896672579';
+    const whatsappUrl = `https://wa.me/${phoneNumber}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Card>
@@ -75,7 +79,7 @@ const FAQ = ({ language, t }) => {
                   {index === faqData.length - 1 && (
                     <Button
                       className="mt-2 bg-green-500 hover:bg-green-600"
-                      onClick={() => window.open("https://wa.me/96896672579", "_blank")}
+                      onClick={handleWhatsAppClick}
                     >
                       <MessageCircle className="mr-2" />
                       {language === 'ar' ? 'تواصل عبر واتساب' : 'Contact via WhatsApp'}
