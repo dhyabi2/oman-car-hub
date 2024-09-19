@@ -1,5 +1,3 @@
-// Latest modification: Made the top header fixed
-
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navItems } from '../nav-items';
@@ -71,7 +69,7 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-80">
-            <DraggableThemeSwitch currentTheme={currentTheme} onThemeChange={onThemeChange} t={t} />
+            <DraggableThemeSwitch currentTheme={currentTheme} onThemeChange={onThemeChange} language={language} t={t} />
           </PopoverContent>
         </Popover>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
