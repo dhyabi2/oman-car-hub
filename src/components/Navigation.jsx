@@ -53,11 +53,11 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 ${getHeaderClass()}`}>
       <div className="container mx-auto px-4 py-2">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
+        <div className="flex flex-col items-center">
+          <div className="w-full flex justify-between items-center mb-2">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-current mr-2">
+                <Button variant="ghost" size="icon" className="text-current">
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
@@ -81,27 +81,29 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
                 </nav>
               </SheetContent>
             </Sheet>
-          </div>
-          <Link to="/" className="text-xl font-bold pt-8">{t.appName}</Link>
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
-              <Globe className="h-4 w-4" />
-            </Button>
-            <Link to="/favorite">
-              <Button variant="ghost" size="icon" className="text-current">
-                <Heart className="h-4 w-4" />
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
+                <Globe className="h-4 w-4" />
               </Button>
-            </Link>
-            <Popover>
-              <PopoverTrigger asChild>
+              <Link to="/favorite">
                 <Button variant="ghost" size="icon" className="text-current">
-                  <Palette className="h-4 w-4" />
+                  <Heart className="h-4 w-4" />
                 </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80">
-                <DraggableThemeSwitch currentTheme={currentTheme} onThemeChange={onThemeChange} language={language} t={t} />
-              </PopoverContent>
-            </Popover>
+              </Link>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" size="icon" className="text-current">
+                    <Palette className="h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80">
+                  <DraggableThemeSwitch currentTheme={currentTheme} onThemeChange={onThemeChange} language={language} t={t} />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+          <div className="w-full text-center pt-4">
+            <Link to="/" className="text-xl font-bold">{t.appName}</Link>
           </div>
         </div>
       </div>
