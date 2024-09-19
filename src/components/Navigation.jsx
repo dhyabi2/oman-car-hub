@@ -52,29 +52,10 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 p-4 flex justify-between items-center ${getHeaderClass()}`}>
-      <Link to="/" className="text-xl font-bold">{t.appName}</Link>
-      <div className="flex items-center space-x-4">
-        <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
-          <Globe className="h-4 w-4" />
-        </Button>
-        <Link to="/favorite">
-          <Button variant="ghost" size="icon" className="text-current">
-            <Heart className="h-4 w-4" />
-          </Button>
-        </Link>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-current">
-              <Palette className="h-4 w-4" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-80">
-            <DraggableThemeSwitch currentTheme={currentTheme} onThemeChange={onThemeChange} language={language} t={t} />
-          </PopoverContent>
-        </Popover>
+      <div className="flex items-center">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-current">
+            <Button variant="ghost" size="icon" className="text-current mr-2">
               <Menu className="h-6 w-6" />
             </Button>
           </SheetTrigger>
@@ -98,6 +79,27 @@ const Navigation = ({ currentTheme, onThemeChange, language, toggleLanguage, t }
             </nav>
           </SheetContent>
         </Sheet>
+        <Link to="/" className="text-xl font-bold">{t.appName}</Link>
+      </div>
+      <div className="flex items-center space-x-4">
+        <Button variant="ghost" size="icon" className="text-current" onClick={toggleLanguage}>
+          <Globe className="h-4 w-4" />
+        </Button>
+        <Link to="/favorite">
+          <Button variant="ghost" size="icon" className="text-current">
+            <Heart className="h-4 w-4" />
+          </Button>
+        </Link>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="ghost" size="icon" className="text-current">
+              <Palette className="h-4 w-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <DraggableThemeSwitch currentTheme={currentTheme} onThemeChange={onThemeChange} language={language} t={t} />
+          </PopoverContent>
+        </Popover>
       </div>
     </nav>
   );
