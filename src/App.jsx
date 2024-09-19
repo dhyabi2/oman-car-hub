@@ -1,3 +1,4 @@
+import React from 'react';
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -125,7 +126,7 @@ const AppContent = () => {
     <div className={`app ${theme} ${language === 'ar' ? 'rtl' : 'ltr'}`} dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <Navigation currentTheme={theme} onThemeChange={changeTheme} language={language} toggleLanguage={toggleLanguage} t={t} />
       {isOffline && <OfflineNotification t={t} />}
-      <div className="pb-16"> {/* Add padding to the bottom to account for the fixed navigation */}
+      <div className="pb-16">
         <Routes>
           <Route path="/" element={<Index language={language} t={t} />} />
           <Route path="/add-car" element={<AddCar language={language} t={t} />} />
@@ -143,14 +144,16 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <BrowserRouter>
+            <AppContent />
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </React.StrictMode>
   );
 };
 
