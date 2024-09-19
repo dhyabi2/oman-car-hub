@@ -67,7 +67,6 @@ const CarsList = ({ language = 'en' }) => {
         model: getTranslation(language, 'allModels', 'All Models'),
       }));
 
-      // Fetch favorite status for each car
       const favoritesStatus = {};
       for (const car of allCars) {
         favoritesStatus[car.id] = await isFavoriteCar(car.id);
@@ -99,6 +98,7 @@ const CarsList = ({ language = 'en' }) => {
     setFilteredCars(filtered);
     setPage(1);
     setHasMore(true);
+    setDisplayedCars([]);
   }, [filters, cars, language]);
 
   useEffect(() => {
@@ -131,7 +131,6 @@ const CarsList = ({ language = 'en' }) => {
       }
       return newFilters;
     });
-    setDisplayedCars([]);
   };
 
   const handleViewDetails = (carId) => {
