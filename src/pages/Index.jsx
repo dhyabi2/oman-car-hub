@@ -58,10 +58,6 @@ const Index = ({ language, t }) => {
 
   return (
     <div className={`container mx-auto px-4 py-8 mt-16 ${language === 'ar' ? 'rtl' : 'ltr'}`}>
-      <h1 className="text-4xl font-bold mb-8">
-        {t.appName}
-      </h1>
-      
       <QuickStats stats={stats} t={t} />
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
