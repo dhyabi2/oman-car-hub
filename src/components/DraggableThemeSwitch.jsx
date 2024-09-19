@@ -1,26 +1,24 @@
-// Latest modification: Added comment line for latest modification
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { setTheme } from '../utils/indexedDB';
 
 const themes = [
-  { name: 'light', colors: ['#ffffff', '#000000', '#e5e7eb'] },
-  { name: 'dark', colors: ['#1f2937', '#ffffff', '#374151'] },
-  { name: 'desert-sands', colors: ['#fef3c7', '#92400e', '#fbbf24'] },
-  { name: 'oasis-breeze', colors: ['#e0f2fe', '#0369a1', '#7dd3fc'] },
-  { name: 'spice-market', colors: ['#fef2f2', '#991b1b', '#fecaca'] },
-  { name: 'modern-minimalist', colors: ['#f9fafb', '#111827', '#e5e7eb'] },
-  { name: 'coastal-calm', colors: ['#ecfeff', '#164e63', '#67e8f9'] },
-  { name: 'arabian-nights', colors: ['#581c87', '#faf5ff', '#c084fc'] },
-  { name: 'bedouin-chic', colors: ['#fffbeb', '#92400e', '#fcd34d'] },
-  { name: 'tech-futurism', colors: ['#030712', '#e0f2fe', '#3b82f6'] },
-  { name: 'frankincense-trail', colors: ['#f0fdf4', '#166534', '#86efac'] },
-  { name: 'royal-opulence', colors: ['#312e81', '#fef3c7', '#fbbf24'] },
-  { name: 'national-day', colors: ['#f9fafb', '#dc2626', '#16a34a'] }
+  { name: 'light', colors: ['#ffffff', '#000000', '#e5e7eb'], arLabel: 'فاتح' },
+  { name: 'dark', colors: ['#1f2937', '#ffffff', '#374151'], arLabel: 'داكن' },
+  { name: 'desert-sands', colors: ['#fef3c7', '#92400e', '#fbbf24'], arLabel: 'رمال الصحراء' },
+  { name: 'oasis-breeze', colors: ['#e0f2fe', '#0369a1', '#7dd3fc'], arLabel: 'نسيم الواحة' },
+  { name: 'spice-market', colors: ['#fef2f2', '#991b1b', '#fecaca'], arLabel: 'سوق التوابل' },
+  { name: 'modern-minimalist', colors: ['#f9fafb', '#111827', '#e5e7eb'], arLabel: 'الحداثة البسيطة' },
+  { name: 'coastal-calm', colors: ['#ecfeff', '#164e63', '#67e8f9'], arLabel: 'هدوء الساحل' },
+  { name: 'arabian-nights', colors: ['#581c87', '#faf5ff', '#c084fc'], arLabel: 'ليالي عربية' },
+  { name: 'bedouin-chic', colors: ['#fffbeb', '#92400e', '#fcd34d'], arLabel: 'أناقة البدو' },
+  { name: 'tech-futurism', colors: ['#030712', '#e0f2fe', '#3b82f6'], arLabel: 'مستقبل التكنولوجيا' },
+  { name: 'frankincense-trail', colors: ['#f0fdf4', '#166534', '#86efac'], arLabel: 'طريق اللبان' },
+  { name: 'royal-opulence', colors: ['#312e81', '#fef3c7', '#fbbf24'], arLabel: 'الفخامة الملكية' },
+  { name: 'national-day', colors: ['#f9fafb', '#dc2626', '#16a34a'], arLabel: 'اليوم الوطني' }
 ];
 
-const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
+const DraggableThemeSwitch = ({ currentTheme, onThemeChange, language }) => {
   const [dragX, setDragX] = useState(0);
   const containerRef = useRef(null);
   const isDraggingRef = useRef(false);
@@ -56,8 +54,8 @@ const DraggableThemeSwitch = ({ currentTheme, onThemeChange, t }) => {
 
   const getThemeLabel = (theme) => {
     if (!theme) return '';
-    const label = t[theme] || theme;
-    return label.charAt(0).toUpperCase() + label.slice(1).replace(/-/g, ' ');
+    const themeObj = themes.find(t => t.name === theme);
+    return language === 'ar' ? themeObj.arLabel : theme.replace(/-/g, ' ');
   };
 
   const currentThemeObject = themes.find(theme => theme.name === lastThemeRef.current) || themes[0];
