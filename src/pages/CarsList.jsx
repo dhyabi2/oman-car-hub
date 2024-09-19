@@ -5,14 +5,10 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { motion } from "framer-motion";
 import { carMakes, carModels } from '../utils/carData';
 import { getAllCars, toggleFavoriteCar, isFavoriteCar } from '../utils/indexedDB';
-import { NoCarsList, CarCard, FiltersCard } from './CarsListComponents';
+import { CarCard, FiltersCard } from './CarsListComponents';
 import { translations } from '../utils/translations';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
-
-const getTranslation = (language, key, fallback = key) => {
-  return translations[language]?.[key] || fallback;
-};
 
 const ITEMS_PER_PAGE = 20;
 
@@ -20,8 +16,8 @@ const CarsList = ({ language = 'en' }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const initialMake = searchParams.get('make') || getTranslation(language, 'allMakes', 'All Makes');
-  const initialModel = searchParams.get('model') || getTranslation(language, 'allModels', 'All Models');
+  const initialMake = searchParams.get('make') || translations[language].allMakes;
+  const initialModel = searchParams.get('model') || translations[language].allModels;
 
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
@@ -49,56 +45,22 @@ const CarsList = ({ language = 'en' }) => {
     drivetrain: 'all',
   });
 
-  const [ref, inView] = useInView({
-    threshold: 0,
-  });
+  const [ref, inView] = useInView({ threshold: 0 });
 
   useEffect(() => {
     const fetchCars = async () => {
       const allCars = await getAllCars();
       setCars(allCars);
-      const maxPrice = Math.max(...allCars.map(car => car.price), 100000);
-      const maxMileage = Math.max(...allCars.map(car => car.mileage), 1000000);
-      setFilters(prev => ({
-        ...prev,
-        maxPrice,
-        maxMileage,
-        make: getTranslation(language, 'allMakes', 'All Makes'),
-        model: getTranslation(language, 'allModels', 'All Models'),
-      }));
-
-      const favoritesStatus = {};
-      for (const car of allCars) {
-        favoritesStatus[car.id] = await isFavoriteCar(car.id);
-      }
-      setFavorites(favoritesStatus);
+      updateFiltersWithCarData(allCars);
+      updateFavoritesStatus(allCars);
     };
     fetchCars();
   }, [language]);
 
   useEffect(() => {
-    const filtered = cars.filter(car => 
-      (filters.make === getTranslation(language, 'allMakes', 'All Makes') || car.make === filters.make) &&
-      (filters.model === getTranslation(language, 'allModels', 'All Models') || car.model === filters.model) &&
-      car.year >= filters.minYear &&
-      car.year <= filters.maxYear &&
-      car.price >= filters.minPrice &&
-      car.price <= filters.maxPrice &&
-      (filters.transmission === 'all' || car.transmission === filters.transmission) &&
-      (filters.fuelType === 'all' || car.fuel_type === filters.fuelType) &&
-      (filters.color === 'all' || car.color === filters.color) &&
-      car.mileage >= filters.minMileage &&
-      car.mileage <= filters.maxMileage &&
-      (filters.condition === 'all' || car.condition === filters.condition) &&
-      (filters.location === 'all' || car.location === filters.location) &&
-      (filters.numberOfDoors === 'all' || car.number_of_doors.toString() === filters.numberOfDoors) &&
-      (filters.numberOfSeats === 'all' || car.number_of_seats.toString() === filters.numberOfSeats) &&
-      (filters.drivetrain === 'all' || car.drivetrain === filters.drivetrain)
-    );
+    const filtered = filterCars();
     setFilteredCars(filtered);
-    setPage(1);
-    setHasMore(true);
-    setDisplayedCars([]);
+    resetPagination();
   }, [filters, cars, language]);
 
   useEffect(() => {
@@ -110,6 +72,51 @@ const CarsList = ({ language = 'en' }) => {
       setPage(prevPage => prevPage + 1);
     }
   }, [inView, hasMore]);
+
+  const updateFiltersWithCarData = (allCars) => {
+    const maxPrice = Math.max(...allCars.map(car => car.price), 100000);
+    const maxMileage = Math.max(...allCars.map(car => car.mileage), 1000000);
+    setFilters(prev => ({
+      ...prev,
+      maxPrice,
+      maxMileage,
+      make: translations[language].allMakes,
+      model: translations[language].allModels,
+    }));
+  };
+
+  const updateFavoritesStatus = async (allCars) => {
+    const favoritesStatus = {};
+    for (const car of allCars) {
+      favoritesStatus[car.id] = await isFavoriteCar(car.id);
+    }
+    setFavorites(favoritesStatus);
+  };
+
+  const filterCars = () => cars.filter(car => 
+    (filters.make === translations[language].allMakes || car.make === filters.make) &&
+    (filters.model === translations[language].allModels || car.model === filters.model) &&
+    car.year >= filters.minYear &&
+    car.year <= filters.maxYear &&
+    car.price >= filters.minPrice &&
+    car.price <= filters.maxPrice &&
+    (filters.transmission === 'all' || car.transmission === filters.transmission) &&
+    (filters.fuelType === 'all' || car.fuel_type === filters.fuelType) &&
+    (filters.color === 'all' || car.color === filters.color) &&
+    car.mileage >= filters.minMileage &&
+    car.mileage <= filters.maxMileage &&
+    (filters.condition === 'all' || car.condition === filters.condition) &&
+    (filters.location === 'all' || car.location === filters.location) &&
+    (filters.numberOfDoors === 'all' || car.number_of_doors.toString() === filters.numberOfDoors) &&
+    (filters.numberOfSeats === 'all' || car.number_of_seats.toString() === filters.numberOfSeats) &&
+    (filters.drivetrain === 'all' || car.drivetrain === filters.drivetrain)
+  );
+
+  const resetPagination = () => {
+    setPage(1);
+    setHasMore(true);
+    setDisplayedCars([]);
+  };
 
   const loadMoreCars = useCallback(() => {
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
@@ -124,45 +131,49 @@ const CarsList = ({ language = 'en' }) => {
   }, [page, filteredCars]);
 
   const handleFilterChange = (name, value) => {
-    setFilters(prev => {
-      const newFilters = { ...prev, [name]: value };
-      if (name === 'make') {
-        newFilters.model = getTranslation(language, 'allModels', 'All Models');
-      }
-      return newFilters;
-    });
+    setFilters(prev => ({
+      ...prev,
+      [name]: value,
+      ...(name === 'make' && { model: translations[language].allModels }),
+    }));
+    setDisplayedCars([]);
   };
 
-  const handleViewDetails = (carId) => {
-    navigate(`/car/${carId}`);
-  };
-
-  const toggleFilters = () => {
-    setIsFiltersOpen(!isFiltersOpen);
-  };
+  const handleViewDetails = (carId) => navigate(`/car/${carId}`);
 
   const handleToggleFavorite = async (carId) => {
     const newFavoriteStatus = await toggleFavoriteCar(carId);
-    setFavorites(prev => ({
-      ...prev,
-      [carId]: newFavoriteStatus
-    }));
+    setFavorites(prev => ({ ...prev, [carId]: newFavoriteStatus }));
   };
+
+  const NoCarsList = () => (
+    <div className="text-center py-10">
+      <h2 className="text-2xl font-semibold mb-4 flex items-center justify-center">
+        <AlertCircle className="mr-2" />
+        {translations[language].noCarsFound}
+      </h2>
+      <p>
+        {language === 'ar'
+          ? "حاول تعديل المرشحات أو معايير البحث الخاصة بك"
+          : "Try adjusting your filters or search criteria"}
+      </p>
+    </div>
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">{getTranslation(language, 'carsList', 'Cars List')}</h1>
+      <h1 className="text-3xl font-bold mb-6">{translations[language].carsList}</h1>
       
       <Collapsible open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
         <CollapsibleTrigger asChild>
           <Button variant="outline" className="mb-4 w-full">
             {isFiltersOpen ? (
               <>
-                {getTranslation(language, 'hideFilters', 'Hide Filters')} <ChevronUp className="ml-2" />
+                {translations[language].hideFilters} <ChevronUp className="ml-2" />
               </>
             ) : (
               <>
-                {getTranslation(language, 'showFilters', 'Show Filters')} <ChevronDown className="ml-2" />
+                {translations[language].showFilters} <ChevronDown className="ml-2" />
               </>
             )}
           </Button>
@@ -170,8 +181,8 @@ const CarsList = ({ language = 'en' }) => {
         <CollapsibleContent>
           <FiltersCard
             filters={filters}
-            carMakes={[getTranslation(language, 'allMakes', 'All Makes'), ...carMakes]}
-            carModels={filters.make === getTranslation(language, 'allMakes', 'All Makes') ? [getTranslation(language, 'allModels', 'All Models')] : [getTranslation(language, 'allModels', 'All Models'), ...(carModels[filters.make] || [])]}
+            carMakes={[translations[language].allMakes, ...carMakes]}
+            carModels={filters.make === translations[language].allMakes ? [translations[language].allModels] : [translations[language].allModels, ...(carModels[filters.make] || [])]}
             maxPriceInData={Math.max(...cars.map(car => car.price), 100000)}
             onFilterChange={handleFilterChange}
             language={language}
@@ -204,12 +215,10 @@ const CarsList = ({ language = 'en' }) => {
           ))}
         </motion.div>
       ) : (
-        <NoCarsList language={language} />
+        <NoCarsList />
       )}
       
-      {hasMore && (
-        <div ref={ref} className="h-10 mt-4"></div>
-      )}
+      {hasMore && <div ref={ref} className="h-10 mt-4"></div>}
     </div>
   );
 };
