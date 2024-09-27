@@ -54,7 +54,7 @@ const FAQ = ({ language, t }) => {
 
   const handleWhatsAppClick = () => {
     const phoneNumber = '96896672579';
-    const whatsappUrl = `https://wa.me/968${phoneNumber}`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}`;
     window.location.href = whatsappUrl;
   };
 
