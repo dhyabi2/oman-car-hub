@@ -65,7 +65,7 @@ export const translations = {
     selectedCar: "السيارة المختارة",
     viewCars: "عرض السيارات",
     latestCar: "آخر سيارة مضافة",
-    sellYourCar: "هل أنت مستعدّ لبيع سيارتك؟",
+    sellYourCar: "عندك سياره للبيع ؟",
     listYourCar: "أضِف سيارتك الآن",
     searchBrands: "البحث عن الماركات...",
     brand: "الماركة",
