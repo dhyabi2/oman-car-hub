@@ -71,7 +71,7 @@ export const translations = {
     brand: "الماركة",
     model: "الموديل",
     viewDetails: "عرض التفاصيل",
-    listingMessage: "أضِف سيارتك في سوق عُمان للسيارات وصِل إلى آلاف المشترين المحتملين!",
+    listingMessage: "أضِف سيارتك في سوق عُمان للسيارات!",
     totalListings: "إجمالي القوائم",
     activeSellers: "البائعون النشطون",
     averagePrice: "متوسط السعر",
