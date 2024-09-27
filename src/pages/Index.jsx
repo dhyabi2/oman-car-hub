@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { carBrands } from '../utils/carData';
 import { getCarStatistics } from '../utils/indexedDB';
 import { QuickStats, BrandSelector, ModelSelector, SelectedCar, LatestCar, SellYourCar } from './IndexComponents';
+import LoadingAnimation from '../components/LoadingAnimation';
 
 const Index = ({ language, t }) => {
   const [selectedBrand, setSelectedBrand] = useState(null);
@@ -19,6 +20,7 @@ const Index = ({ language, t }) => {
     newestListing: '',
     totalValue: 0
   });
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const modelSelectorRef = useRef(null);
 
@@ -31,9 +33,16 @@ const Index = ({ language, t }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const statistics = await getCarStatistics();
-      setStats(statistics);
-      setLatestCar(statistics.latestCar);
+      setIsLoading(true);
+      try {
+        const statistics = await getCarStatistics();
+        setStats(statistics);
+        setLatestCar(statistics.latestCar);
+      } catch (error) {
+        console.error('Error fetching car statistics:', error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchData();
   }, []);
@@ -55,6 +64,10 @@ const Index = ({ language, t }) => {
       navigate(`/cars-list?make=${selectedBrand.brand}&model=${selectedModel}`);
     }
   };
+
+  if (isLoading) {
+    return <LoadingAnimation />;
+  }
 
   return (
     <div className={`container mx-auto px-4 py-8 mt-16 ${language === 'ar' ? 'rtl' : 'ltr'}`}>
